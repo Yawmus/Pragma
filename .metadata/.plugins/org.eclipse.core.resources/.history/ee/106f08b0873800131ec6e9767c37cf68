@@ -1,0 +1,81 @@
+package com.peter.rogue.entities;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.peter.rogue.Global;
+
+public class Monster extends Entity {
+
+	protected int move;
+	
+	public Monster(String filename, String type) {
+		super(filename, type);
+	}
+
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+	}
+	
+	public void update(float delta){
+		moveDelay += Gdx.graphics.getDeltaTime();
+		
+		move = Global.randomGenerator(5, 0);
+		if(moveDelay >= .4f + Global.randomGenerator(100, 0) / 100){
+			switch(move){
+			case 0:
+				setY(getY() + 32);
+				moveDelay = 0;
+				break;
+			case 1:
+				setY(getY() - 32);
+				moveDelay = 0;
+				break;
+			case 2:
+				setX(getX() - 32);
+				moveDelay = 0;
+				break;
+			case 3:
+				setX(getX() + 32);
+				moveDelay = 0;
+				break;
+			case 4:
+				moveDelay = 0;
+			}
+			checkCollision();
+		}
+
+		if(getMessage() != "")
+			messageDelay += Gdx.graphics.getDeltaTime();
+		if(messageDelay > 2.0){
+			resetMessage();
+			messageDelay = 0;
+		}
+	}
+
+	public void checkCollision(){
+		if(getMapID(getY(), getX()) != "null" && getMapID(getY(), getX()) != getID()){
+			Global.inbox.sendMail(getMapID(getY(), getX()), getType());
+			setX(oldX);
+			setY(oldY);
+		}
+		
+		else if(collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties().containsKey("blocked")){
+			setX(oldX);
+			setY(oldY);
+		}
+		else{
+			setMap((int)oldY, (int)oldX, nullEntry);
+			setMap((int)getY(), (int)getX(), this.entry);
+		}
+		oldX = getX();
+		oldY = getY();
+	}
+	
+	public void setMessage(String type){
+		if(type != "null")
+			message = "Hello " + type + "!";
+	}
+}

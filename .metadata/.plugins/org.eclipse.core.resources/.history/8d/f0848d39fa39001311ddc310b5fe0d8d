@@ -1,0 +1,12 @@
+package com.peter.rogue.inventory;
+
+public class Armor extends Item{
+
+	public static Food BREAD = new Armor("Bread", 1, "at.png");
+	public static Food MEAT = new Armor("Meat", 1, "at.png");
+	
+	private Armor(String name, int weight, String filename) {
+		super(name, weight, filename);
+	}
+
+}

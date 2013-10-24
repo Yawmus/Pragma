@@ -1,0 +1,11 @@
+1382057697275	Delete element
+1382057737561	Move compilation units
+1382057885508	Delete element
+1382057890378	Move files
+1382057914492	Move compilation units
+1382057918923	Delete element
+1382123292374	Rename package 'com.peter.rogue.inventory'
+1382123303969	Rename package 'com.peter.rogue.item'
+1382123334431	Rename type 'backpack'
+1382161877049	Encapsulate field 'wallet'
+1382162004574	Encapsulate field 'name'

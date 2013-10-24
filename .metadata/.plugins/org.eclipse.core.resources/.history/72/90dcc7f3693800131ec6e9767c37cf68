@@ -1,0 +1,13 @@
+package com.peter.rogue.items;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+public class Backpack extends Sprite{
+
+	public static Backpack smallBackpack = new Backpack("Small backpack", "backpack.png");
+	public static Backpack largeBackpack = new Backpack("Large backpack", "backpack.png");
+	
+	protected Backpack(String name, String filename) {
+		super(name, filename);
+	}
+}

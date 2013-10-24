@@ -1,0 +1,11 @@
+package com.peter.rogue.items;
+
+public class Backpack extends Item{
+
+	public static Backpack smallBackpack = new Backpack("Small backpack", 0, "backpack.png");
+	public static Backpack smallBackpack = new Backpack("Small backpack", 0, "backpack.png");
+	
+	protected Backpack(String name, int weight, String filename) {
+		super(name, weight, filename);
+	}
+}

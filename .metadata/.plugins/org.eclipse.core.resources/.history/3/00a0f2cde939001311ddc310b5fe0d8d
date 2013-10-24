@@ -1,0 +1,66 @@
+package com.peter.rogue.entities;
+
+import com.peter.rogue.data.LevelData;
+
+public class Inbox{
+	public class Message{
+		private String ID;
+		private String type;
+		
+		public Message(){
+			this.ID = "null";
+			this.type = "null";
+		}
+		public void setID(String ID) {
+			if(this.ID == "null")
+				this.ID = ID;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		public String getID() {
+			return ID;
+		}
+		public String getType() {
+			return type;
+		}
+	}
+	
+	private Message[] messageBox;
+	private int messageBoxSize;
+	private LevelData data;
+	private String temp;
+	private static int index;
+	
+	public Inbox(){
+		data = new LevelData();
+		messageBoxSize = data.getNPCTotal() + 1;
+		messageBox = new Message[messageBoxSize];
+		temp = new String();
+		index = 0;
+	}
+	
+	public void setupMail(String ID){
+		messageBox[index] = new Message();
+		messageBox[index].setID(ID);
+		index++;
+	}
+	
+	public void printClients(){
+		for(int i=0; i<messageBoxSize; i++)
+			System.out.println(messageBox[i].getID());
+	}
+	
+	public void sendMail(String ID, String type){
+		for(int i=0; i<messageBoxSize; i++)
+			if(ID == messageBox[i].getID()){
+				messageBox[i].setType(type);
+				break;
+			}
+	}
+	public String checkMail(int i){
+		temp = messageBox[i].getType();
+		messageBox[i].setType("null");
+		return temp;
+	}
+}

@@ -1,0 +1,10 @@
+{
+class: com.peter.rogue.data,
+LevelData: [
+	{
+		"citizens": 8
+		"villagers": 8
+		"monsters": 0
+	}
+]
+}

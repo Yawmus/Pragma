@@ -1,0 +1,20 @@
+package com.peter.rogue.items;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+public class Backpack extends Sprite{
+
+	private Texture texture;
+	private String name = new String();
+	private int capacity;
+	
+	public static Backpack smallBackpack = new Backpack("Small backpack", 6, "backpack.png");
+	public static Backpack largeBackpack = new Backpack("Large backpack", 12, "backpack.png");
+	
+	protected Backpack(String name, String filename, int capacity) {
+		this.name = name;
+		this.capacity = capacity;
+		texture = new Texture("img/" + filename);
+	}
+}

@@ -1,0 +1,100 @@
+package com.peter.rogue.entities;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.peter.rogue.Global;
+
+public class NPC extends Entity {
+
+	protected int move;
+
+	private static final int KEY_SIZE = 1;
+	private String[] key = new String[KEY_SIZE];
+	private List<String> keyList = Arrays.asList(key);
+	private Iterator<String> keys = keyList.iterator();
+	private String keyCheck = new String("blocked");
+	
+	public NPC(Sprite sprite, TiledMapTileLayer collisionLayer, String type) {
+		super(sprite, type);
+	}
+
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+	}
+	
+	public void update(float delta){
+		moveDelay += Gdx.graphics.getDeltaTime();
+		
+		move = Global.randomGenerator(5, 0);
+		if(moveDelay >= .6f + Global.randomGenerator(100, 0) / 100){
+			switch(move){
+			case 0:
+				setY(getY() + 32);
+				moveDelay = 0;
+				break;
+			case 1:
+				setY(getY() - 32);
+				moveDelay = 0;
+				break;
+			case 2:
+				setX(getX() - 32);
+				moveDelay = 0;
+				break;
+			case 3:
+				setX(getX() + 32);
+				moveDelay = 0;
+				break;
+			case 4:
+				moveDelay = 0;
+			}
+			try{
+				checkCollision();
+			} catch(Exception e){
+				System.out.println(e);
+			}
+		}
+
+		if(getMessage() != "")
+			messageDelay += Gdx.graphics.getDeltaTime();
+		if(messageDelay > 2.0){
+			resetMessage();
+			messageDelay = 0;
+		}
+	}
+	
+	public void checkCollision(){
+		keys = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties().getKeys();
+		if(getMapID(getY(), getX()) != "null" && getMapID(getY(), getX()) != getID()){
+			Global.inbox.sendMail(getMapID(getY(), getX()), getType());
+			setX(oldX);
+			setY(oldY);
+		}
+		
+		else if(keys.hasNext()){
+			for(; keys.hasNext(); keyCheck = keys.next())
+				if(keyCheck.equals("blocked")){
+					setX(oldX);
+					setY(oldY);
+				}
+		}
+		
+		else{
+			setMap((int)oldY, (int)oldX, nullEntry);
+			setMap((int)getY(), (int)getX(), this.entry);
+		}
+		oldX = getX();
+		oldY = getY();
+	}
+	
+	public void setMessage(String type){
+		if(type != "null")
+			message = "Hello " + type + "!";
+	}
+}

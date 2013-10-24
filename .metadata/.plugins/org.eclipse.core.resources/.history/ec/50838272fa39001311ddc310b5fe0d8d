@@ -1,0 +1,11 @@
+package com.peter.rogue.inventory;
+
+public class Armor extends Item{
+	
+	private int protection;
+	
+	private Armor(String name, int weight, String filename) {
+		super(name, weight, filename);
+	}
+
+}

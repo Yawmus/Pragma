@@ -1,0 +1,9 @@
+package com.peter.rogue.items;
+
+public class Food extends Item{
+
+	protected Food(String name, int weight, String filename) {
+		super(name, weight, filename);
+	}
+
+}

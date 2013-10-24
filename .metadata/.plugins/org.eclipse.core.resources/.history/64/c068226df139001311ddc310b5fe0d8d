@@ -1,0 +1,80 @@
+package com.peter.rogue.data;
+
+import java.util.HashMap;
+
+import com.peter.rogue.entities.Animate;
+import com.peter.rogue.entities.Entity;
+
+public class LevelData {
+	private int citizens;
+	private int shopkeeps;
+	private int monsters;
+    private int npcTotal;
+    private HashMap<String, AnimateEntry> animateDB;
+    private HashMap<String, Entry> inanimateDB;
+    
+    class Entry{
+    	private Entity entity;
+    	public Entry(Entity entity){
+    		this.entity = entity;
+    	}
+    	public Entity getEntity(){
+    		return entity;
+    	}
+    }
+    class AnimateEntry{
+    	private Animate entity;
+    	public AnimateEntry(Animate entity){
+    		this.entity = entity;
+    	}
+    	public Animate getEntity(){
+    		return entity;
+    	}
+    }
+	public LevelData(){
+		animateDB = new HashMap<String, AnimateEntry>();
+		inanimateDB = new HashMap<String, Entry>();
+		citizens = 2;
+		shopkeeps = 3;
+		monsters = 1;
+		npcTotal = citizens + shopkeeps;
+	}
+	
+	public int getNPCTotal() {
+		return npcTotal;
+	}
+	public int getCitizens() {
+		return citizens;
+	}
+	public int getShopkeeps() {
+		return shopkeeps;
+	}
+	public int getMonsters() {
+		return monsters;
+	}
+	public void setCitizens(int citizens) {
+		this.citizens = citizens;
+	}
+	public void setShopkeeps(int shopkeeps) {
+		this.shopkeeps = shopkeeps;
+	}
+	public void setMonsters(int monsters) {
+		this.monsters = monsters;
+	}
+	public void add(String ID, Entity entity){
+		if(entity.isAnimate())
+			animateDB.put(ID, new Entry(entity));
+		else
+			inanimateDB.put(ID, new Entry(entity));
+	}
+	public String get(String ID){
+		if(ID != "null")
+			if(animateDB.get(ID) != null)
+				if(animateDB.get(ID).getEntity().getName() != "null")
+					return animateDB.get(ID).getEntity().getName() + animateDB.get(ID).getEntity();
+				else
+			else
+				return ((Entry) database.get(ID)).getType();
+		return "null";
+	}
+}

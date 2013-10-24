@@ -1,0 +1,67 @@
+package com.peter.rogue.data;
+
+import java.util.HashMap;
+
+import com.peter.rogue.entities.Entity;
+
+public class LevelData {
+	private int citizens;
+	private int shopkeeps;
+	private int monsters;
+    private int npcTotal;
+    private HashMap<String, Entry> database;
+    private HashMap<String, Entry> inanimateDB;
+    
+    class Entry{
+    	private Entity entity;
+    	public Entry(Entity entity){
+    		this.entity = entity;
+    	}
+    	public Entity getEntity(){
+    		return entity;
+    	}
+    }
+	
+	public LevelData(){
+		database = new HashMap<String, Entry>();
+		inanimateDB = new HashMap<String, Entry>();
+		citizens = 2;
+		shopkeeps = 3;
+		monsters = 1;
+		npcTotal = citizens + shopkeeps;
+	}
+	
+	public int getNPCTotal() {
+		return npcTotal;
+	}
+	public int getCitizens() {
+		return citizens;
+	}
+	public int getShopkeeps() {
+		return shopkeeps;
+	}
+	public int getMonsters() {
+		return monsters;
+	}
+	public void setCitizens(int citizens) {
+		this.citizens = citizens;
+	}
+	public void setShopkeeps(int shopkeeps) {
+		this.shopkeeps = shopkeeps;
+	}
+	public void setMonsters(int monsters) {
+		this.monsters = monsters;
+	}
+	public void add(String ID, Entity entity){
+		database.put(ID, new Entry(entity));
+	}
+	public String get(String ID){
+		if(ID != "null")
+			if(((Entry) database.get(ID)).getEntity().getName() != "null")
+				if(((Entry) database.get(ID)).getEntity().getType() != "item")
+					return database.get(ID).getEntity().getName() + ((Entry) database.get(ID)).getEntity();
+			else
+				return ((Entry) database.get(ID)).getType();
+		return "null";
+	}
+}

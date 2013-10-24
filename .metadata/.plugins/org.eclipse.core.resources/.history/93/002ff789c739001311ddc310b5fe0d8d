@@ -1,0 +1,25 @@
+package com.peter.rogue.items;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.peter.rogue.Global;
+
+public class Item extends Entity{
+	private int weight;
+	public Item(){}
+	public Item(String name, int weight, String filename){
+		super(filename, "item");
+		name = new String();
+		this.weight = weight;
+	}
+	public void add(Item item, float x, float y){
+		setX(x * 32);
+		setY(y * 32);
+		Global.map.getLayers().get(1).getObjects().add(item);
+	}
+	public int getWeight() {
+		return weight;
+	}
+}

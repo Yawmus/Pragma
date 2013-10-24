@@ -1,0 +1,15 @@
+package com.peter.rogue.items;
+
+import com.peter.rogue.entities.Entity;
+
+public class Item extends Entity{
+	private int weight;
+	public Item(String name, int weight, String filename){
+		super(filename, "item");
+		name = new String();
+		this.weight = weight;
+	}
+	public int getWeight() {
+		return weight;
+	}
+}

@@ -1,0 +1,11 @@
+package com.peter.rogue.items;
+
+public class Food extends Item{
+
+	private static Food BREAD = new Food("Bread", 1, "backpack.png")
+	
+	private Food(String name, int weight, String filename) {
+		super(name, weight, filename);
+	}
+
+}

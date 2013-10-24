@@ -1,0 +1,31 @@
+package com.peter.rogue.items;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class Backpack extends Item{
+
+	public static Backpack smallBackpack = new Backpack("Small backpack", 0, "backpack.png");
+	private Backpack current;
+	
+	protected Backpack(String name, int weight, String filename) {
+		super(name, weight, filename);
+		current = smallBackpack;
+	}
+
+	@Override
+	public Texture getTexture(){
+		return getCurrent().getTexture();
+	}
+	public void putOn(Backpack backpack){
+		setCurrent(backpack);
+	}
+	public void takeOff(){
+		setCurrent(null);
+	}
+	private void setCurrent(Backpack current){
+		this.current = current;
+	}
+	private Backpack getCurrent(){
+		return current;
+	}
+}

@@ -1,0 +1,47 @@
+package com.peter.rogue.entities;
+
+public class Animate extends Entity{
+	protected Stats stats;
+	private Response response;
+	protected float oldX, oldY;
+	protected float wait = 0, messageDelay = 0, delay = 1;
+	
+	public Animate(String filename, String type) {
+		super(filename, type);
+		animate = true;
+		stats = new Stats();
+		response = new Response();
+	}
+	
+	@Override
+	public void setPosition(float x, float y){
+		setX(x * tileWidth);
+		setY(y * tileHeight);
+		oldX = getX();
+		oldY = getY();
+	}
+	
+
+	public Stats getStats() {
+		return stats;
+	}
+
+	public void setStats(Stats stats) {
+		this.stats = stats;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String type){
+		if(type != "null")
+			message = response.call(type);
+		
+		if(getType() == "worm")
+			message = "*Gurgle*";
+	}
+}
+
+class Response{
+	
+}
