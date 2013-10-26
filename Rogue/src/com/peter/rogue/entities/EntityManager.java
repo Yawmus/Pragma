@@ -27,6 +27,7 @@ public class EntityManager {
     public EntityManager() throws IOException {
     	data = new LevelData();
     	npcs = new LinkedList<NPC>();
+		ui = new UI();
     }
     
 	public void draw(OrthogonalTiledMapRenderer renderer){
@@ -69,25 +70,24 @@ public class EntityManager {
     }
     
     public void init(){
-    	Entity.initMap();
     	
     	for(int i=0; i<data.getCitizens(); i++){
-			randX = Global.randomGenerator(13, 3);
-			randY = Global.randomGenerator(7, 3);
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
 			npcs.add(new NPC("c_.png", "Citizen"));
 			npcs.getLast().setPosition(randX, randY);
 			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
 		}
     	for(int i=data.getCitizens(); i<data.getCitizens() + data.getShopkeeps(); i++){
-			randX = Global.randomGenerator(13, 3);
-			randY = Global.randomGenerator(7, 3);
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
 			npcs.add(new Shopkeep("s_.png", "Shopkeep"));
 			npcs.getLast().setPosition(randX, randY);
 			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
 		}
     	for(int i=data.getCitizens() + data.getShopkeeps(); i<data.getNPCTotal(); i++){
-			randX = Global.randomGenerator(13, 3);
-			randY = Global.randomGenerator(7, 3);
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
 			npcs.add(new Monster("w.png", "Worm"));
 			npcs.getLast().setPosition(randX, randY);
 			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
@@ -115,7 +115,6 @@ public class EntityManager {
 		data.add(player.getID(), player);
 		
 		Gdx.input.setInputProcessor(player);
-		ui = new UI();
 	}
     
     public void dispose(){

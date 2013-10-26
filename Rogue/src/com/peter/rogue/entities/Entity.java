@@ -23,6 +23,16 @@ public class Entity extends Sprite{
 	protected String name;
 	protected float tileWidth, tileHeight;
     protected static BitmapFont font = new BitmapFont();
+    protected int rand1, rand2;
+    
+    static{
+		map = new MapEntry[Global.HEIGHT][Global.WIDTH];
+		for(int i=0; i<Global.HEIGHT; i++)
+    		for(int j=0; j<Global.WIDTH; j++){
+    			nullEntry = new MapEntry("null", null);
+    			map[i][j] = nullEntry;
+    		}
+    }
 
 
 	public Entity(String filename, String type){
@@ -35,15 +45,6 @@ public class Entity extends Sprite{
 		name = new String("null");
 		animate = false;
 		entry = new MapEntry(UUID.randomUUID().toString(), this);
-	}
-	
-	public static void initMap(){
-		Entity.map = new MapEntry[Global.HEIGHT][Global.WIDTH];
-		for(int i=0; i<Global.HEIGHT; i++)
-    		for(int j=0; j<Global.WIDTH; j++){
-    			nullEntry = new MapEntry("null", null);
-    			Entity.map[i][j] = nullEntry;
-    		}
 	}
 
 	@Override

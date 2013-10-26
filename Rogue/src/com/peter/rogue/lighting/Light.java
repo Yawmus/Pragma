@@ -32,7 +32,7 @@ public class Light
 		}
 		
 		position.setXY(Gdx.input.getX(), Gdx.input.getY() * -1 + Global.HEIGHT);
-		for(int i = 0; i < rays.length - 1; i++){
+		/*for(int i = 0; i < rays.length - 1; i++){
 			for(int j = 0; j < Main.visible_rects.size(); j++){
 				if(rays[i].is_intersected(Main.visible_rects.get(j).getLineTop())){
 					rays[i] = new Line(rays[i].begin, rays[i].returnIntersectedPoint(Main.visible_rects.get(j).getLineTop()));
@@ -47,7 +47,7 @@ public class Light
 					rays[i] = new Line(rays[i].begin, rays[i].returnIntersectedPoint(Main.visible_rects.get(j).getLineLeft()));
 				}
 			}
-		}
+		}*/
 	}
 	
 	public Line new_ray(float rotation)
