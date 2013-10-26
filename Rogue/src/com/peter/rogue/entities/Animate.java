@@ -11,14 +11,21 @@ public class Animate extends Entity{
 	protected Stats stats;
 	private Response response;
 	protected float oldX, oldY;
+	protected static Scanner in;
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
-	protected float wait = 0, messageDelay = 0, delay = 1;
+	protected float wait = 0, messageDelay = 0, statusDelay = .6f, delay = 1;
+	protected String message;
+	public boolean messageFlag;
+	protected Integer status;
+	public boolean statusFlag;
+	protected boolean hostile;
+	protected String target;
 	protected static Vector3 pos = new Vector3();
+	
 	static{
 		firstNames = new LinkedList<String>();
 		lastNames = new LinkedList<String>();
-		Scanner in;
 		in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
 		while(in.hasNextLine())
 			firstNames.add(new String(in.nextLine()));
@@ -34,6 +41,8 @@ public class Animate extends Entity{
 		animate = true;
 		stats = new Stats();
 		response = new Response(type);
+		message = new String("");
+		status = new Integer(0);
 	}
 	
 	@Override
@@ -51,26 +60,55 @@ public class Animate extends Entity{
 	public void setStats(Stats stats) {
 		this.stats = stats;
 	}
+
+	public boolean isHostile() {
+		return hostile;
+	}
+
+	public void setHostility(boolean hostile) {
+		this.hostile = hostile;
+	}
+	
+	public void remove(){
+		setMap((int)getY(), (int)getX(), nullEntry);
+	}
 	
 	public String getMessage() {
 		return message;
 	}
-	public void setMessage(String type){
-		if(type != "null")
-			message = response.call(name, type);
+	public void setMessage(Animate caller){
+		if(!messageFlag)
+			message = response.call(caller);
+	}
+	public void resetMessage() {
+		message = "";
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(int amount){
+		if(!statusFlag)
+			status = amount;
+	}
+	public void resetStatus() {
+		status = 0;
 	}
 }
 
 class Response{
 	
 	private String receiver;
+	//private LinkedList<LinkedList<String>> responses;
 	private int dice;
 	
 	public Response(String type) {
+		//responses = new LinkedList<LinkedList<String>>();
+		//in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
+		//if(type == "Player")
 		this.receiver = type;
 	}
 
-	public String call(String name, String type){
+	public String call(Animate caller){
 		if(receiver == "Player"){
 			dice = Global.rand(8, 0);
 			switch(dice){
@@ -94,10 +132,10 @@ class Response{
 		}
 		if(receiver == "Shopkeep" || receiver == "Citizen"){
 			dice = Global.rand(4, 0);
-			if(type == "worm")
+			if(caller.getType() == "worm")
 				switch(dice){
 				case 0:
-					return "Eww, a " + type + "!";
+					return "Eww, a " + caller.getType() + "!";
 				case 1:
 					return "Back vile beast!";
 				case 2:
@@ -105,13 +143,15 @@ class Response{
 				case 3:
 					return "Do you want to come home with me?";
 				}
+			if(caller.isHostile())
+				return "Ouch!";
 			switch(dice){
 			case 0:
-				return "Hello " + name + "!";
+				return "Hello " + caller.getType() + "!";
 			case 1:
-				return "Greetings " + name + "!";
+				return "Greetings " + caller.getType() + "!";
 			case 2:
-				return "How goes it " + name + "?";
+				return "How goes it " + caller.getType() + "?";
 			case 3:
 				return "Nice day isn't it?";
 			}

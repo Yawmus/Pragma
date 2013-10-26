@@ -38,7 +38,7 @@ public class Inventory {
 
 		spriteBatch.begin();
 		for(int i=0; i<items.size(); i++){
-			font.draw(spriteBatch, items.get(i).getName(),  Global.camera.position.x + 80, (Global.camera.position.y + WIDTH/2) - i * 15);
+			font.draw(spriteBatch, items.get(i).getName(),  Global.camera.position.x + 80, (Global.camera.position.y + HEIGHT/2) - i * 15);
 		}
 		spriteBatch.end();
 	}

@@ -41,25 +41,12 @@ public class UI{
 		renderer.getSpriteBatch().end();
 		
 		if(player.isMenuActive()){
-			if(player.getMenu().equals("inventory"))
+			if(player.getMenu().equals("Inventory"))
 				player.getInventory().display(renderer.getSpriteBatch(), font);
 			
-			else if(player.getMenu().equals("chest")){
+			else if(player.getMenu().equals("Chest")){
 				player.getInventory().display(renderer.getSpriteBatch(), font);
-				
-				Global.shapeRenderer.begin(ShapeType.Filled);
-				Global.shapeRenderer.setColor(0f, 0f, 0f, 1f);
-				Global.shapeRenderer.rect(Global.SCREEN_WIDTH/6, Global.SCREEN_HEIGHT/3, 300, 300);
-				Global.shapeRenderer.end();
-				Global.shapeRenderer.begin(ShapeType.Line);
-				Global.shapeRenderer.setColor(.3f, .84f, 0, 1f);
-				Global.shapeRenderer.rect(Global.SCREEN_WIDTH/6, Global.SCREEN_HEIGHT/3, 300, 300);
-				Global.shapeRenderer.end();
-				
-				renderer.getSpriteBatch().begin();
-				font.draw(renderer.getSpriteBatch(), "Hello World!", Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y + Global.SCREEN_HEIGHT/8 + 78);
-				font.draw(renderer.getSpriteBatch(), "Hello World!", Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y + Global.SCREEN_HEIGHT/8 + 60);
-				renderer.getSpriteBatch().end();
+				player.getMenuObject().display(renderer.getSpriteBatch(), font);
 			}
 		}
 		update(Gdx.graphics.getDeltaTime());
@@ -70,15 +57,20 @@ public class UI{
 	
 	public void display(SpriteBatch spriteBatch, Player player){
 		spriteBatch.draw(player.getPicture(),  Global.camera.position.x - Global.SCREEN_WIDTH/2 + 45, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 20);
+		
 		gothicFont.setScale(1f);
 		gothicFont.draw(spriteBatch, player.getName(), Global.camera.position.x - Global.SCREEN_WIDTH/2 + 125, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 90);
 		gothicFont.setScale(.7f);
 		gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel(), Global.camera.position.x - Global.SCREEN_WIDTH/2 + 125, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
-		gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints(), Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
+		gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
 		gothicFont.draw(spriteBatch, "Strenght:  " + player.getStats().getStrength(), Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
-		gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 120, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
-		gothicFont.draw(spriteBatch, "Experience: " + player.getStats().getExperience(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 120, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
-
+		gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 150, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
+		gothicFont.draw(spriteBatch, "Experience: " + player.getStats().getExperience(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 150, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
+		gothicFont.draw(spriteBatch, "Demeanor: ", Global.camera.position.x - Global.SCREEN_WIDTH/4 + 350, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
+		if(player.isHostile())
+			gothicFont.draw(spriteBatch, "Hostile", Global.camera.position.x - Global.SCREEN_WIDTH/4 + 440, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
+		else
+			gothicFont.draw(spriteBatch, "Friendly", Global.camera.position.x - Global.SCREEN_WIDTH/4 + 440, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
 		spriteBatch.draw(player.getInventory().getBackpack(),  Global.camera.position.x + Global.SCREEN_WIDTH/2 - 100, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 20);
 	}
 	

@@ -1,0 +1,10 @@
+*Player
+-Citizen
+Hello
+Leave me alone
+-Shopkeep
+askdhflkjfkl
+-Worm
+Filthy beast!
+
+*Citizen

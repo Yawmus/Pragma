@@ -5,6 +5,7 @@ public class Monster extends NPC{
 	public Monster(String filename, String type) {
 		super(filename, type);
 		hostile = true;
+		name = type;
 		message = "*Gurgle*";
 	}
 }

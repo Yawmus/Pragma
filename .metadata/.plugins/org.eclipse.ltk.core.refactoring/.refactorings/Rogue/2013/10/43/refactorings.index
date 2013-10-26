@@ -8,5 +8,6 @@
 1382323228261	Rename package 'com.peter.rogue.items'
 1382323357712	Delete element
 1382406388949	Rename package 'lighting'
-1382586852818	Rename compilation unit 'FileReader.java'
-1382640013377	Delete element
+1382805233262	Encapsulate field 'maxHitpoints'
+1382808628952	Delete element
+1382808650297	Rename type 'LevelData'
