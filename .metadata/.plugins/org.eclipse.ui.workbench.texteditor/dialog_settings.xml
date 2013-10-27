@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="287" key="DIALOG_WIDTH"/>
-		<item value="248" key="DIALOG_Y_ORIGIN"/>
-		<item value="826" key="DIALOG_X_ORIGIN"/>
+		<item value="305" key="DIALOG_Y_ORIGIN"/>
 		<item value="428" key="DIALOG_HEIGHT"/>
+		<item value="1192" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.163636|0|WINDOWS|1|-14|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="data.get" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
+			<item value="getY()"/>
+			<item value="getY(), getX"/>
+			<item value="render"/>
+			<item value="draw("/>
+			<item value="draw"/>
+			<item value="map = new TmxMapLoader().load(&quot;maps/map.tmx&quot;);"/>
 			<item value="data.get"/>
 			<item value="system.out"/>
-			<item value="info"/>
-			<item value="&#x09;&#x09;&#x09;"/>
-			<item value="check"/>
-			<item value="checkCollision"/>
-			<item value="OrthogonalTiledMapRenderer renderer"/>
-			<item value="poop"/>
 		</list>
 		<list key="replacehistory">
 		</list>

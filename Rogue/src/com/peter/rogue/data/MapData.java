@@ -39,7 +39,12 @@ public class MapData {
 		monsters = 1;
 		npcTotal = citizens + shopkeeps + monsters;
 	}
-	
+	public void clean(String ID){
+		Animate temp = animateDB.get(ID).getEntity();
+		animateDB.clear();
+		animateDB.put(ID, new Entry1(temp));
+		inanimateDB.clear();
+	}
 	public int getNPCTotal() {
 		return npcTotal;
 	}

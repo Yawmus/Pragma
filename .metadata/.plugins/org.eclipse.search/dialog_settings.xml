@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.jdt.ui.JavaSearchResultPage">
+		<item value="TRUE" key="org.eclipse.jdt.search.resultpage.limit_enabled"/>
+		<item value="1000" key="org.eclipse.jdt.search.resultpage.limit"/>
+	</section>
+	<section name="">
+		<item value="TRUE" key="org.eclipse.jdt.search.resultpage.limit_enabled"/>
+		<item value="1000" key="org.eclipse.jdt.search.resultpage.limit"/>
+	</section>
 	<section name="">
 		<item value="1000" key="org.eclipse.search.resultpage.limit"/>
 	</section>
 	<section name="DialogBounds_SearchDialog">
 		<item value="636" key="DIALOG_WIDTH"/>
 		<item value="164" key="DIALOG_Y_ORIGIN"/>
-		<item value="517" key="DIALOG_HEIGHT"/>
 		<item value="1012" key="DIALOG_X_ORIGIN"/>
+		<item value="517" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.163636|0|WINDOWS|1|-14|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="Search">
@@ -26,11 +34,11 @@
 			<item value="org.eclipse.pde.internal.ui.search.SearchPage"/>
 		</list>
 	</section>
+	<section name="SearchDialog">
+		<item value="org.eclipse.jdt.ui.JavaSearchPage" key="PREVIOUS_PAGE"/>
+	</section>
 	<section name="org.eclipse.search.text.FileSearchResultPage">
 		<item value="1000" key="org.eclipse.search.resultpage.limit"/>
-	</section>
-	<section name="SearchDialog">
-		<item value="org.eclipse.search.internal.ui.text.TextSearchPage" key="PREVIOUS_PAGE"/>
 	</section>
 	<section name="TextSearchPage">
 		<item value="false" key="CASE_SENSITIVE"/>

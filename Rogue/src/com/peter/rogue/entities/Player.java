@@ -4,8 +4,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Inventory;
@@ -23,6 +21,7 @@ public class Player extends Animate implements InputProcessor {
 	private Entity menuObject;
 	private int wallet;
 	private int viewDistance;
+    private boolean newMap = false;
 	
 	public Player(String filename, String type){
 		super(filename, type);
@@ -43,30 +42,12 @@ public class Player extends Animate implements InputProcessor {
 	public void draw(Map renderer){
 		super.draw(renderer.getSpriteBatch());
 		
-		renderer.getSpriteBatch().end();
-		pos = new Vector3(getX(), getY(), 0);
-		Global.camera.project(pos);
+		
 		/*Global.shapeRenderer.begin(ShapeType.Line);
 		Global.shapeRenderer.setColor(1f, 0, 0, .1f);
 		Global.shapeRenderer.circle(pos.x + getWidth()/2, pos.y + getHeight()/2, viewDistance);
 		Global.shapeRenderer.end();*/
 		
-		if(messageFlag){
-			Global.shapeRenderer.begin(ShapeType.Filled);
-			Global.shapeRenderer.setColor(0, 0, 0, 1f);
-			Global.shapeRenderer.rect(pos.x, pos.y - 17, font.getBounds(getMessage()).width, font.getLineHeight());
-			Global.shapeRenderer.end();
-		}
-		
-		if(statusFlag){
-			Global.shapeRenderer.begin(ShapeType.Filled);
-			Global.shapeRenderer.setColor(0, 0, 0, 1f);
-			Global.shapeRenderer.rect(pos.x, pos.y, font.getBounds(getMessage()).width, font.getLineHeight());
-			Global.shapeRenderer.end();
-		}
-
-		renderer.getSpriteBatch().begin();
-		Entity.font.draw(renderer.getSpriteBatch(), getMessage(), getX(), getY());
 		update(Gdx.graphics.getDeltaTime(), renderer);
 	}
 	
@@ -134,12 +115,12 @@ public class Player extends Animate implements InputProcessor {
 		}
 		else if(Global.renderer.getTile(getX(), getY()).hasStairs() && !Global.renderer.getTile(oldX, oldY).hasStairs()){
 			if(Global.renderer.getTile(getX(), getY()).direction()){
-				System.out.println("Down");
-				Map.load(-1);
+				newMap = true;
+				Map.load(-1, getX(), getY());
 			}
 			else{
-				System.out.println("Up");
-				Map.load(1);
+				newMap = true;
+				Map.load(1, getX(), getY());
 			}
 		}
 		if(getMapID(getX(), getY()) != "null" && getMapID(getX(), getY()) != getID()){
@@ -185,6 +166,9 @@ public class Player extends Animate implements InputProcessor {
 			break;
 		case Keys.F:
 			hostile = !hostile;
+			break;
+		case Keys.TAB:
+			Global.camera.zoom += .4;
 			break;
 		case Keys.ESCAPE:
 			System.exit(0);
@@ -247,10 +231,22 @@ public class Player extends Animate implements InputProcessor {
 	public void setWallet(int wallet) {
 		this.wallet = wallet;
 	}
+	
+	public boolean isNewMap(){
+		return newMap;
+	}
+	
+	public void setNewMap(){
+		newMap = !newMap;
+	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		switch(keycode){
+		case Keys.TAB:
+			Global.camera.zoom -= .4;
+			break;
+		}
 		return false;
 	}
 

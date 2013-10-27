@@ -2,8 +2,6 @@ package com.peter.rogue.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 
 public class NPC extends Animate {
@@ -18,29 +16,6 @@ public class NPC extends Animate {
 
 	public void draw(SpriteBatch spriteBatch){
 		super.draw(spriteBatch);
-		pos = new Vector3(getX(), getY(), 0);
-		Global.camera.project(pos);
-		spriteBatch.end();
-		
-		if(messageFlag){
-			Global.shapeRenderer.begin(ShapeType.Filled);
-			Global.shapeRenderer.setColor(0, 0, 0, 1f);
-			Global.shapeRenderer.rect(pos.x, pos.y - 17, font.getBounds(getMessage()).width, font.getLineHeight());
-			Global.shapeRenderer.end();
-		}
-		if(statusFlag){
-			Global.shapeRenderer.begin(ShapeType.Filled);
-			Global.shapeRenderer.setColor(.4f, 0f, 0f, 1f);
-			Global.shapeRenderer.circle(pos.x, pos.y + 20, font.getBounds(getStatus().toString()).width);
-			Global.shapeRenderer.end();
-		}
-		spriteBatch.begin();
-		Entity.font.draw(spriteBatch, getMessage(), getX(), getY());
-		if(getStatus() != 0){
-			//Entity.font.setColor(0, 0, 0, 1f);
-			Entity.font.draw(spriteBatch, getStatus().toString(), getX() - 8, getY() + 26);
-			//Entity.font.setColor(1f, 1f, 1f, 1f);
-		}
 		update(Gdx.graphics.getDeltaTime());
 	}
 	

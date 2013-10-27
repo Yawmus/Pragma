@@ -1,10 +1,14 @@
 package com.peter.rogue.views;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
+import com.peter.rogue.entities.NPC;
 import com.peter.rogue.entities.Player;
 import com.peter.rogue.map.Map;
 
@@ -17,8 +21,55 @@ public class UI{
 		gothicFont = new BitmapFont(Gdx.files.internal("fonts/Cardinal.fnt"), Gdx.files.internal("fonts/Cardinal.png"), false);
 	}
 	
-	public void draw(Map renderer, Player player){
-		renderer.getSpriteBatch().end();
+	public void draw(Player player, LinkedList<NPC> npcs){
+		
+		// Draws the messages and statuses on top of everything
+		for(int i=0; i<npcs.size(); i++){
+			NPC.pos = new Vector3(npcs.get(i).getX(), npcs.get(i).getY(), 0);
+			Global.camera.project(NPC.pos);
+			Global.renderer.getSpriteBatch().end();
+			
+			if(npcs.get(i).messageFlag){
+				Global.shapeRenderer.begin(ShapeType.Filled);
+				Global.shapeRenderer.setColor(0, 0, 0, 1f);
+				Global.shapeRenderer.rect(NPC.pos.x, NPC.pos.y - 17, font.getBounds(npcs.get(i).getMessage()).width, font.getLineHeight());
+				Global.shapeRenderer.end();
+			}
+			if(npcs.get(i).statusFlag){
+				Global.shapeRenderer.begin(ShapeType.Filled);
+				Global.shapeRenderer.setColor(.4f, 0f, 0f, 1f);
+				Global.shapeRenderer.circle(NPC.pos.x, NPC.pos.y + 20, font.getBounds(npcs.get(i).getStatus().toString()).width);
+				Global.shapeRenderer.end();
+			}
+			Global.renderer.getSpriteBatch().begin();
+			font.draw(Global.renderer.getSpriteBatch(), npcs.get(i).getMessage(), npcs.get(i).getX(), npcs.get(i).getY());
+			if(npcs.get(i).getStatus() != 0){
+				font.draw(Global.renderer.getSpriteBatch(), npcs.get(i).getStatus().toString(), npcs.get(i).getX() - 8, npcs.get(i).getY() + 26);
+			}
+		}
+		
+		Global.renderer.getSpriteBatch().end();
+		Player.pos = new Vector3(player.getX(), player.getY(), 0);
+		Global.camera.project(Player.pos);
+		if(player.messageFlag){
+			Global.shapeRenderer.begin(ShapeType.Filled);
+			Global.shapeRenderer.setColor(0, 0, 0, 1f);
+			Global.shapeRenderer.rect(Player.pos.x, Player.pos.y - 17, font.getBounds(player.getMessage()).width, font.getLineHeight());
+			Global.shapeRenderer.end();
+		}
+		
+		if(player.statusFlag){
+			Global.shapeRenderer.begin(ShapeType.Filled);
+			Global.shapeRenderer.setColor(0, 0, 0, 1f);
+			Global.shapeRenderer.rect(Player.pos.x, Player.pos.y, font.getBounds(player.getMessage()).width, font.getLineHeight());
+			Global.shapeRenderer.end();
+		}
+
+		Global.renderer.getSpriteBatch().begin();
+		font.draw(Global.renderer.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
+		
+		
+		Global.renderer.getSpriteBatch().end();
 		Global.shapeRenderer.begin(ShapeType.Filled);
 		Global.shapeRenderer.setColor(0, 0, 0, 1f);
 		Global.shapeRenderer.rect(0, 0, Global.SCREEN_WIDTH, 100f);
@@ -35,18 +86,18 @@ public class UI{
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
 		Global.camera.update();
 		
-		renderer.setView(Global.camera);
-		renderer.getSpriteBatch().begin();
-		display(renderer.getSpriteBatch(), player);
-		renderer.getSpriteBatch().end();
+		Global.renderer.setView(Global.camera);
+		Global.renderer.getSpriteBatch().begin();
+		display(Global.renderer.getSpriteBatch(), player);
+		Global.renderer.getSpriteBatch().end();
 		
 		if(player.isMenuActive()){
 			if(player.getMenu().equals("Inventory"))
-				player.getInventory().display(renderer.getSpriteBatch(), font);
+				player.getInventory().display(Global.renderer.getSpriteBatch(), font);
 			
 			else if(player.getMenu().equals("Chest")){
-				player.getInventory().display(renderer.getSpriteBatch(), font);
-				player.getMenuObject().display(renderer.getSpriteBatch(), font);
+				player.getInventory().display(Global.renderer.getSpriteBatch(), font);
+				player.getMenuObject().display(Global.renderer.getSpriteBatch(), font);
 			}
 		}
 		update(Gdx.graphics.getDeltaTime());

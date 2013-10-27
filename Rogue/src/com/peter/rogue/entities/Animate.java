@@ -21,7 +21,7 @@ public class Animate extends Entity{
 	public boolean statusFlag;
 	protected boolean hostile;
 	protected String target;
-	protected static Vector3 pos = new Vector3();
+	public static Vector3 pos = new Vector3();
 	
 	static{
 		firstNames = new LinkedList<String>();

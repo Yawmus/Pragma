@@ -47,8 +47,11 @@ public class EntityManager {
 
 		player.draw(Global.renderer);
 		
+		if(player.isNewMap())
+			purge();
+		
 		Global.renderer.setView(Global.camera);
-		ui.draw(Global.renderer, player);
+		ui.draw(player, npcs);
 		
 		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(Animate.pos);
@@ -70,7 +73,6 @@ public class EntityManager {
     }
     
     public void init(){
-    	
     	for(int i=0; i<Global.data.getCitizens(); i++){
 			randX = Global.rand(13, 3);
 			randY = Global.rand(7, 3);
@@ -120,9 +122,15 @@ public class EntityManager {
 		Global.data.add(objects.getLast().getID(), objects.getLast());
 
 		Global.data.add(player.getID(), player);
-		
 		Gdx.input.setInputProcessor(player);
 	}
+    
+    public void purge(){
+		Global.data.clean(player.getID());
+		npcs.clear();
+		objects.clear();
+		player.setNewMap();
+    }
     
     public void dispose(){
 		for(int i=0; i<Global.data.getNPCTotal(); i++)

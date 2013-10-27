@@ -5,7 +5,6 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.Sprite"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.BitmapFont"/>
 <fullyQualifiedTypeName name="com.peter.rogue.items.Item"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="com.peter.rogue.items.Food"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
@@ -14,14 +13,22 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.tiled.TiledMapTileLayer"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.tiled.TiledMapTileSet"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.TextureRegion"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.objects.TextureMapObject"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.MapObject"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Entity.MapEntry"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Head"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.GL10"/>
 <fullyQualifiedTypeName name="com.peter.rogue.Global"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
+<fullyQualifiedTypeName name="com.peter.rogue.inventory.Chest"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.TextureRegion"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.Image"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Pixmap"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
+<fullyQualifiedTypeName name="com.peter.map.Map"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
 </qualifiedTypeNameHistroy>
