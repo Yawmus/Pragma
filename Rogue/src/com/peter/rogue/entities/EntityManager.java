@@ -1,11 +1,9 @@
 package com.peter.rogue.entities;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
@@ -16,23 +14,23 @@ import com.peter.rogue.views.UI;
 public class EntityManager {
 
     private LinkedList<NPC> npcs;
-    private LinkedList<Entity> objects = new LinkedList<Entity>();
+    private LinkedList<Entity> objects;
     
     private int randX, randY;
     private Player player;
-    private UI ui;
+    private UI ui = new UI();
     
-    public EntityManager() throws IOException {
+    public EntityManager(){
     	npcs = new LinkedList<NPC>();
-		ui = new UI();
+    	objects = new LinkedList<Entity>();
     }
     
-	public void draw(OrthogonalTiledMapRenderer renderer){
+	public void draw(){
 		for(int i=0; i<objects.size(); i++){
 			if(objects.get(i).isPickedUp())
 				objects.remove(i);
 			else
-				objects.get(i).draw(renderer.getSpriteBatch());
+				objects.get(i).draw(Global.renderer.getSpriteBatch());
 		}
 		for(int i=0; i<npcs.size(); i++){
 			//if(npcs.get(i).getX() > (player.getX() + player.getWidth()/2) - player.getViewDistance() && npcs.get(i).getX() < (player.getX() + player.getWidth()/2) + player.getViewDistance() &&
@@ -42,21 +40,21 @@ public class EntityManager {
 				npcs.remove(i);
 			}
 			else
-				npcs.get(i).draw(renderer.getSpriteBatch());
+				npcs.get(i).draw(Global.renderer.getSpriteBatch());
 			//else
 			//	npcs.get(i).update(Gdx.graphics.getDeltaTime());
 		}
 
-		player.draw(renderer.getSpriteBatch());
+		player.draw(Global.renderer);
 		
-		renderer.setView(Global.camera);
-		ui.draw(renderer, player);
+		Global.renderer.setView(Global.camera);
+		ui.draw(Global.renderer, player);
 		
 		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(Animate.pos);
 		
 		if(Animate.pos.y + 32 > (Global.camera.position.y - Global.SCREEN_HEIGHT/3 + 12))
-			player.setInformation(Global.data.getCursor(player.getMapID(Animate.pos.y, Animate.pos.x)));
+			player.setInformation(Global.data.getCursor(player.getMapID(Animate.pos.x, Animate.pos.y)));
 		else
 			player.setInformation("null");
 		
@@ -67,8 +65,8 @@ public class EntityManager {
 		Global.shapeRenderer.end();
 		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(Animate.pos);
-		renderer.getSpriteBatch().begin();
-		Entity.font.draw(renderer.getSpriteBatch(), player.getInformation(), Animate.pos.x, Animate.pos.y + Entity.font.getLineHeight());
+		Global.renderer.getSpriteBatch().begin();
+		Entity.font.draw(Global.renderer.getSpriteBatch(), player.getInformation(), Animate.pos.x, Animate.pos.y + Entity.font.getLineHeight());
     }
     
     public void init(){
@@ -78,21 +76,21 @@ public class EntityManager {
 			randY = Global.rand(7, 3);
 			npcs.add(new NPC("c_.png", "Citizen"));
 			npcs.getLast().setPosition(randX, randY);
-			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
+			npcs.getLast().setMap(npcs.getLast().getX(), npcs.getLast().getY(), npcs.getLast().getEntry());
 		}
     	for(int i=Global.data.getCitizens(); i<Global.data.getCitizens() + Global.data.getShopkeeps(); i++){
 			randX = Global.rand(13, 3);
 			randY = Global.rand(7, 3);
 			npcs.add(new Shopkeep("s_.png", "Shopkeep"));
 			npcs.getLast().setPosition(randX, randY);
-			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
+			npcs.getLast().setMap(npcs.getLast().getX(), npcs.getLast().getY(), npcs.getLast().getEntry());
 		}
     	for(int i=Global.data.getCitizens() + Global.data.getShopkeeps(); i<Global.data.getNPCTotal(); i++){
 			randX = Global.rand(13, 3);
 			randY = Global.rand(7, 3);
 			npcs.add(new Monster("w.png", "Worm"));
 			npcs.getLast().setPosition(randX, randY);
-			npcs.getLast().setMap((int)npcs.getLast().getY(), (int)npcs.getLast().getX(), npcs.getLast().getEntry());
+			npcs.getLast().setMap(npcs.getLast().getX(), npcs.getLast().getY(), npcs.getLast().getEntry());
     	}
     	
     	for(int i=0; i<npcs.size(); i++){

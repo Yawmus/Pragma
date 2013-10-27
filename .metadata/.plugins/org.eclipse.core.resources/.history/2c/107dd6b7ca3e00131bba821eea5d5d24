@@ -1,0 +1,10 @@
+package com.peter.map;
+
+public class Tile{
+
+	public static final Tile GROUND = new Tile("tile.png");
+	
+	public Tile(String filename){
+		
+	}
+}

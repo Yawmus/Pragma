@@ -1,0 +1,103 @@
+package com.peter.rogue.map;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
+
+public class Map implements MapRenderer{
+	protected Tile[][] tiles;
+	protected int HEIGHT = 10, WIDTH = 10;
+	protected SpriteBatch spriteBatch;
+	protected Rectangle viewBounds;
+	protected TextureRegion region;
+	
+	
+	public Map(){
+		spriteBatch = new SpriteBatch();
+		viewBounds = new Rectangle();
+		region = new TextureRegion();
+		tiles = new Tile[HEIGHT][WIDTH];
+	}
+	
+	public void load(){
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				tiles[x][y] = Tile.GROUND;
+	}
+	
+	public void draw(){
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++){
+				System.out.println("HI");
+				spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
+			}
+	}
+
+	public Rectangle getViewBounds () {
+		return viewBounds;
+	}
+	
+	@Override
+	public void setView (OrthographicCamera camera) {
+		spriteBatch.setProjectionMatrix(camera.combined);
+		float width = camera.viewportWidth * camera.zoom;
+		float height = camera.viewportHeight * camera.zoom;
+		viewBounds.set(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
+	}
+	
+	public SpriteBatch getSpriteBatch () {
+		return spriteBatch;
+	}
+
+	@Override
+	public void setView (Matrix4 projection, float x, float y, float width, float height) {
+		spriteBatch.setProjectionMatrix(projection);
+		viewBounds.set(x, y, width, height);
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	/*beginRender();
+	for (MapLayer layer : map.getLayers()) {
+		if (layer.isVisible()) {
+			if (layer instanceof TiledMapTileLayer) {
+				renderTileLayer((TiledMapTileLayer)layer);
+			} else {
+				for (MapObject object : layer.getObjects()) {
+					renderObject(object);
+				}
+			}
+		}
+	}
+	endRender();
+	
+	
+	*//** Called before the rendering of all layers starts. *//*
+	protected void beginRender () {
+		AnimatedTiledMapTile.updateAnimationBaseTime();
+		spriteBatch.begin();
+	}
+
+	*//** Called after the rendering of all layers ended. *//*
+	protected void endRender () {
+		spriteBatch.end();
+	}*/
+
+	@Override
+	public void render(int[] layers) {
+		// TODO Auto-generated method stub
+		
+	}
+}

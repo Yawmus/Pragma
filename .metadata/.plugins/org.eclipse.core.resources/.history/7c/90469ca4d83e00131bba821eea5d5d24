@@ -1,0 +1,31 @@
+package com.peter.rogue.map;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+public class Tile{
+	/*blocked, money, stairway
+	*/
+	private Texture texture;
+	private boolean blocked;
+	private boolean[] properties;
+	
+	public static final Tile GROUND = new Tile("tile.png", new String[2](false, false));
+	public static final Tile WALL = new Tile("pound.png");
+	
+	public Tile(String filename, String[] properties){
+		texture = new Texture(Gdx.files.internal("maps/" + filename));
+		this.blocked = blocked;
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+}

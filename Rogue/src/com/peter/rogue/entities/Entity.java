@@ -6,12 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.peter.rogue.Global;
+import com.peter.rogue.map.Map;
 
 public class Entity extends Sprite{
-
-	protected TiledMapTileLayer collisionLayer;
 	
 	private static MapEntry[][] map;
 	protected static MapEntry nullEntry;
@@ -19,26 +16,22 @@ public class Entity extends Sprite{
 	private String type = new String();
 	protected boolean animate;
 	protected String name;
-	protected float tileWidth, tileHeight;
+	protected float tileWidth = 32, tileHeight = 32;
     protected static BitmapFont font = new BitmapFont();
     protected int rand1, rand2;
 	protected boolean pickedUp = false;
     
     static{
-		map = new MapEntry[Global.HEIGHT][Global.WIDTH];
-		for(int i=0; i<Global.HEIGHT; i++)
-    		for(int j=0; j<Global.WIDTH; j++){
+		map = new MapEntry[Map.WIDTH][Map.HEIGHT];
+		for(int i=0; i<Map.WIDTH; i++)
+    		for(int j=0; j<Map.HEIGHT; j++){
     			nullEntry = new MapEntry("null", null);
     			map[i][j] = nullEntry;
     		}
     }
 
-
 	public Entity(String filename, String type){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
-		collisionLayer = (TiledMapTileLayer) Global.map.getLayers().get(0);
-		tileWidth = this.collisionLayer.getTileWidth();
-		tileHeight = this.collisionLayer.getTileHeight();
 		this.type = type;
 		name = new String("null");
 		animate = false;
@@ -49,10 +42,6 @@ public class Entity extends Sprite{
 	public void setPosition(float x, float y){
 		setX(x * tileWidth);
 		setY(y * tileHeight);
-	}
-	
-	public TiledMapTileLayer getCollisionLayer() {
-		return collisionLayer;
 	}
 
 	public String getID() {
@@ -71,18 +60,18 @@ public class Entity extends Sprite{
 		return entry;
 	}
 
-	public String getMapID(float y, float x) {
-		if(y < 0 || x < 0)
+	public String getMapID(float x, float y) {
+		if(y < 0 || x < 0 || y/32 >= Map.HEIGHT || x/32 >= Map.WIDTH)
 			return "null";
-		return Entity.map[(int)(y / 32f)][(int)(x / 32f)].ID;
+		return Entity.map[(int)(x/32)][(int)(y/32)].ID;
 	}
 	
-	public Entity getMapObject(float y, float x) {
-		return Entity.map[(int) (y / 32f)][(int) (x / 32f)].entity;
+	public Entity getMapObject(float x, float y) {
+		return Entity.map[(int)(x/32)][(int)(y/32)].entity;
 	}
 
-	public void setMap(int y, int x, MapEntry entry) {
-		Entity.map[y / 32][x / 32] = entry;
+	public void setMap(float x, float y, MapEntry entry) {
+		Entity.map[(int)(x/32)][(int)(y/32)] = entry;
 	}
 	public String getType() {
 		return type;

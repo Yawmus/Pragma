@@ -70,7 +70,7 @@ public class Animate extends Entity{
 	}
 	
 	public void remove(){
-		setMap((int)getY(), (int)getX(), nullEntry);
+		setMap(getX(), getY(), nullEntry);
 	}
 	
 	public String getMessage() {

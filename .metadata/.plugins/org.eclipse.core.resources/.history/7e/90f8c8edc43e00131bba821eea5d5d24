@@ -1,0 +1,9 @@
+package com.peter.map;
+
+public class Map {
+	private static Tile[] map;
+	
+	public Map(){
+		
+	}
+}

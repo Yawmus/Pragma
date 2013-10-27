@@ -1,0 +1,18 @@
+package com.peter.map;
+
+public class Map {
+	private static Tile[][] tiles;
+	private static final int HEIGHT = 30, WIDTH = 30;
+	
+	static{
+		tiles = new Tile[HEIGHT][WIDTH];
+	}
+	
+	public Map(){
+		
+	}
+	
+	public void draw(){
+		for(int x=0; x<
+	}
+}

@@ -1,0 +1,31 @@
+package com.peter.rogue.map;
+
+import java.util.LinkedList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+ public class Tile{
+
+	private Texture texture;
+	private boolean blocked;
+	private LinkedList<String> properties;
+	
+	public static final Tile GROUND = new Tile("tile.png", false);
+	public static final Tile WALL = new Tile("pound.png", true);
+	
+	public Tile(){}
+	
+	public Tile(String filename, boolean blocked){
+		texture = new Texture(Gdx.files.internal("maps/" + filename));
+		this.blocked = blocked;
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+}

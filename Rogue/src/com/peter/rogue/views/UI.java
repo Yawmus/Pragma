@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.peter.rogue.Global;
 import com.peter.rogue.entities.Player;
+import com.peter.rogue.map.Map;
 
 public class UI{
     private BitmapFont gothicFont;
@@ -17,7 +17,7 @@ public class UI{
 		gothicFont = new BitmapFont(Gdx.files.internal("fonts/Cardinal.fnt"), Gdx.files.internal("fonts/Cardinal.png"), false);
 	}
 	
-	public void draw(OrthogonalTiledMapRenderer renderer, Player player){
+	public void draw(Map renderer, Player player){
 		renderer.getSpriteBatch().end();
 		Global.shapeRenderer.begin(ShapeType.Filled);
 		Global.shapeRenderer.setColor(0, 0, 0, 1f);
@@ -29,9 +29,9 @@ public class UI{
 		Global.shapeRenderer.end();
 		
 		// If near edge of map then don't update respective axis
-		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Global.WIDTH*32 - 18*32)
+		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Map.WIDTH*32 - 18*32)
 			Global.camera.position.x = player.getX() + player.getWidth() / 2;
-		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Global.HEIGHT*32 - 9*32)
+		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Map.HEIGHT*32 - 9*32)
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
 		Global.camera.update();
 		
@@ -71,6 +71,7 @@ public class UI{
 			gothicFont.draw(spriteBatch, "Hostile", Global.camera.position.x - Global.SCREEN_WIDTH/4 + 440, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
 		else
 			gothicFont.draw(spriteBatch, "Friendly", Global.camera.position.x - Global.SCREEN_WIDTH/4 + 440, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
+		gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 350, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
 		spriteBatch.draw(player.getInventory().getBackpack(),  Global.camera.position.x + Global.SCREEN_WIDTH/2 - 100, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 20);
 	}
 	

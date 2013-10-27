@@ -31,7 +31,7 @@ public class Light
 			rays[(int)i] = new_ray(i / 10);
 		}
 		
-		position.setXY(Gdx.input.getX(), Gdx.input.getY() * -1 + Global.HEIGHT);
+		position.setXY(Gdx.input.getX(), Gdx.input.getY() * -1 + Global.renderer.HEIGHT);
 		/*for(int i = 0; i < rays.length - 1; i++){
 			for(int j = 0; j < Main.visible_rects.size(); j++){
 				if(rays[i].is_intersected(Main.visible_rects.get(j).getLineTop())){

@@ -4,14 +4,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Inventory;
 import com.peter.rogue.inventory.Item;
+import com.peter.rogue.map.Map;
 
 public class Player extends Animate implements InputProcessor {
 	
@@ -20,7 +19,6 @@ public class Player extends Animate implements InputProcessor {
 	private String info;
 	private String menu = "null";
 	private boolean menuActive = false;
-	private MapProperties keys = new MapProperties();
 	private Inventory inventory = new Inventory();
 	private Entity menuObject;
 	private int wallet;
@@ -42,10 +40,10 @@ public class Player extends Animate implements InputProcessor {
 		stats.setExperience(100);
 	}
 
-	public void draw(SpriteBatch spriteBatch){
-		super.draw(spriteBatch);
+	public void draw(Map renderer){
+		super.draw(renderer.getSpriteBatch());
 		
-		spriteBatch.end();
+		renderer.getSpriteBatch().end();
 		pos = new Vector3(getX(), getY(), 0);
 		Global.camera.project(pos);
 		/*Global.shapeRenderer.begin(ShapeType.Line);
@@ -67,9 +65,9 @@ public class Player extends Animate implements InputProcessor {
 			Global.shapeRenderer.end();
 		}
 
-		spriteBatch.begin();
-		Entity.font.draw(spriteBatch, getMessage(), getX(), getY());
-		update(Gdx.graphics.getDeltaTime());
+		renderer.getSpriteBatch().begin();
+		Entity.font.draw(renderer.getSpriteBatch(), getMessage(), getX(), getY());
+		update(Gdx.graphics.getDeltaTime(), renderer);
 	}
 	
 	public Inventory getInventory(){
@@ -80,10 +78,10 @@ public class Player extends Animate implements InputProcessor {
 		return picture;
 	}
 	
-	public void update(float delta){
+	public void update(float delta, Map renderer){
 		wait += Gdx.graphics.getDeltaTime();
 		
-		if(wait >= .35){
+		if(wait >= .15){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
 				wait = 0;
@@ -102,7 +100,7 @@ public class Player extends Animate implements InputProcessor {
 			}
 			if(wait == 0f)
 				menuActive = false;
-			checkCollision();
+			checkCollision(renderer);
 		}
 
 		if(messageDelay > 2.0){
@@ -128,45 +126,40 @@ public class Player extends Animate implements InputProcessor {
 		}
 	}
 	
-	public void checkCollision(){
-		keys = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties();
+	public void checkCollision(Map renderer){
 
-		if("1".equals(keys.get("blocked"))){
+		if(Global.renderer.getTile(getX(), getY()).isBlocked()){
 			setX(oldX);
 			setY(oldY);
 		}
-		
-		else if("1".equals(keys.get("money"))){
-			setWallet(Integer.parseInt(getMapID(getY(), getX())));
-		}
-		else if("1".equals(keys.get("stairs"))){
-			if("up".equals(keys.get("direction"))){
-				System.out.println("Hi");
-				
+		else if(Global.renderer.getTile(getX(), getY()).hasStairs() && !Global.renderer.getTile(oldX, oldY).hasStairs()){
+			if(Global.renderer.getTile(getX(), getY()).direction()){
+				System.out.println("Down");
+				Map.load(-1);
 			}
-			else if("down".equals(keys.get("direction"))){
-				System.out.println("Hi");
-				
+			else{
+				System.out.println("Up");
+				Map.load(1);
 			}
 		}
-		if(getMapID(getY(), getX()) != "null" && getMapID(getY(), getX()) != getID()){
-			if(getMapObject(getY(), getX()).getType().equals("Item"))
-				inventory.add((Item) getMapObject(getY(), getX()));
-			else if(getMapObject(getY(), getX()).getType().equals("Chest")){
+		if(getMapID(getX(), getY()) != "null" && getMapID(getX(), getY()) != getID()){
+			if(getMapObject(getX(), getY()).getType().equals("Item"))
+				inventory.add((Item) getMapObject(getX(), getY()));
+			else if(getMapObject(getX(), getY()).getType().equals("Chest")){
 				setMenu("Chest");
-				setMenuObject((Chest)getMapObject(getY(), getX()));
+				setMenuObject((Chest)getMapObject(getX(), getY()));
 				setX(oldX);
 				setY(oldY);
 			}
 			else
 				if(isHostile())
-					attack((Animate) getMapObject(getY(), getX()));
+					attack((Animate)getMapObject(getX(), getY()));
 				else
-					bump((Animate)getMapObject(getY(), getX()));
+					bump((Animate)getMapObject(getX(), getY()));
 		}
-		
-		setMap((int)oldY, (int)oldX, nullEntry);
-		setMap((int)getY(), (int)getX(), this.entry);
+
+		setMap(oldX, oldY, nullEntry);
+		setMap(getX(), getY(), this.entry);
 		oldX = getX();
 		oldY = getY();
 	}
@@ -174,13 +167,13 @@ public class Player extends Animate implements InputProcessor {
 	private void attack(Animate entity) {
 		int amount = -1*stats.getStrength();
 		entity.getStats().mutateHitpoints(amount);
-		Global.data.sendMessage(getMapID(getY(), getX()), this);
-		Global.data.sendStatus(getMapID(getY(), getX()), amount);
+		Global.data.sendMessage(getMapID(getX(), getY()), this);
+		Global.data.sendStatus(getMapID(getX(), getY()), amount);
 		setX(oldX);
 		setY(oldY);
 	}
 	private void bump(Animate entity) {
-		Global.data.sendMessage(getMapID(getY(), getX()), this);
+		Global.data.sendMessage(getMapID(getX(), getY()), this);
 		setX(oldX);
 		setY(oldY);
 	}

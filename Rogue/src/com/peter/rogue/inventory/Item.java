@@ -17,6 +17,6 @@ public class Item extends Entity{
 		setY(y * 32);
 		setX(x * 32);
 		pickedUp = false;
-		setMap((int)getY(), (int)getX(), this.entry);
+		setMap(getX(), getY(), this.entry);
 	}
 }

@@ -1,0 +1,42 @@
+package com.peter.map;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+
+public class Map {
+	protected Tile[][] tiles;
+	protected int HEIGHT = 30, WIDTH = 30;
+	protected SpriteBatch spriteBatch;
+	protected Rectangle viewBounds;
+	
+	static{
+		tiles = new Tile[HEIGHT][WIDTH];
+	}
+	
+	public Map(){
+		
+	}
+	
+	public void draw(){
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				
+	}
+
+	public Rectangle getViewBounds () {
+		return viewBounds;
+	}
+	
+	@Override
+	public void setView (OrthographicCamera camera) {
+		spriteBatch.setProjectionMatrix(camera.combined);
+		float width = camera.viewportWidth * camera.zoom;
+		float height = camera.viewportHeight * camera.zoom;
+		viewBounds.set(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
+	}
+	
+	public SpriteBatch getSpriteBatch () {
+		return spriteBatch;
+	}
+}

@@ -45,9 +45,9 @@ public class Chest extends Entity {
 		spriteBatch.end();
 	}
 	@Override
-	public void setPosition(float y, float x){
+	public void setPosition(float x, float y){
 		setY(y * 32);
 		setX(x * 32);
-		setMap((int)getY(), (int)getX(), this.entry);
+		setMap((int)getX(), (int)getY(), this.entry);
 	}
 }

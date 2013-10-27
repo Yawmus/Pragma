@@ -3,15 +3,12 @@ package com.peter.rogue.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 
 public class NPC extends Animate {
 
 	protected int move;
-	
-	private MapProperties keys = new MapProperties();
 	
 	public NPC(String filename, String type) {
 		super(filename, type);
@@ -37,7 +34,6 @@ public class NPC extends Animate {
 			Global.shapeRenderer.circle(pos.x, pos.y + 20, font.getBounds(getStatus().toString()).width);
 			Global.shapeRenderer.end();
 		}
-		
 		spriteBatch.begin();
 		Entity.font.draw(spriteBatch, getMessage(), getX(), getY());
 		if(getStatus() != 0){
@@ -101,26 +97,21 @@ public class NPC extends Animate {
 	}
 	
 	public void checkCollision(){
-		keys = collisionLayer.getCell((int) (getX() / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties();
-		
-		if("1".equals(keys.get("blocked"))){
+		if(Global.renderer.getTile(getX(), getY()).isBlocked()){
 			setX(oldX);
 			setY(oldY);
 		}
 		
-		if(getMapID(getY(), getX()) != "null" && getMapID(getY(), getX()) != getID()){
-			if(!getMapObject(getY(), getX()).getType().equals("Chest") && !getMapObject(getY(), getX()).getType().equals("Item"))
-				Global.data.sendMessage(getMapID(getY(), getX()), this);
+		if(getMapID(getX(), getY()) != "null" && getMapID(getX(), getY()) != getID()){
+			if(!getMapObject(getX(), getY()).getType().equals("Chest") && !getMapObject(getX(), getY()).getType().equals("Item"))
+				Global.data.sendMessage(getMapID(getX(), getY()), this);
 			setX(oldX);
 			setY(oldY);
 		}
 		
-		setMap((int)oldY, (int)oldX, nullEntry);
-		setMap((int)getY(), (int)getX(), this.entry);
-		
+		setMap(oldX, oldY, nullEntry);
+		setMap(getX(), getY(), this.entry);
 		oldX = getX();
 		oldY = getY();
 	}
-	
-	
 }
