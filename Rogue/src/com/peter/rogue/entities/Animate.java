@@ -49,8 +49,12 @@ public class Animate extends Entity{
 	public void setPosition(float x, float y){
 		setX(x * tileWidth);
 		setY(y * tileHeight);
+
 		oldX = getX();
 		oldY = getY();
+		
+		map.getData().put(ID, this);
+		map.setMark(ID, getX(), getY());
 	}
 
 	public Stats getStats() {
@@ -67,10 +71,6 @@ public class Animate extends Entity{
 
 	public void setHostility(boolean hostile) {
 		this.hostile = hostile;
-	}
-	
-	public void remove(){
-		setMap(getX(), getY(), nullEntry);
 	}
 	
 	public String getMessage() {

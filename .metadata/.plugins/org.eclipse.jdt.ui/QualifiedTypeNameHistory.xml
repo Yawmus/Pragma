@@ -19,7 +19,6 @@
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Head"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.GL10"/>
-<fullyQualifiedTypeName name="com.peter.rogue.Global"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Chest"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer"/>
@@ -28,7 +27,10 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Pixmap"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
 <fullyQualifiedTypeName name="com.peter.map.Map"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.NPC"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Player"/>
+<fullyQualifiedTypeName name="com.peter.rogue.Global"/>
 </qualifiedTypeNameHistroy>

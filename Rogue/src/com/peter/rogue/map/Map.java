@@ -6,41 +6,56 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
+import com.peter.rogue.entities.Entity;
 
 public class Map implements MapRenderer{
-	protected static Tile[][] tiles;
-	public static final int HEIGHT = 40, WIDTH = 40;
-	public static final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
+	protected Tile[][] tiles;
+	private String[][] marker;
+	private Data data;
+	public final int HEIGHT = 40, WIDTH = 40;
+	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
 	protected Rectangle viewBounds;
 	protected TextureRegion region;
 	protected static int floor;
+	private static int direction;
+	
+	static{
+	}
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
 		viewBounds = new Rectangle();
 		region = new TextureRegion();
+
 		tiles = new Tile[WIDTH][HEIGHT];
-		floor = 0;
 		baseFloor();
+		marker = new String[WIDTH][HEIGHT];
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				marker[i][j] = new String();
+		
+		setData(new Data());
+		floor = 0;
 	}
 	
-	public static void load(int direction, float x, float y){
-		floor -= direction;
+	public void load(int direction, float x, float y){
+		floor += direction;
+		setDirection(direction);
 		clear();
-		if(floor == -1){
+		if(floor == 0){
+			baseFloor();
+		}
+		else if(direction == -1){
 			generateFloor((int)x/32, (int)y/32);
 			tiles[(int)x/32][(int)y/32] = Tile.UP;
 		}
-		else if(floor == 0){
-			baseFloor();
-		}
-		else if(floor == 1){
+		else if(direction == 1){
 			
 		}
 	}
 	
-	private static void baseFloor(){
+	private void baseFloor(){
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
 				if(y == 0 || y == HEIGHT-1 || x == 0 || x == WIDTH-1)
@@ -50,13 +65,13 @@ public class Map implements MapRenderer{
 		tiles[10][13] = Tile.DOWN;
 	}
 	
-	private static boolean generateFloor(int x, int y){
+	private boolean generateFloor(int x, int y){
 		System.out.println(x + ", " + y);
 		generateRoom(x, y);
 		return false;
 	}
 	
-	private static boolean generateRoom(int x, int y){
+	private boolean generateRoom(int x, int y){
 		if(x-ROOM_WIDTH/2 < 0 || x+ROOM_WIDTH/2 >= WIDTH || y-ROOM_HEIGHT/2 < 0 || y+ROOM_HEIGHT/2 >= WIDTH){
 			return false;
 		}
@@ -94,7 +109,7 @@ public class Map implements MapRenderer{
 			
 	}
 	
-	private static boolean generateHall(int x, int y, String direction){
+	private boolean generateHall(int x, int y, String direction){
 		boolean flag = true;
 		tiles[x][y] = Tile.DOOR;
 		if(direction.equals("left")){
@@ -145,7 +160,7 @@ public class Map implements MapRenderer{
 		return flag;
 	}
 	
-	private static void clear(){
+	private void clear(){
 		for(int i=0; i<WIDTH; i++)
 			for(int j=0; j<HEIGHT; j++)
 				tiles[i][j] = Tile.BLANK;
@@ -158,6 +173,7 @@ public class Map implements MapRenderer{
 			}
 	}
 	
+	// ------------- Getters -------------
 	public Tile getTile(float x, float y){
 		if(y < 0 || x < 0)
 			return null;
@@ -171,7 +187,27 @@ public class Map implements MapRenderer{
 	public static int getFloor(){
 		return floor;
 	}
+
+	public static int getDirection() {
+		return direction;
+	}
 	
+	public SpriteBatch getSpriteBatch () {
+		return spriteBatch;
+	}
+	
+	public String getMark(float x, float y){
+		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
+			return "";
+		else
+			return marker[(int)(x/32)][(int)(y/32)];
+	}
+	
+	public Entity getEntity(float x, float y){
+		return data.get(getMark(x, y));
+	}
+	
+	// ------------- Setters -------------
 	@Override
 	public void setView (OrthographicCamera camera) {
 		spriteBatch.setProjectionMatrix(camera.combined);
@@ -179,41 +215,38 @@ public class Map implements MapRenderer{
 		float height = camera.viewportHeight * camera.zoom;
 		viewBounds.set(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
 	}
-	
-	public SpriteBatch getSpriteBatch () {
-		return spriteBatch;
-	}
-
 	@Override
 	public void setView (Matrix4 projection, float x, float y, float width, float height) {
 		spriteBatch.setProjectionMatrix(projection);
 		viewBounds.set(x, y, width, height);
 	}
 
+	public static void setDirection(int direction) {
+		Map.direction = direction;
+	}
+	
+	public void setMark(String ID, float x, float y){
+		marker[(int)(x/32)][(int)(y/32)] = ID;
+	}
+
+	public void setData(Data data) {
+		this.data = data;
+	}
+
+	
+	
+	
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 		
 	}
-	
-
-	/*beginRender();
-	for (MapLayer layer : map.getLayers()) {
-		if (layer.isVisible()) {
-			if (layer instanceof TiledMapTileLayer) {
-				renderTileLayer((TiledMapTileLayer)layer);
-			} else {
-				for (MapObject object : layer.getObjects()) {
-					renderObject(object);
-				}
-			}
-		}
-	}
-	*/
 
 	@Override
 	public void render(int[] layers) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }

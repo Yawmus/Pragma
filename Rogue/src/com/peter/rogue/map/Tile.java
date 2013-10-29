@@ -32,7 +32,6 @@ public class Tile{
 	public boolean isBlocked(){
 		return properties[0];
 	}
-
 	public boolean hasStairs() {
 		return properties[1];
 	}

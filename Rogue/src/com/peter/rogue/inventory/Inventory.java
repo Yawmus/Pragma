@@ -13,7 +13,7 @@ public class Inventory {
 	private Backpack backpack = new Backpack();
 	private LinkedList<Item> items;
 	private int weight;
-	public static final int HEIGHT = 200, WIDTH = 300;
+	public static final int HEIGHT = 300, WIDTH = 350;
 	
 	public Inventory(){
 		backpack = Backpack.SMALL;
@@ -29,11 +29,15 @@ public class Inventory {
 	public void display(SpriteBatch spriteBatch, BitmapFont font){
 		Global.shapeRenderer.begin(ShapeType.Filled);
 		Global.shapeRenderer.setColor(0f, 0f, 0f, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, Inventory.HEIGHT, Inventory.WIDTH);
+		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, WIDTH, HEIGHT);
+		Global.shapeRenderer.end();
+		Global.shapeRenderer.begin(ShapeType.Filled);
+		Global.shapeRenderer.setColor(0.2f, 0.1f, 0.0f, 1f);
+		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 55, Global.SCREEN_HEIGHT/3 + 5, WIDTH/2 - 5, HEIGHT - 10);
 		Global.shapeRenderer.end();
 		Global.shapeRenderer.begin(ShapeType.Line);
-		Global.shapeRenderer.setColor(.3f, .84f, 0, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, Inventory.HEIGHT, Inventory.WIDTH);
+		Global.shapeRenderer.setColor(.3f, .4f, 0, 1f);
+		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, WIDTH, HEIGHT);
 		Global.shapeRenderer.end();
 
 		spriteBatch.begin();

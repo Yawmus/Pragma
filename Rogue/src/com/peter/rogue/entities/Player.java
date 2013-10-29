@@ -4,7 +4,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.peter.rogue.Global;
+import com.peter.rogue.;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Inventory;
 import com.peter.rogue.inventory.Item;
@@ -109,55 +109,56 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void checkCollision(Map renderer){
 
-		if(Global.renderer.getTile(getX(), getY()).isBlocked()){
+		if(map.getTile(getX(), getY()).isBlocked()){
 			setX(oldX);
 			setY(oldY);
 		}
-		else if(Global.renderer.getTile(getX(), getY()).hasStairs() && !Global.renderer.getTile(oldX, oldY).hasStairs()){
-			if(Global.renderer.getTile(getX(), getY()).direction()){
+		else if(map.getTile(getX(), getY()).hasStairs() && !map.getTile(oldX, oldY).hasStairs()){
+			if(map.getTile(getX(), getY()).direction()){
 				newMap = true;
-				Map.load(-1, getX(), getY());
+				map.load(1, getX(), getY());
 			}
 			else{
 				newMap = true;
-				Map.load(1, getX(), getY());
+				map.load(-1, getX(), getY());
 			}
 		}
-		if(getMapID(getX(), getY()) != "null" && getMapID(getX(), getY()) != getID()){
-			if(getMapObject(getX(), getY()).getType().equals("Item"))
-				inventory.add((Item) getMapObject(getX(), getY()));
-			else if(getMapObject(getX(), getY()).getType().equals("Chest")){
+		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
+			if(map.getEntity(getX(), getY()).getType().equals("Item"))
+				inventory.add((Item)map.getEntity(getX(), getY()));
+			
+			else if(map.getEntity(getX(), getY()).getType().equals("Chest")){
 				setMenu("Chest");
-				setMenuObject((Chest)getMapObject(getX(), getY()));
+				setMenuObject((Chest)map.getEntity(getX(), getY()));
 				setX(oldX);
 				setY(oldY);
 			}
+			
 			else
 				if(isHostile())
-					attack((Animate)getMapObject(getX(), getY()));
+					attack((Animate) map.getEntity(getX(), getY()));
 				else
-					bump((Animate)getMapObject(getX(), getY()));
+					bump((Animate) map.getEntity(getX(), getY()));
 		}
 
-		setMap(oldX, oldY, nullEntry);
-		setMap(getX(), getY(), this.entry);
+		map.setMark("", oldX, oldY);
+		map.setMark(ID, oldX, oldY);
 		oldX = getX();
 		oldY = getY();
 	}
 	
-	private void attack(Animate entity) {
-		int amount = -1*stats.getStrength();
+	private void attack(Animate entity){
+		int amount = -this.getStats().getStrength();
 		entity.getStats().mutateHitpoints(amount);
-		Global.data.sendMessage(getMapID(getX(), getY()), this);
-		Global.data.sendStatus(getMapID(getX(), getY()), amount);
-		setX(oldX);
-		setY(oldY);
+		entity.setStatus(amount);
 	}
-	private void bump(Animate entity) {
-		Global.data.sendMessage(getMapID(getX(), getY()), this);
-		setX(oldX);
-		setY(oldY);
+	
+	private void attack(Animate entity){
+		int amount = -this.getStats().getStrength();
+		entity.getStats().mutateHitpoints(amount);
+		entity.setStatus(amount);
 	}
+	
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode){
@@ -168,7 +169,7 @@ public class Player extends Animate implements InputProcessor {
 			hostile = !hostile;
 			break;
 		case Keys.TAB:
-			Global.camera.zoom += .4;
+			.camera.zoom += .4;
 			break;
 		case Keys.ESCAPE:
 			System.exit(0);
@@ -244,7 +245,7 @@ public class Player extends Animate implements InputProcessor {
 	public boolean keyUp(int keycode) {
 		switch(keycode){
 		case Keys.TAB:
-			Global.camera.zoom -= .4;
+			.camera.zoom -= .4;
 			break;
 		}
 		return false;

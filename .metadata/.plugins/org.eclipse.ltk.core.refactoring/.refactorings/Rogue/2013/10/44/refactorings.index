@@ -1,2 +1,10 @@
 1382852877512	Encapsulate field 'texture'
 1382853402076	Rename package 'com.peter.map'
+1382944979823	Delete element
+1382996770624	Encapsulate field 'direction'
+1383000164259	Move compilation unit
+1383000170449	Delete element
+1383000184250	Rename type 'MapData'
+1383000195092	Rename type 'data'
+1383000389156	Rename type 'Data'
+1383002192251	Encapsulate field 'data'

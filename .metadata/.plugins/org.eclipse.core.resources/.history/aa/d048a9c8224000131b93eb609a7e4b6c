@@ -1,0 +1,53 @@
+package com.peter.rogue.map;
+
+import java.util.HashMap;
+
+import com.peter.rogue.entities.Animate;
+import com.peter.rogue.entities.Entity;
+
+public class Database {
+	private int citizens;
+	private int shopkeeps;
+	private int monsters;
+    private HashMap<String, Entry> dataBase;
+    
+    class Entry{
+    	private Entity entity;
+    	public Entry(Entity entity){
+    		this.entity = entity;
+    	}
+    	public Entity getEntity(){
+    		return entity;
+    	}
+    }
+
+	public Data(){
+		dataBase = new HashMap<String, Entry>();
+		citizens = 2;
+		shopkeeps = 3;
+		monsters = 1;
+	}
+	public void add(String ID, Entity entity){
+		if(entity.isAnimate())
+			animateDB.put(ID, new Entry1((Animate)entity));
+		else
+			inanimateDB.put(ID, new Entry2(entity));
+	}
+	public void sendMessage(String ID, Animate entity){
+		animateDB.get(ID).getEntity().setMessage(entity);
+	}
+	public void sendStatus(String ID, int amount){
+		animateDB.get(ID).getEntity().setStatus(amount);
+	}
+	public String getCursor(String ID){
+		if(ID != "null")
+			if(animateDB.get(ID) != null)
+				if(animateDB.get(ID).getEntity().getName().equals("null"))
+					return animateDB.get(ID).getEntity().getType() + ", level " + animateDB.get(ID).getEntity().getStats().getLevel();
+				else
+					return animateDB.get(ID).getEntity().getName() + ", level " + animateDB.get(ID).getEntity().getStats().getLevel();
+			else
+				return inanimateDB.get(ID).getEntity().getName();
+		return "null";
+	}
+}
