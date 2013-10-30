@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
+import com.peter.rogue.entities.Entity;
 import com.peter.rogue.entities.NPC;
 import com.peter.rogue.entities.Player;
 import com.peter.rogue.map.Map;
@@ -27,7 +28,7 @@ public class UI{
 		for(int i=0; i<npcs.size(); i++){
 			NPC.pos = new Vector3(npcs.get(i).getX(), npcs.get(i).getY(), 0);
 			Global.camera.project(NPC.pos);
-			Global.renderer.getSpriteBatch().end();
+			Entity.map.getSpriteBatch().end();
 			
 			if(npcs.get(i).messageFlag){
 				Global.shapeRenderer.begin(ShapeType.Filled);
@@ -41,14 +42,14 @@ public class UI{
 				Global.shapeRenderer.circle(NPC.pos.x, NPC.pos.y + 20, font.getBounds(npcs.get(i).getStatus().toString()).width);
 				Global.shapeRenderer.end();
 			}
-			Global.renderer.getSpriteBatch().begin();
-			font.draw(Global.renderer.getSpriteBatch(), npcs.get(i).getMessage(), npcs.get(i).getX(), npcs.get(i).getY());
+			Entity.map.getSpriteBatch().begin();
+			font.draw(Entity.map.getSpriteBatch(), npcs.get(i).getMessage(), npcs.get(i).getX(), npcs.get(i).getY());
 			if(npcs.get(i).getStatus() != 0){
-				font.draw(Global.renderer.getSpriteBatch(), npcs.get(i).getStatus().toString(), npcs.get(i).getX() - 8, npcs.get(i).getY() + 26);
+				font.draw(Entity.map.getSpriteBatch(), npcs.get(i).getStatus().toString(), npcs.get(i).getX() - 8, npcs.get(i).getY() + 26);
 			}
 		}
 		
-		Global.renderer.getSpriteBatch().end();
+		Entity.map.getSpriteBatch().end();
 		Player.pos = new Vector3(player.getX(), player.getY(), 0);
 		Global.camera.project(Player.pos);
 		if(player.messageFlag){
@@ -60,16 +61,19 @@ public class UI{
 		
 		if(player.statusFlag){
 			Global.shapeRenderer.begin(ShapeType.Filled);
-			Global.shapeRenderer.setColor(0, 0, 0, 1f);
-			Global.shapeRenderer.rect(Player.pos.x, Player.pos.y, font.getBounds(player.getMessage()).width, font.getLineHeight());
+			Global.shapeRenderer.setColor(.4f, 0f, 0f, 1f);
+			Global.shapeRenderer.circle(Player.pos.x, Player.pos.y + 20, font.getBounds(player.getStatus().toString()).width);
 			Global.shapeRenderer.end();
 		}
 
-		Global.renderer.getSpriteBatch().begin();
-		font.draw(Global.renderer.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
+		Entity.map.getSpriteBatch().begin();
+		font.draw(Entity.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
+		if(player.getStatus() != 0){
+			font.draw(Entity.map.getSpriteBatch(), player.getStatus().toString(), player.getX() - 8, player.getY() + 26);
+		}
 		
 		
-		Global.renderer.getSpriteBatch().end();
+		Entity.map.getSpriteBatch().end();
 		Global.shapeRenderer.begin(ShapeType.Filled);
 		Global.shapeRenderer.setColor(0, 0, 0, 1f);
 		Global.shapeRenderer.rect(0, 0, Global.SCREEN_WIDTH, 100f);
@@ -80,24 +84,24 @@ public class UI{
 		Global.shapeRenderer.end();
 		
 		// If near edge of map then don't update respective axis
-		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Map.WIDTH*32 - 18*32)
+		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Entity.map.WIDTH*32 - 18*32)
 			Global.camera.position.x = player.getX() + player.getWidth() / 2;
-		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Map.HEIGHT*32 - 9*32)
+		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Entity.map.HEIGHT*32 - 9*32)
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
 		Global.camera.update();
 		
-		Global.renderer.setView(Global.camera);
-		Global.renderer.getSpriteBatch().begin();
-		display(Global.renderer.getSpriteBatch(), player);
-		Global.renderer.getSpriteBatch().end();
+		Entity.map.setView(Global.camera);
+		Entity.map.getSpriteBatch().begin();
+		display(Entity.map.getSpriteBatch(), player);
+		Entity.map.getSpriteBatch().end();
 		
 		if(player.isMenuActive()){
 			if(player.getMenu().equals("Inventory"))
-				player.getInventory().display(Global.renderer.getSpriteBatch(), font);
+				player.getInventory().display(Entity.map.getSpriteBatch(), font);
 			
 			else if(player.getMenu().equals("Chest")){
-				player.getInventory().display(Global.renderer.getSpriteBatch(), font);
-				player.getMenuObject().display(Global.renderer.getSpriteBatch(), font);
+				player.getInventory().display(Entity.map.getSpriteBatch(), font);
+				player.getMenuObject().display(Entity.map.getSpriteBatch(), font);
 			}
 		}
 		update(Gdx.graphics.getDeltaTime());

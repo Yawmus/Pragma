@@ -5,21 +5,20 @@ import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
-import com.peter.rogue.Global;
 
 public class Animate extends Entity{
 	protected Stats stats;
-	private Response response;
+	protected Responses response;
 	protected float oldX, oldY;
 	protected static Scanner in;
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
 	protected float wait = 0, messageDelay = 0, statusDelay = .6f, delay = 1;
+	protected HostilityList list;
 	protected String message;
 	public boolean messageFlag;
 	protected Integer status;
 	public boolean statusFlag;
-	protected boolean hostile;
 	protected String target;
 	public static Vector3 pos = new Vector3();
 	
@@ -38,22 +37,48 @@ public class Animate extends Entity{
 	
 	public Animate(String filename, String type) {
 		super(filename, type);
+		list = new HostilityList();
 		animate = true;
 		stats = new Stats();
-		response = new Response(type);
+		response = new Responses(type);
 		message = new String("");
 		status = new Integer(0);
 	}
-	
+	public void update(float delta){
+		wait += Gdx.graphics.getDeltaTime();
+		
+		if(messageDelay > 2.0){
+			resetMessage();
+			messageDelay = 0;
+			messageFlag = false;
+		}
+		
+		if(getMessage() != ""){
+			messageFlag = true;
+			messageDelay += Gdx.graphics.getDeltaTime();
+		}
+
+		if(statusDelay > 2.0){
+			resetStatus();
+			statusDelay = 0;
+			statusFlag = false;
+		}
+		
+		if(getStatus() != 0){
+			statusFlag = true;
+			statusDelay += Gdx.graphics.getDeltaTime();
+		}
+	}
 	@Override
 	public void setPosition(float x, float y){
+		
 		setX(x * tileWidth);
 		setY(y * tileHeight);
 
 		oldX = getX();
 		oldY = getY();
 		
-		map.getData().put(ID, this);
+		map.put(ID, this);
 		map.setMark(ID, getX(), getY());
 	}
 
@@ -64,22 +89,12 @@ public class Animate extends Entity{
 	public void setStats(Stats stats) {
 		this.stats = stats;
 	}
-
-	public boolean isHostile() {
-		return hostile;
-	}
-
-	public void setHostility(boolean hostile) {
-		this.hostile = hostile;
-	}
+	
 	
 	public String getMessage() {
 		return message;
 	}
-	public void setMessage(Animate caller){
-		if(!messageFlag)
-			message = response.call(caller);
-	}
+	
 	public void resetMessage() {
 		message = "";
 	}
@@ -93,79 +108,44 @@ public class Animate extends Entity{
 	public void resetStatus() {
 		status = 0;
 	}
-}
 
-class Response{
-	
-	private String receiver;
-	//private LinkedList<LinkedList<String>> responses;
-	private int dice;
-	
-	public Response(String type) {
-		//responses = new LinkedList<LinkedList<String>>();
-		//in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
-		//if(type == "Player")
-		this.receiver = type;
+	protected void attack(Animate entity){
+		int amount = -this.getStats().getStrength();
+		entity.getStats().mutateHitpoints(amount);
+		entity.setStatus(amount);
+		bump(entity);
+		if(entity.getStats().getHitpoints() <= 0){
+			Entity.map.setMark("", entity.getX(), entity.getY());
+			stats.mutateExperience(entity.type);
+		}
 	}
 
-	public String call(Animate caller){
-		if(receiver == "Player"){
-			dice = Global.rand(8, 0);
-			switch(dice){
-			case 0:
-				return "Watch it bitch.";
-			case 1:
-				return "Keep to yourself, bud.";
-			case 2:
-				return "Touch me again and I'll cut you.";
-			case 3:
-				return "Get out of my face!";
-			case 4:
-				return "You're going to regret that.";
-			case 5:
-				return "I'll gut you like a fish.";
-			case 6:
-				return "Back off motherfucker!";
-			case 7:
-				return "Shove it up your ass.";
-			}
-		}
-		if(receiver == "Shopkeep" || receiver == "Citizen"){
-			dice = Global.rand(4, 0);
-			if(caller.getType() == "worm")
-				switch(dice){
-				case 0:
-					return "Eww, a " + caller.getType() + "!";
-				case 1:
-					return "Back vile beast!";
-				case 2:
-					return "How revolting!";
-				case 3:
-					return "Do you want to come home with me?";
-				}
-			if(caller.isHostile())
-				return "Ouch!";
-			switch(dice){
-			case 0:
-				return "Hello " + caller.getType() + "!";
-			case 1:
-				return "Greetings " + caller.getType() + "!";
-			case 2:
-				return "How goes it " + caller.getType() + "?";
-			case 3:
-				return "Nice day isn't it?";
-			}
-		}
-		if(receiver == "Worm"){
-			dice = Global.rand(2, 0);
-			switch(dice){
-			case 0:
-				return "*Gurgle*";
-			case 1:
-				return "*Screech*";
-			}
-		}
-		
-		return "I don't have a response programmed";
+	protected void bump(Animate entity){
+		if(type.equals("Player"))
+			entity.setMessage((Player)this);
+		else
+			entity.setMessage((NPC)this);
+		setX(oldX);
+		setY(oldY);
+	}
+
+	protected void bump(){
+		setX(oldX);
+		setY(oldY);
+	}
+	
+	public void setMessage(Player player){
+		if(player.isHostile() && !list.check(player))
+			list.addID(player.getID());
+		if(!messageFlag)
+			message = response.call(player, list.check(player));
+	}
+	
+	public void setMessage(NPC npc){
+		if(!messageFlag)
+			if(type.equals("Player"))
+				message = response.call(npc, npc.list.check(this));
+			else
+				message = response.call(npc, list.check(npc));
 	}
 }

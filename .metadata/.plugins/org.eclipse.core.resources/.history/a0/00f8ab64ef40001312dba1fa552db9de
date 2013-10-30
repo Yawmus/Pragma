@@ -1,0 +1,10 @@
+package com.peter.rogue.entities;
+
+public class Monster extends NPC{
+	
+	public Monster(String filename) {
+		super(filename, "Monster");
+		name = type;
+		message = "*Gurgle*";
+	}
+}

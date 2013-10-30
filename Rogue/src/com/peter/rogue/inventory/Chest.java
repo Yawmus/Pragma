@@ -15,8 +15,8 @@ public class Chest extends Entity {
 	
 	public Chest(){
 		super("c1.png", "Chest");
-		name = "Chest";
-		items = new LinkedList<Item>();
+		this.name = "Chest";
+		this.items = new LinkedList<Item>();
 		for(int i=0; i<5; i++){
 			if(Global.rand(3, 0) == 0)
 				items.add(Food.MEAT);
@@ -43,11 +43,5 @@ public class Chest extends Entity {
 			font.draw(spriteBatch, items.get(i).getName(),  Global.camera.position.x/2, (Global.camera.position.y + HEIGHT/2) - i * 15);
 		}
 		spriteBatch.end();
-	}
-	@Override
-	public void setPosition(float x, float y){
-		setY(y * 32);
-		setX(x * 32);
-		setMap((int)getX(), (int)getY(), this.entry);
 	}
 }

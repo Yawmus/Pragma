@@ -6,12 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.peter.rogue.Global;
 import com.peter.rogue.map.Map;
 
 public class Entity extends Sprite{
 	
-	private String type = new String();
+	protected String type = new String();
 	protected boolean animate;
 	protected String name;
 	protected String ID;
@@ -19,12 +18,12 @@ public class Entity extends Sprite{
     protected static BitmapFont font;
     protected int rand1, rand2;
 	protected boolean pickedUp;
-	protected static Map map = new Map();
+	public static Map map = new Map();
 
 	public Entity(String filename, String type){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
-		this.type = type;
 		name = new String("null");
+		this.type = type;
 		animate = false;
 		ID = UUID.randomUUID().toString();
 		pickedUp = false;
@@ -37,7 +36,7 @@ public class Entity extends Sprite{
 		setX(x * tileWidth);
 		setY(y * tileHeight);
 		
-		map.getData().put(ID, this);
+		map.put(ID, this);
 		map.setMark(ID, getX(), getY());
 	}
 

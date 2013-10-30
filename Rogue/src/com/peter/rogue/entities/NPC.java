@@ -20,7 +20,7 @@ public class NPC extends Animate {
 	}
 	
 	public void update(float delta){
-		wait += Gdx.graphics.getDeltaTime();
+		super.update(delta);
 		
 		move = Global.rand(5, 0);
 		if(wait >= .6f + delay){
@@ -45,48 +45,32 @@ public class NPC extends Animate {
 				wait = 0;
 			}
 			checkCollision();
-		}
-
-		if(messageDelay > 2.0){
-			resetMessage();
-			messageDelay = 0;
-			messageFlag = false;
-		}
-		
-		if(getMessage() != ""){
-			messageFlag = true;
-			messageDelay += Gdx.graphics.getDeltaTime();
-		}
-		
-		if(statusDelay > 2.0){
-			resetStatus();
-			statusDelay = 0;
-			statusFlag = false;
-		}
-		
-		if(getStatus() != 0){
-			statusFlag = true;
-			statusDelay += Gdx.graphics.getDeltaTime();
-		}
-		
+		}		
 	}
 	
 	public void checkCollision(){
-		if(Global.renderer.getTile(getX(), getY()).isBlocked()){
+		if(map.getTile(getX(), getY()).isBlocked()){
 			setX(oldX);
 			setY(oldY);
 		}
-		
-		if(getMapID(getX(), getY()) != "null" && getMapID(getX(), getY()) != getID()){
-			if(!getMapObject(getX(), getY()).getType().equals("Chest") && !getMapObject(getX(), getY()).getType().equals("Item"))
-				Global.data.sendMessage(getMapID(getX(), getY()), this);
-			setX(oldX);
-			setY(oldY);
+		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
+			if(map.get(getX(), getY()).getType().equals("Item") || map.get(getX(), getY()).getType().equals("Chest"))
+				bump();
+			else
+				if(list.check((Animate)map.get(getX(), getY())))
+					if(map.get(getX(), getY()).getType().equals("Player"))
+						attack((Player) map.get(getX(), getY()));
+					else
+						attack((NPC) map.get(getX(), getY()));
+				else
+					bump((Animate) map.get(getX(), getY()));
 		}
 		
-		setMap(oldX, oldY, nullEntry);
-		setMap(getX(), getY(), this.entry);
+
+		map.setMark("", oldX, oldY);
+		map.setMark(ID, getX(), getY());
 		oldX = getX();
 		oldY = getY();
 	}
 }
+

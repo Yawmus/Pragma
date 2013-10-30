@@ -1,0 +1,26 @@
+package com.peter.rogue.map;
+
+public class Data {
+    private int citizens, shopkeeps, monsters;
+    
+    
+
+	public Data(){
+		citizens = 8;
+		shopkeeps = 8;
+		monsters = 24;
+	}
+	
+	public int getCitizens() {
+		return citizens;
+	}
+	public int getShopkeeps() {
+		return shopkeeps;
+	}
+	public int getMonsters() {
+		return monsters;
+	}
+	public int getNPCTotal() {
+		return monsters + citizens + shopkeeps;
+	}
+}

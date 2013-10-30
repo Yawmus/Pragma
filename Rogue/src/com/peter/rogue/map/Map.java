@@ -1,5 +1,7 @@
 package com.peter.rogue.map;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +13,7 @@ import com.peter.rogue.entities.Entity;
 public class Map implements MapRenderer{
 	protected Tile[][] tiles;
 	private String[][] marker;
+    private HashMap<String, Entity> database;
 	private Data data;
 	public final int HEIGHT = 40, WIDTH = 40;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
@@ -29,11 +32,14 @@ public class Map implements MapRenderer{
 		region = new TextureRegion();
 
 		tiles = new Tile[WIDTH][HEIGHT];
-		baseFloor();
 		marker = new String[WIDTH][HEIGHT];
+		database = new HashMap<String, Entity>();
+		data = new Data();
+		
+		baseFloor();
 		for(int i=0; i<WIDTH; i++)
 			for(int j=0; j<HEIGHT; j++)
-				marker[i][j] = new String();
+				marker[i][j] = new String("");
 		
 		setData(new Data());
 		floor = 0;
@@ -62,7 +68,7 @@ public class Map implements MapRenderer{
 					tiles[x][y] = Tile.WALL;
 				else
 					tiles[x][y] = Tile.GROUND;
-		tiles[10][13] = Tile.DOWN;
+		tiles[10][33] = Tile.DOWN;
 	}
 	
 	private boolean generateFloor(int x, int y){
@@ -203,8 +209,22 @@ public class Map implements MapRenderer{
 			return marker[(int)(x/32)][(int)(y/32)];
 	}
 	
-	public Entity getEntity(float x, float y){
-		return data.get(getMark(x, y));
+	public Entity get(String ID){
+		if(ID != "")
+			return database.get(ID);
+		return null;
+	}
+	
+	public Entity get(float x, float y){
+		return database.get(getMark(x, y));
+	}
+	
+	public void put(String ID, Entity entity){
+		database.put(ID, entity);
+	}
+	
+	public Data getData(){
+		return data;
 	}
 	
 	// ------------- Setters -------------
@@ -232,9 +252,17 @@ public class Map implements MapRenderer{
 	public void setData(Data data) {
 		this.data = data;
 	}
+	
+	public void remove(String ID){
+		setMark("", (int)database.get(ID).getX()/32, (int)database.get(ID).getY()/32);
+		database.remove(ID);
+	}
 
-	
-	
+	public String cursor(String ID){
+		if(!(ID.equals("") || ID.equals(null)))
+			return database.get(ID).getName();
+		return "";
+	}
 	
 	@Override
 	public void render() {
@@ -247,6 +275,4 @@ public class Map implements MapRenderer{
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

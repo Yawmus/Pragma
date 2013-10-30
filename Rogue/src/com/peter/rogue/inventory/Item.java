@@ -12,11 +12,4 @@ public class Item extends Entity{
 	public int getWeight() {
 		return weight;
 	}
-	@Override
-	public void setPosition(float y, float x){
-		setY(y * 32);
-		setX(x * 32);
-		pickedUp = false;
-		setMap(getX(), getY(), this.entry);
-	}
 }

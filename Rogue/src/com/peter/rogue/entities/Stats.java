@@ -24,6 +24,20 @@ public class Stats{
 	public void mutateHitpoints(int amount){
 		this.hitpoints += amount;
 	}
+	
+	public void mutateExperience(String type){
+		if(type == "Worm")
+			experience += 5;
+		else if(type == "Citizen")
+			experience += 1;
+		else if(type == "Shopkeep")
+			experience += 1;
+	}
+	
+	public void mutateExperience(int amount){
+		experience += amount;
+	}
+	
 	public void setHitpoints(int hitpoints) {
 		this.hitpoints = hitpoints;
 	}
