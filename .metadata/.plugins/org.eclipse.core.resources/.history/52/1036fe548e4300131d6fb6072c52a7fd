@@ -1,0 +1,157 @@
+package com.peter.rogue.entities;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
+import com.peter.rogue.Global;
+import com.peter.rogue.inventory.Chest;
+import com.peter.rogue.inventory.Food;
+import com.peter.rogue.inventory.Head;
+import com.peter.rogue.map.Tile;
+import com.peter.rogue.views.UI;
+
+public class EntityManager {
+
+    private LinkedList<Entity> objects;
+    
+    private int randX, randY;
+    private Player player;
+    private UI ui = new UI();
+    
+    
+    public EntityManager(){
+    	objects = new LinkedList<Entity>();
+
+		player = new Player("at.png");
+		player.setPosition(18, 7);
+		
+		
+
+		objects.add(new Chest());
+		objects.getLast().setPosition(4, 4);
+		
+		objects.add(new Chest());
+		objects.getLast().setPosition(6, 4);
+		
+		objects.add(Food.BREAD);
+		objects.getLast().setPosition(8, 18);
+		
+		objects.add(Head.HAT);
+		objects.getLast().setPosition(9, 18);
+    }
+    
+	public void draw(){
+		for(int i=0; i<objects.size(); i++){
+			if(objects.get(i).isPickedUp()){
+				objects.remove(i);
+			}
+			else
+				objects.get(i).draw(Entity.map.getSpriteBatch());
+		}
+		
+		for(int i=0; i<NPC.npcs.size(); i++)
+			NPC.npcs.get(i).draw(Entity.map.getSpriteBatch());
+			
+		player.draw(Entity.map.getSpriteBatch());
+		Entity.map.setView(Global.camera);
+		ui.draw(player, NPC.npcs);
+		light();
+		
+		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Global.camera.unproject(Animate.pos);
+
+		if(Animate.pos.y + 32 > (Global.camera.position.y - Global.SCREEN_HEIGHT/3 + 12))
+			player.setInformation(Entity.map.cursor(Entity.map.getMark(Animate.pos.x, Animate.pos.y)));
+		else
+			player.setInformation("");
+		
+		Global.camera.project(Animate.pos);
+		Global.shapeRenderer.begin(ShapeType.Filled);
+		Global.shapeRenderer.setColor(0, 0, 0, 1f);
+		Global.shapeRenderer.rect(Animate.pos.x, Animate.pos.y, Entity.font.getBounds(player.getInformation()).width, Entity.font.getLineHeight());
+		Global.shapeRenderer.end();
+		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Global.camera.unproject(Animate.pos);
+		Entity.map.getSpriteBatch().begin();
+		Entity.font.draw(Entity.map.getSpriteBatch(), player.getInformation(), Animate.pos.x, Animate.pos.y + Entity.font.getLineHeight());
+    }
+    
+    public void init(){
+    	for(int i=0; i<Entity.map.getData().getCitizens(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			NPC.npcs.add(new Citizen("c_.png"));
+			NPC.npcs.get(NPC.npcs.size()-1).setPosition(randX, randY);
+		}
+    	for(int i=0; i<Entity.map.getData().getShopkeeps(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			NPC.npcs.add(new Shopkeep("s_.png"));
+			NPC.npcs.get(NPC.npcs.size()-1).setPosition(randX, randY);
+		}
+    	for(int i=0; i<Entity.map.getData().getMonsters(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			NPC.npcs.add(new Worm("w.png"));
+			NPC.npcs.get(NPC.npcs.size()-1).setPosition(randX, randY);
+    	}
+    	
+		Player.pos = new Vector3(player.getX(), player.getY(), 0);
+		Global.camera.project(Player.pos);
+		for(int i=0; i<1; i++){
+			rays.add(new Ray(new Vector3(Player.pos.x+player.getWidth()/2, Player.pos.y+player.getHeight()/2, 0), new Vector3(64, i*32, 0f)));
+		}
+		Gdx.input.setInputProcessor(player);
+	}
+    
+    /*public void purge(){
+    	Entity.map.clean(player.getID());
+		npcs.clear();
+		objects.clear();
+		player.setNewMap();
+		Entity.clearMap();
+		
+		init();
+    }*/
+    //(float)Math.cos((2*Math.PI*i)/rays.size()), (float)Math.sin((2*Math.PI*i)/rays.size())
+    
+
+	private ArrayList<Ray> rays = new ArrayList<Ray>();
+    
+    public void light(){
+		Player.pos = new Vector3(player.getX(), player.getY(), 0);
+		Global.camera.project(Player.pos);
+		Global.shapeRenderer.begin(ShapeType.Line);
+		for(int i=0; i<rays.size(); i++){
+			rays.get(i).set(new Vector3(Player.pos.x+player.getWidth()/2, Player.pos.y+player.getHeight()/2, 0), 
+					        new Vector3((float)(player.getViewDistance()*Math.cos((2*Math.PI*i)/rays.size()) + Player.pos.x+player.getWidth()/2), 
+					        		    (float)(player.getViewDistance()*Math.sin((2*Math.PI*i)/rays.size()) + Player.pos.y+player.getHeight()/2), 0f));
+			rays.get(i).direction.set(check(rays.get(i)));
+			Global.shapeRenderer.line(rays.get(i).origin, rays.get(i).direction);
+		}
+		Global.shapeRenderer.end();
+    }
+    
+    public Vector3 check(Ray ray){
+    	for(int i=0; i<7; i++){
+    		System.out.println(Entity.map.getTile((ray.direction.x -(ray.direction.x * i)/7), ray.origin.y).equals(Tile.WALL));
+	    	if(Entity.map.getTile((ray.direction.x - (ray.direction.x * i)/7), ray.origin.y).isBlocked()){
+	    		System.out.println("hi");
+	    		return new Vector3((ray.direction.x - (ray.direction.x * i)/7), ray.origin.y, 0);
+	    	}
+    	}
+    	return ray.direction;
+    }
+    
+    public void dispose(){
+		for(int i=0; i<NPC.npcs.size(); i++)
+			NPC.npcs.get(i).getTexture().dispose();
+		player.getTexture().dispose();
+		ui.dispose();
+		Global.shapeRenderer.dispose();
+    }
+}

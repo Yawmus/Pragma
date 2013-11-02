@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.peter.rogue.map.Map;
 
@@ -13,8 +14,10 @@ public class Global {
     public static final int SCREEN_HEIGHT = 720;
     
 	public static OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	public static ShapeRenderer shapeRenderer = new ShapeRenderer();
-    
+	public static ShapeRenderer screenShapes = new ShapeRenderer();
+	public static ShapeRenderer mapShapes = new ShapeRenderer();
+    public static SpriteBatch screen = new SpriteBatch();
+	
     private static Random generator = new Random();
     
     public static void changeMap(int level, Map renderer){

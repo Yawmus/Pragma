@@ -69,6 +69,10 @@ public class Map implements MapRenderer{
 				else
 					tiles[x][y] = Tile.GROUND;
 		tiles[10][33] = Tile.DOWN;
+		tiles[20][20] = Tile.WALL;
+		tiles[21][20] = Tile.WALL;
+		tiles[20][21] = Tile.WALL;
+		tiles[21][21] = Tile.WALL;
 	}
 	
 	private boolean generateFloor(int x, int y){
@@ -173,16 +177,18 @@ public class Map implements MapRenderer{
 	}
 	
 	public void draw(){
+		spriteBatch.begin();
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++){
 				spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
 			}
+		spriteBatch.end();
 	}
 	
 	// ------------- Getters -------------
 	public Tile getTile(float x, float y){
-		if(y < 0 || x < 0)
-			return null;
+		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
+			return Tile.BLANK;
 		return tiles[(int)(x/32)][(int)(y/32)];
 	}
 

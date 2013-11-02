@@ -34,7 +34,6 @@
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.List"/>
 <fullyQualifiedTypeName name="java.awt.List"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.NPC"/>
 <fullyQualifiedTypeName name="java.nio.FloatBuffer"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.utils.BufferUtils"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.OrthographicCamera"/>
@@ -50,5 +49,9 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Color"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Player"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.NPC"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.math.collision.Ray"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.math.Vector3"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
+<fullyQualifiedTypeName name="com.peter.rogue.map.Tile"/>
 </qualifiedTypeNameHistroy>

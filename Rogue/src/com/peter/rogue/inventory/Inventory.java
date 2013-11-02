@@ -27,22 +27,22 @@ public class Inventory {
 		}
 	}
 	public void display(SpriteBatch spriteBatch, BitmapFont font){
-		Global.shapeRenderer.begin(ShapeType.Filled);
-		Global.shapeRenderer.setColor(0f, 0f, 0f, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, WIDTH, HEIGHT);
-		Global.shapeRenderer.end();
-		Global.shapeRenderer.begin(ShapeType.Filled);
-		Global.shapeRenderer.setColor(0.2f, 0.1f, 0.0f, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 55, Global.SCREEN_HEIGHT/3 + 5, WIDTH/2 - 5, HEIGHT - 10);
-		Global.shapeRenderer.end();
-		Global.shapeRenderer.begin(ShapeType.Line);
-		Global.shapeRenderer.setColor(.3f, .4f, 0, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/2 + 50, Global.SCREEN_HEIGHT/3, WIDTH, HEIGHT);
-		Global.shapeRenderer.end();
-
+		Global.screenShapes.begin(ShapeType.Filled);
+		Global.screenShapes.setColor(0f, 0f, 0f, 1f);
+		Global.screenShapes.rect(670, 250, WIDTH, HEIGHT);
+		Global.screenShapes.end();
+		Global.screenShapes.begin(ShapeType.Filled);
+		Global.screenShapes.setColor(0.2f, 0.1f, 0.0f, 1f);
+		Global.screenShapes.rect(675, 255, WIDTH/2 - 5, HEIGHT - 10);
+		Global.screenShapes.end();
+		Global.screenShapes.begin(ShapeType.Line);
+		Global.screenShapes.setColor(.3f, .4f, 0, 1f);
+		Global.screenShapes.rect(670, 250, WIDTH, HEIGHT);
+		Global.screenShapes.end();
+		
 		spriteBatch.begin();
 		for(int i=0; i<items.size(); i++){
-			font.draw(spriteBatch, items.get(i).getName(),  Global.camera.position.x + 80, (Global.camera.position.y + HEIGHT/2) - i * 15);
+			font.draw(spriteBatch, items.get(i).getName(),  675, 255 + HEIGHT - i * 15);
 		}
 		spriteBatch.end();
 	}

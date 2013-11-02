@@ -29,18 +29,19 @@ public class Chest extends Entity {
 		items.add(item);
 	}
 	public void display(SpriteBatch spriteBatch, BitmapFont font){
-		Global.shapeRenderer.begin(ShapeType.Filled);
-		Global.shapeRenderer.setColor(0f, 0f, 0f, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/6, Global.SCREEN_HEIGHT/3, HEIGHT, WIDTH);
-		Global.shapeRenderer.end();
-		Global.shapeRenderer.begin(ShapeType.Line);
-		Global.shapeRenderer.setColor(.3f, .84f, 0, 1f);
-		Global.shapeRenderer.rect(Global.SCREEN_WIDTH/6, Global.SCREEN_HEIGHT/3, HEIGHT, WIDTH);
-		Global.shapeRenderer.end();
-
+		Global.screenShapes.begin(ShapeType.Filled);
+		Global.screenShapes.setColor(0f, 0f, 0f, 1f);
+		Global.screenShapes.rect(270, 255, HEIGHT, WIDTH);
+		Global.screenShapes.end();
+		Global.screenShapes.begin(ShapeType.Line);
+		Global.screenShapes.setColor(.3f, .84f, 0, 1f);
+		Global.screenShapes.rect(270, 255, HEIGHT, WIDTH);
+		Global.screenShapes.end();
+		
 		spriteBatch.begin();
+		font.setScale(1f);
 		for(int i=0; i<items.size(); i++){
-			font.draw(spriteBatch, items.get(i).getName(),  Global.camera.position.x/2, (Global.camera.position.y + HEIGHT/2) - i * 15);
+			font.draw(spriteBatch, items.get(i).getName(),  275, 250 + HEIGHT - i * 15);
 		}
 		spriteBatch.end();
 	}
