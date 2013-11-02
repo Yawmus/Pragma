@@ -9,9 +9,12 @@ public class Data {
 		past 20fps*/
 
 	public Data(){
-		citizens = 4;
+		citizens = 400;
+	shopkeeps = 190;
+	monsters = 10;
+		/*citizens = 4;
 		shopkeeps = 1;
-		monsters = 1;
+		monsters = 1;*/
 	}
 	
 	public int getCitizens() {

@@ -14,7 +14,7 @@ public class Animate extends Entity{
 	protected static Scanner in;
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
-	protected float wait = 0, messageDelay = 0, statusDelay = .6f, delay = 1;
+	protected float messageDelay = 0, statusDelay = 0, delay = 0;
 	protected HostilityList list;
 	protected String message;
 	public boolean messageFlag;
@@ -47,7 +47,7 @@ public class Animate extends Entity{
 		status = new Integer(0);
 	}
 	public void update(float delta){
-		wait += Gdx.graphics.getDeltaTime();
+		delay += Gdx.graphics.getDeltaTime();
 		
 		if(messageDelay > 2.0){
 			resetMessage();
@@ -60,7 +60,7 @@ public class Animate extends Entity{
 			messageDelay += Gdx.graphics.getDeltaTime();
 		}
 
-		if(statusDelay > 2.0){
+		if(statusDelay > 2.6f){
 			resetStatus();
 			statusDelay = 0;
 			statusFlag = false;
@@ -146,5 +146,13 @@ public class Animate extends Entity{
 				message = response.call(entity, entity.list.check(this));
 			else
 				message = response.call(entity, list.check(entity));
+	}
+	
+
+	public void setDelays(int delay) {
+		this.delay = delay;
+		messageDelay = delay;
+		statusDelay = delay;
+		
 	}
 }

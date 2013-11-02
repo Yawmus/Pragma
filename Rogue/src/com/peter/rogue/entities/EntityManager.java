@@ -45,15 +45,17 @@ public class EntityManager {
 		
 		Entity.map.getSpriteBatch().begin();
 		for(int i=0; i<objects.size(); i++){
-			if(objects.get(i).isPickedUp()){
+			if(objects.get(i).isPickedUp())
 				objects.remove(i);
-			}
-			else
+			else if(objects.get(i).canDraw)
 				objects.get(i).draw(Entity.map.getSpriteBatch());
 		}
 		
 		for(int i=0; i<NPC.npcs.size(); i++)
-			NPC.npcs.get(i).draw(Entity.map.getSpriteBatch());
+			if(NPC.npcs.get(i).canDraw)
+				NPC.npcs.get(i).draw(Entity.map.getSpriteBatch());
+			else
+				NPC.npcs.get(i).update(Gdx.graphics.getDeltaTime());
 
 		Entity.map.getSpriteBatch().end();
 		player.light();

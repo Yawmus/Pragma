@@ -33,7 +33,7 @@ public class Play implements Screen{
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-	    //fps.log();
+	    fps.log();
 
 		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
 		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);

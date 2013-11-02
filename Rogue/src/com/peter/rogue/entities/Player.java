@@ -15,6 +15,7 @@ import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Inventory;
 import com.peter.rogue.inventory.Item;
+import com.peter.rogue.map.Tile;
 
 public class Player extends Animate implements InputProcessor {
 	
@@ -48,8 +49,9 @@ public class Player extends Animate implements InputProcessor {
 		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
 		stats.setLevelPending(false);
+		canDraw = true;
 
-		for(int i=0; i<20; i++){
+		for(int i=0; i<40; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
 		}
 	}
@@ -74,24 +76,24 @@ public class Player extends Animate implements InputProcessor {
 	public void update(float delta){
 		super.update(delta);
 		
-		if(wait >= .15){
+		if(delay >= .15){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
-				wait = 0;
+				delay = 0;
 			}
 			if(Gdx.input.isKeyPressed(Keys.D)){
 				setX(getX() + 32);
-				wait = 0;
+				delay = 0;
 			}
 			if(Gdx.input.isKeyPressed(Keys.S)){
 				setY(getY() - 32);
-				wait = 0;
+				delay = 0;
 			}
 			if(Gdx.input.isKeyPressed(Keys.W)){
 				setY(getY() + 32);
-				wait = 0;
+				delay = 0;
 			}
-			if(wait == 0f)
+			if(delay == 0f)
 				menuActive = false;
 			checkCollision();
 		}
@@ -149,7 +151,9 @@ public class Player extends Animate implements InputProcessor {
 			rays.get(i).set(new Vector3(getX()+getWidth()/2, getY()+getHeight()/2, 0), 
 					        new Vector3((float)(getViewDistance()*Math.cos((2*Math.PI*i)/rays.size()) + getX()+getWidth()/2), 
 					        		    (float)(getViewDistance()*Math.sin((2*Math.PI*i)/rays.size()) + getY()+getHeight()/2), 0f));
+    		map.getSpriteBatch().begin();
 			rays.get(i).direction.set(intersect(rays.get(i)));
+    		map.getSpriteBatch().end();
 			Global.mapShapes.line(rays.get(i).origin, rays.get(i).direction);
 		}
 		
@@ -157,11 +161,19 @@ public class Player extends Animate implements InputProcessor {
     }
     
     public Vector3 intersect(Ray ray){
+    	float x, y;
     	for(int i=1; i<=getViewDistance()/32; i++){
-	    	if(Entity.map.getTile(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32)), 
-	    			              ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32))).isBlocked()){
+    		x = ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32));
+    		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32));
+    		Tile tile = map.getTile(x, y);
+	    	if(tile.isBlocked()){
+	    		
 	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32)), 
 	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32)), 0);
+	    	}
+	    	// Render entities when in sight
+	    	else if(!(map.getMark(x, y).equals(ID) || map.getMark(x, y).equals(""))){
+		    	map.get(x, y).canDraw = true;
 	    	}
     	}
     	return ray.direction;

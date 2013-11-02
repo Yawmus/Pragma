@@ -11,7 +11,7 @@ public class NPC extends Animate {
 	public NPC(String filename, String type) {
 		super(filename, type);
 		name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));
-		wait -= Global.rand(100, 0) * .01f;
+		delay -= Global.rand(100, 0) * .01f;
 	}
 
 	public void draw(SpriteBatch spriteBatch){
@@ -23,29 +23,29 @@ public class NPC extends Animate {
 		super.update(delta);
 		
 		move = Global.rand(5, 0);
-		if(wait >= .6f + delay){
+		if(delay >= 2.6f){
 			switch(move){
 			case 0:
 				setY(getY() + 32);
-				wait = 0;
+				delay = 0;
 				break;
 			case 1:
 				setY(getY() - 32);
-				wait = 0;
+				delay = 0;
 				break;
 			case 2:
 				setX(getX() - 32);
-				wait = 0;
+				delay = 0;
 				break;
 			case 3:
 				setX(getX() + 32);
-				wait = 0;
+				delay = 0;
 				break;
 			case 4:
-				wait = 0;
+				delay = 0;
 			}
 			checkCollision();
-		}		
+		}	
 	}
 	
 	public void checkCollision(){

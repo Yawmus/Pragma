@@ -26,10 +26,10 @@ public class Worm extends Monster{
 		
 		multiplyDelay = Global.rand(6, 0);
 		
-		if(Global.rand(2, 0) == 0)
-			fertile = false;
-		else
+		if(Global.rand(3, 0) == 0)
 			fertile = true;
+		else
+			fertile = false;
 	}
 	
 	public void draw(SpriteBatch spriteBatch){
@@ -43,7 +43,7 @@ public class Worm extends Monster{
 		if(fertile){
 			multiplyDelay += delta;
 			
-			if(multiplyDelay >= 15){
+			if(multiplyDelay >= 25){
 				multiplyDelay = 0;
 				multiply();
 			}
