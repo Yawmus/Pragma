@@ -1,0 +1,142 @@
+package com.peter.rogue.screens;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
+import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.EntityManager;
+import com.peter.rogue.entities.NPC;
+import com.peter.rogue.entities.Player;
+import com.peter.rogue.inventory.Chest;
+import com.peter.rogue.inventory.Food;
+import com.peter.rogue.inventory.Head;
+import com.peter.rogue.lighting.Light;
+import com.peter.rogue.lighting.Line;
+import com.peter.rogue.lighting.Point;
+import com.peter.rogue.lighting.Rect;
+
+public class Play implements Screen{
+
+	Rogue game;
+	FPSLogger fps;
+	
+    private EntityManager manager;
+    
+	private ArrayList<Light> visible_lights;
+	public static ArrayList<Rect> visible_rects;
+	private ArrayList<Line> light_rays;
+	private Rect rect;
+    private Player player;
+    
+	public Play(Rogue game){
+		this.game = game;
+		fps = new FPSLogger();
+		player = new Player("at.png");
+		player.setPosition(18, 7);
+		
+	}
+	
+	@Override
+	public void render(float delta) {
+		
+		
+
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+	    fps.log();
+	    
+	    Entity.map.setView(Global.camera);
+	    Entity.map.getSpriteBatch().begin();
+	    
+		Entity.map.draw();
+		manager.draw();
+		
+		Entity.map.getSpriteBatch().end();
+		
+		Global.shapeRenderer.begin(ShapeType.Line);
+		
+		light_rays.clear();
+		
+		for(int i = 0; i < visible_lights.size(); i++)
+		{
+			visible_lights.get(i).update(player);
+			
+			Global.shapeRenderer.setColor(visible_lights.get(i).get_color());
+			
+			for(int j = 0; j < visible_rects.size(); j++)
+			{
+				light_rays.add(visible_lights.get(i).new_ray(visible_lights.get(i).get_position().angleRelativeToPoint(visible_rects.get(j).getUpperLeft())));
+				light_rays.add(visible_lights.get(i).new_ray(visible_lights.get(i).get_position().angleRelativeToPoint(visible_rects.get(j).getUpperRight())));
+				light_rays.add(visible_lights.get(i).new_ray(visible_lights.get(i).get_position().angleRelativeToPoint(visible_rects.get(j).getLowerLeft())));
+				light_rays.add(visible_lights.get(i).new_ray(visible_lights.get(i).get_position().angleRelativeToPoint(visible_rects.get(j).getLowerRight())));
+			}
+		}
+		for(int i = 0; i < light_rays.size(); i++)
+		{
+			Global.shapeRenderer.line(light_rays.get(i).begin.getX(), light_rays.get(i).begin.getY(), light_rays.get(i).end.getX(), light_rays.get(i).end.getY());
+		}
+		Global.shapeRenderer.end();
+		
+		Global.shapeRenderer.begin(ShapeType.Filled);
+		Global.shapeRenderer.setColor(Color.GREEN);
+			for(int i = 0; i < visible_rects.size(); i++)
+			{
+				Global.shapeRenderer.rect(visible_rects.get(i).getUpperLeft().getX(), visible_rects.get(i).getUpperLeft().getY(), visible_rects.get(i).get_width(), visible_rects.get(i).get_height());
+			}
+		Global.shapeRenderer.end();
+		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		Global.camera.viewportWidth = width;
+		Global.camera.viewportHeight = height;
+	}
+	
+	@Override
+	public void show() {
+		manager = new EntityManager();
+		manager.init();
+		
+		visible_lights = new ArrayList<Light>();
+		visible_lights.add(new Light(new Point(500,600), 3, 100000, Color.PINK));
+		
+		visible_rects = new ArrayList<Rect>();
+		rect = new Rect(new Point(300f,300f),100,100);
+		visible_rects.add(rect);
+		visible_rects.add(new Rect(new Point(350f,350f),100,100));
+		
+		light_rays = new ArrayList<Line>();
+
+	}
+
+	@Override
+	public void hide() {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
+
+	@Override
+	public void dispose() {
+		//renderer.dispose();
+		//entityManager.dispose();
+	}
+
+}

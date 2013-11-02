@@ -1,0 +1,64 @@
+package com.peter.rogue.lighting;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
+import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.NPC;
+import com.peter.rogue.lighting.Line;
+import com.peter.rogue.lighting.Point;
+
+public class Light 
+{
+	private Point position;
+	private float size;
+	private float range;
+	private Color color;
+	
+	public Light(Point new_pos, float new_size, float new_range, Color new_color)
+	{
+		position = new_pos;
+		size = new_size;
+		range = new_range;
+		color = new_color;
+	}
+	
+	public void update()
+	{
+		if(Gdx.input.isKeyPressed(Input.Keys.W))
+		{
+			position.set_xy(position.get_x(), position.get_y() + 5);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.S))
+		{
+			position.set_xy(position.get_x(), position.get_y() - 5);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.A))
+		{
+			position.set_xy(position.get_x() - 5, position.get_y());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.D))
+		{
+			position.set_xy(position.get_x() + 5, position.get_y());
+		}
+	}
+	
+	public Line new_ray(float rotation)
+	{
+		return new Line(position, new Point((float)Math.cos(Math.toRadians(rotation)) * range, 
+				                            (float)Math.sin(Math.toRadians(rotation)) * range));
+	}
+	
+	public Color get_color()
+	{
+		return color;
+	}
+	
+	public Point get_position()
+	{
+		return position;
+	}
+}

@@ -1,5 +1,6 @@
 package com.peter.rogue.entities;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -21,6 +22,7 @@ public class Animate extends Entity{
 	public boolean statusFlag;
 	protected String target;
 	public static Vector3 pos = new Vector3();
+	public static ArrayList<NPC>npcs = new ArrayList<NPC>();
 	
 	static{
 		firstNames = new LinkedList<String>();
@@ -116,15 +118,17 @@ public class Animate extends Entity{
 		bump(entity);
 		if(entity.getStats().getHitpoints() <= 0){
 			Entity.map.setMark("", entity.getX(), entity.getY());
-			stats.mutateExperience(entity.type);
+			stats.addExperience(entity.type);
+			if(entity instanceof NPC)
+				npcs.remove(entity);
+			else if(entity instanceof Player)
+				System.exit(0);
+			
 		}
 	}
 
 	protected void bump(Animate entity){
-		if(type.equals("Player"))
-			entity.setMessage((Player)this);
-		else
-			entity.setMessage((NPC)this);
+		entity.setMessage(this);
 		setX(oldX);
 		setY(oldY);
 	}
@@ -134,18 +138,13 @@ public class Animate extends Entity{
 		setY(oldY);
 	}
 	
-	public void setMessage(Player player){
-		if(player.isHostile() && !list.check(player))
-			list.addID(player.getID());
-		if(!messageFlag)
-			message = response.call(player, list.check(player));
-	}
-	
-	public void setMessage(NPC npc){
+	public void setMessage(Animate entity){
+		if(entity instanceof Player && ((Player)(entity)).isHostile() && !list.check(entity))
+			list.addID(entity.getID());
 		if(!messageFlag)
 			if(type.equals("Player"))
-				message = response.call(npc, npc.list.check(this));
+				message = response.call(entity, entity.list.check(this));
 			else
-				message = response.call(npc, list.check(npc));
+				message = response.call(entity, list.check(entity));
 	}
 }

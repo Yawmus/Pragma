@@ -15,7 +15,7 @@ public class Global {
 	public static OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	public static ShapeRenderer shapeRenderer = new ShapeRenderer();
     
-    private static Random generator = new Random(System.currentTimeMillis());
+    private static Random generator = new Random();
     
     public static void changeMap(int level, Map renderer){
     }

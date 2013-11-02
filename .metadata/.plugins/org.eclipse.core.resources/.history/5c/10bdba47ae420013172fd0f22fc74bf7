@@ -1,0 +1,40 @@
+package com.peter.rogue.entities;
+
+import java.util.LinkedList;
+
+import com.peter.rogue.Global;
+
+public class Worm extends Monster{
+
+	private float multiplyDelay;
+	
+	public Worm(String filename) {
+		super(filename, "Worm");
+		
+		stats.setLevel(1);
+		stats.setHitpoints(10);
+		stats.setDexterity(5);
+		stats.setStrength(2);
+		stats.setExperience(0);
+
+		message = "*Gurgle*";
+
+		list.addType("Citizen");
+		list.addType("Shopkeep");
+		list.addType("Player");
+		
+		multiplyDelay = 0;
+	}
+
+	public void update(float delta){
+		super.update(delta);
+		
+		if(multiplyDelay >= 5)
+			multiply();
+	}
+	
+	public void multiply(){
+		npcs.add(new Worm("w.png"));
+		npcs.getLast().setPosition(Global.rand((int)(getX()/32)+1, (int)(getX()/32)-1), Global.rand((int)(getY()/32)+1, (int)(getY()/32)-1));
+	}
+}

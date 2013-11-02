@@ -2,6 +2,7 @@ package com.peter.rogue.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.peter.rogue.Global;
@@ -12,11 +13,14 @@ import com.peter.rogue.entities.EntityManager;
 public class Play implements Screen{
 
 	Rogue game;
+	FPSLogger fps;
 	
-    private EntityManager entityManager;
+    private EntityManager manager;
+    
     
 	public Play(Rogue game){
 		this.game = game;
+		fps = new FPSLogger();
 	}
 	
 	@Override
@@ -27,16 +31,14 @@ public class Play implements Screen{
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
+	    fps.log();
+	    
 	    Entity.map.setView(Global.camera);
 	    Entity.map.getSpriteBatch().begin();
 	    
-		try {
-			Entity.map.draw();
-			entityManager.draw();
-		} catch (Exception e) {
-			System.out.println(e);
-			System.exit(0);
-		}
+		Entity.map.draw();
+		manager.draw();
+		
 		Entity.map.getSpriteBatch().end();
 	}
 
@@ -48,8 +50,9 @@ public class Play implements Screen{
 	
 	@Override
 	public void show() {
-		entityManager = new EntityManager();
-		entityManager.init();
+		manager = new EntityManager();
+		manager.init();
+
 	}
 
 	@Override

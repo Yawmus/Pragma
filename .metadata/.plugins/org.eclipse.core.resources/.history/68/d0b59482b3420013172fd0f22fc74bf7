@@ -1,0 +1,51 @@
+package com.peter.rogue.entities;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.peter.rogue.Global;
+
+public class Worm extends Monster{
+
+	private float multiplyDelay;
+	
+	public Worm(String filename) {
+		super(filename, "Worm");
+		
+		stats.setLevel(1);
+		stats.setHitpoints(10);
+		stats.setDexterity(5);
+		stats.setStrength(2);
+		stats.setExperience(0);
+
+		message = "*Gurgle*";
+
+		list.addType("Citizen");
+		list.addType("Shopkeep");
+		list.addType("Player");
+		
+		multiplyDelay = 0;
+	}
+	
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+	}
+
+	public void update(float delta){
+		super.update(delta);
+		
+		multiplyDelay += delta;
+		
+		if(multiplyDelay >= 5){
+			multiplyDelay = 0;
+			multiply();
+		}
+	}
+	
+	public void multiply(){
+		System.out.println(Global.rand((int)(this.getX()/32)+1, (int)(this.getX()/32)-1) + " " + Global.rand((int)(this.getY()/32)+1, (int)(this.getY()/32)-1));
+		npcs.add(new Worm("w.png"));
+		npcs.getLast().setPosition(Global.rand((int)(this.getX()/32)+1, (int)(this.getX()/32)-1), Global.rand((int)(this.getY()/32)+1, (int)(this.getY()/32)-1));
+		System.out.println(Global.rand((int)(this.getX()/32)+1, (int)(this.getX()/32)-1) + " " + Global.rand((int)(this.getY()/32)+1, (int)(this.getY()/32)-1));
+	}
+}

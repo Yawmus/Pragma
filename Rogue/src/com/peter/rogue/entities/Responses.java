@@ -21,12 +21,16 @@ public class Responses{
 			return Citizen(caller, hostile);
 		
 		if(receiver == "Worm"){
-			dice = Global.rand(2, 0);
+			dice = Global.rand(4, 0);
 			switch(dice){
 			case 0:
 				return "*Gurgle*";
 			case 1:
 				return "*Screech*";
+			case 2:
+				return "*Vomit*";
+			case 3:
+				return "*Squirm*";
 			}
 		}
 		
@@ -34,25 +38,13 @@ public class Responses{
 	}
 	
 	private String Player(Animate caller, boolean hostile){
-		dice = Global.rand(8, 0);
+		dice = Global.rand(2, 0);
 		if(hostile)
 			switch(dice){
 			case 0:
-				return "Watch it bitch.";
-			case 1:
 				return "Keep to yourself, bud.";
-			case 2:
-				return "Touch me again and I'll cut you.";
-			case 3:
-				return "Get out of my face!";
-			case 4:
+			case 1:
 				return "You're going to regret that.";
-			case 5:
-				return "I'll gut you like a fish.";
-			case 6:
-				return "Back off motherfucker!";
-			case 7:
-				return "Shove it up your ass.";
 			}
 		return "";
 	}

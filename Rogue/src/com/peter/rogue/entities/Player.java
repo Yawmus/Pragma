@@ -33,11 +33,14 @@ public class Player extends Animate implements InputProcessor {
 		viewDistance = 228;
 		hostile = false;
 		setWallet(0);
-		stats.setLevel(1);
-		stats.setHitpoints(20);
 		stats.setDexterity(5);
+		stats.setMaxExperience(100);
+		stats.setExperience(0);
+		stats.setLevel(1);
 		stats.setStrength(5);
-		stats.setExperience(100);
+		stats.setHitpoints(20);
+		stats.setMaxHitpoints(20);
+		stats.setLevelPending(false);
 	}
 
 	public void draw(SpriteBatch spriteBatch){
@@ -48,7 +51,6 @@ public class Player extends Animate implements InputProcessor {
 		Global.shapeRenderer.setColor(1f, 0, 0, .1f);
 		Global.shapeRenderer.circle(pos.x + getWidth()/2, pos.y + getHeight()/2, viewDistance);
 		Global.shapeRenderer.end();*/
-		
 		update(Gdx.graphics.getDeltaTime());
 	}
 	
@@ -105,7 +107,7 @@ public class Player extends Animate implements InputProcessor {
 		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
 			if(map.get(getX(), getY()).getType().equals("Item")){
 				inventory.add((Item)map.get(getX(), getY()));
-				Entity.map.remove(map.get(getX(), getY()).getID());
+				map.remove(map.get(getX(), getY()).getID());
 			}
 			
 			else if(map.get(getX(), getY()).getType().equals("Chest")){
@@ -219,6 +221,7 @@ public class Player extends Animate implements InputProcessor {
 	public void setHostility(boolean hostile) {
 		this.hostile = hostile;
 	}
+	
 
 	@Override
 	public boolean keyUp(int keycode) {

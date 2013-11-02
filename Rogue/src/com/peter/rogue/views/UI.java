@@ -1,6 +1,6 @@
 package com.peter.rogue.views;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,7 +22,7 @@ public class UI{
 		gothicFont = new BitmapFont(Gdx.files.internal("fonts/Cardinal.fnt"), Gdx.files.internal("fonts/Cardinal.png"), false);
 	}
 	
-	public void draw(Player player, LinkedList<NPC> npcs){
+	public void draw(Player player, ArrayList<NPC> npcs){
 		
 		// Draws the messages and statuses on top of everything
 		for(int i=0; i<npcs.size(); i++){
@@ -116,7 +116,7 @@ public class UI{
 		gothicFont.setScale(1f);
 		gothicFont.draw(spriteBatch, player.getName(), Global.camera.position.x - Global.SCREEN_WIDTH/2 + 125, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 90);
 		gothicFont.setScale(.7f);
-		gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel(), Global.camera.position.x - Global.SCREEN_WIDTH/2 + 125, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
+		gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel() + player.getStats().getLevelPending(), Global.camera.position.x - Global.SCREEN_WIDTH/2 + 125, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
 		gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);
 		gothicFont.draw(spriteBatch, "Strenght:  " + player.getStats().getStrength(), Global.camera.position.x - Global.SCREEN_WIDTH/4, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 80);
 		gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), Global.camera.position.x - Global.SCREEN_WIDTH/4 + 150, Global.camera.position.y - Global.SCREEN_HEIGHT/2 + 50);

@@ -11,4 +11,8 @@ public class Shopkeep extends NPC{
 		stats.setStrength(1);
 		stats.setExperience(100);
 	}
+	
+	public void update(float delta){
+		super.update(delta);
+	}
 }
