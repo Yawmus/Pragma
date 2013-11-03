@@ -14,7 +14,6 @@ public class Play implements Screen{
 
 	//private Rogue game;
 	
-	@SuppressWarnings("unused")
 	private FPSLogger fps;
 	
     private EntityManager manager;
@@ -41,6 +40,7 @@ public class Play implements Screen{
 	    
 		Entity.map.draw();
 		manager.draw();
+		
 	}
 
 	@Override

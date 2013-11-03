@@ -1,6 +1,6 @@
 package com.peter.rogue.inventory;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,13 +10,13 @@ import com.peter.rogue.entities.Entity;
 
 public class Chest extends Entity {
 	
-	private LinkedList<Item> items;
+	private ArrayList<Item> items;
 	public static final int HEIGHT = 200, WIDTH = 300;
 	
 	public Chest(){
 		super("c1.png", "Chest");
 		this.name = "Chest";
-		this.items = new LinkedList<Item>();
+		this.items = new ArrayList<Item>();
 		for(int i=0; i<5; i++){
 			if(Global.rand(3, 0) == 0)
 				items.add(Food.MEAT);

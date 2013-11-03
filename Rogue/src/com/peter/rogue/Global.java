@@ -17,6 +17,7 @@ public class Global {
 	public static ShapeRenderer screenShapes = new ShapeRenderer();
 	public static ShapeRenderer mapShapes = new ShapeRenderer();
     public static SpriteBatch screen = new SpriteBatch();
+    public static boolean gameOver = false;
 	
     private static Random generator = new Random();
     

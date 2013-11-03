@@ -1,6 +1,9 @@
 package com.peter.rogue;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.peter.rogue.screens.Death;
 import com.peter.rogue.screens.Play;
 import com.peter.rogue.screens.Splash;
 
@@ -26,6 +29,13 @@ public class Rogue extends Game {
 	@Override
 	public void render() {
 		super.render();
+		if(Global.gameOver){
+			setScreen(new Death(this));
+		    if(Gdx.input.isKeyPressed(Keys.ENTER)){
+		    	setScreen(new Play(this));
+		    	Global.gameOver = false;
+		    }
+		}
 	}
 
 	@Override

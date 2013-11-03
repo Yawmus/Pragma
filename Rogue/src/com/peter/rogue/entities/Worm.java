@@ -43,7 +43,7 @@ public class Worm extends Monster{
 		if(fertile){
 			multiplyDelay += delta;
 			
-			if(multiplyDelay >= 25){
+			if(multiplyDelay >= 35){
 				multiplyDelay = 0;
 				multiply();
 			}
@@ -51,7 +51,7 @@ public class Worm extends Monster{
 	}
 	
 	public void multiply(){
-		npcs.add(new Worm("w.png"));
+		npcs.add(new Worm("tilda.png"));
 		npcs.get(npcs.size()-1).setPosition(Global.rand(3, (int)(this.getX()/32)-1), Global.rand(3, (int)(this.getY()/32)-1));
 	}
 }

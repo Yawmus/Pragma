@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.peter.rogue.Global;
@@ -46,22 +44,18 @@ public class Player extends Animate implements InputProcessor {
 		stats.setExperience(0);
 		stats.setLevel(1);
 		stats.setStrength(5);
-		stats.setHitpoints(20);
+		stats.setHitpoints(3);
 		stats.setMaxHitpoints(20);
 		stats.setLevelPending(false);
 		canDraw = true;
 
-		for(int i=0; i<40; i++){
+		for(int i=0; i<90; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
 		}
 	}
 
 	public void draw(SpriteBatch spriteBatch){
 		super.draw(spriteBatch);
-		/*Global.shapeRenderer.begin(ShapeType.Line);
-		Global.shapeRenderer.setColor(1f, 0, 0, .1f);
-		Global.shapeRenderer.circle(pos.x + getWidth()/2, pos.y + getHeight()/2, viewDistance);
-		Global.shapeRenderer.end();*/
 		update(Gdx.graphics.getDeltaTime());
 	}
 	
@@ -97,6 +91,7 @@ public class Player extends Animate implements InputProcessor {
 				menuActive = false;
 			checkCollision();
 		}
+		
 	}
 	
 	public void checkCollision(){
@@ -130,8 +125,13 @@ public class Player extends Animate implements InputProcessor {
 			else
 				if(isHostile())
 					attack((Animate) map.get(getX(), getY()));
-				else
+				else{
+					if(map.get(getX(), getY()) instanceof Shopkeep){
+						setMenu("Barter");
+						setMenuObject((Shopkeep)map.get(getX(), getY()));
+					}
 					bump((Animate) map.get(getX(), getY()));
+				}
 		}
 
 		map.setMark("", oldX, oldY);
@@ -142,10 +142,8 @@ public class Player extends Animate implements InputProcessor {
 	
     
     public void light(){
-		Player.pos = new Vector3(getX(), getY(), 0);
-		Global.camera.project(Player.pos);
-		Global.mapShapes.begin(ShapeType.Line);
-		Global.mapShapes.setColor(Color.YELLOW);
+		//Global.mapShapes.begin(ShapeType.Line);
+		//Global.mapShapes.setColor(Color.YELLOW);
 		
 		for(int i=0; i<rays.size(); i++){
 			rays.get(i).set(new Vector3(getX()+getWidth()/2, getY()+getHeight()/2, 0), 
@@ -154,10 +152,11 @@ public class Player extends Animate implements InputProcessor {
     		map.getSpriteBatch().begin();
 			rays.get(i).direction.set(intersect(rays.get(i)));
     		map.getSpriteBatch().end();
-			Global.mapShapes.line(rays.get(i).origin, rays.get(i).direction);
+    		
+			//Global.mapShapes.line(rays.get(i).origin, rays.get(i).direction);
 		}
 		
-		Global.mapShapes.end();
+		//Global.mapShapes.end();
     }
     
     public Vector3 intersect(Ray ray){
@@ -166,8 +165,8 @@ public class Player extends Animate implements InputProcessor {
     		x = ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32));
     		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32));
     		Tile tile = map.getTile(x, y);
+    		map.setVisible(x, y, "visited");
 	    	if(tile.isBlocked()){
-	    		
 	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32)), 
 	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32)), 0);
 	    	}
@@ -232,11 +231,12 @@ public class Player extends Animate implements InputProcessor {
 		return menuActive;
 	}
 	
-	public void setMenuObject(Chest chest){
-		menuObject = chest;
+	public void setMenuObject(Entity object){
+		menuObject = object;
 	}
-	public Chest getMenuObject(){
-		return (Chest)menuObject;
+	
+	public Entity getMenuObject(){
+		return menuObject;
 	}
 	
 	public int getViewDistance() {
@@ -309,8 +309,8 @@ public class Player extends Animate implements InputProcessor {
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean mouseMoved(int x, int y) {
+		
+		return true;
 	}
 }

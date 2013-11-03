@@ -3,18 +3,16 @@ package com.peter.rogue.map;
 public class Data {
     private int citizens, shopkeeps, monsters;
     
-    /*citizens = 400;
-		shopkeeps = 190;
+    /*
+		citizens = 2000;
+		shopkeeps = 38000;
 		monsters = 10;
-		past 20fps*/
+		past ~35fps*/
 
 	public Data(){
-		citizens = 400;
-	shopkeeps = 190;
-	monsters = 10;
-		/*citizens = 4;
+		citizens = 4;
 		shopkeeps = 1;
-		monsters = 1;*/
+		monsters = 3;
 	}
 	
 	public int getCitizens() {

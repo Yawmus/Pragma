@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
+import com.peter.rogue.Global;
 
 public class Animate extends Entity{
 	protected Stats stats;
@@ -15,11 +16,10 @@ public class Animate extends Entity{
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
 	protected float messageDelay = 0, statusDelay = 0, delay = 0;
+	public boolean messageFlag, statusFlag;
 	protected HostilityList list;
 	protected String message;
-	public boolean messageFlag;
 	protected Integer status;
-	public boolean statusFlag;
 	protected String target;
 	public static Vector3 pos = new Vector3();
 	public static ArrayList<NPC>npcs = new ArrayList<NPC>();
@@ -121,8 +121,9 @@ public class Animate extends Entity{
 			stats.addExperience(entity.type);
 			if(entity instanceof NPC)
 				npcs.remove(entity);
-			else if(entity instanceof Player)
-				System.exit(0);
+			else if(entity instanceof Player){
+				Global.gameOver = true;
+			}
 			
 		}
 	}
