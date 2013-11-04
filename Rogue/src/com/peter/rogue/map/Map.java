@@ -1,5 +1,6 @@
 package com.peter.rogue.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,6 +23,7 @@ public class Map implements MapRenderer{
 	protected TextureRegion region;
 	protected static int floor;
 	private static int direction;
+	public ArrayList<Entity> objects;
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
@@ -32,6 +34,7 @@ public class Map implements MapRenderer{
 		visible = new String[WIDTH][HEIGHT];
 		marker = new String[WIDTH][HEIGHT];
 		database = new HashMap<String, Entity>();
+		objects = new ArrayList<Entity>();
 
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
@@ -78,6 +81,7 @@ public class Map implements MapRenderer{
 		tiles[20][8] = Tile.WALL;
 		tiles[20][6] = Tile.WALL;
 		createRoom(WIDTH-8, 0, WIDTH, 6);
+		
 	}
 	
 	private void createRoom(int x, int y, int dx, int dy){
@@ -202,7 +206,14 @@ public class Map implements MapRenderer{
 				else
 					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y);
 			}
+		for(int i=0; i<objects.size(); i++){
+			if(objects.get(i).isPickedUp())
+				objects.remove(i);
+			else if(objects.get(i).canDraw)
+				objects.get(i).draw(getSpriteBatch());
+		}
 		spriteBatch.end();
+		
 	}
 	
 	// ------------- Getters -------------

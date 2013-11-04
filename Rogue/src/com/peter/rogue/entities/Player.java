@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.peter.rogue.Global;
@@ -37,6 +36,7 @@ public class Player extends Animate implements InputProcessor {
 		messageFlag = false;
 		name = "Adelaide";
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
+		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		info = new String();
 		viewDistance = 224;
 		hostile = false;
@@ -49,7 +49,6 @@ public class Player extends Animate implements InputProcessor {
 		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
 		stats.setLevelPending(false);
-		
 		
 		for(int i=0; i<90; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
@@ -93,7 +92,6 @@ public class Player extends Animate implements InputProcessor {
 				menuActive = false;
 			checkCollision();
 		}
-		
 	}
 	
 	public void checkCollision(){

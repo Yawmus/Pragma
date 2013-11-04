@@ -39,13 +39,6 @@ public class Worm extends Monster{
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	public void update(float delta){
 		super.update(delta);
 		
@@ -62,6 +55,8 @@ public class Worm extends Monster{
 	public void multiply(){
 		npcs.add(new Worm("tilda.png"));
 		npcs.get(npcs.size()-1).setPosition(Global.rand(3, (int)(this.getX()/32)-1), Global.rand(3, (int)(this.getY()/32)-1));
+		if(attacker != null)
+			npcs.get(npcs.size()-1).attacker = attacker;
 	}
 }
 

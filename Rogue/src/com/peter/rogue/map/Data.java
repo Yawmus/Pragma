@@ -12,7 +12,7 @@ public class Data {
 	public Data(){
 		citizens = 4;
 		shopkeeps = 1;
-		monsters = 3;
+		monsters = 5;
 	}
 	
 	public int getCitizens() {

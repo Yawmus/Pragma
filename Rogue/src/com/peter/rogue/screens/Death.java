@@ -31,7 +31,7 @@ public class Death implements Screen{
 	    spriteBatch.begin();
 	    spriteBatch.draw(new Texture(Gdx.files.internal("img/skeleton.png")), 500, 0, 631, 670);
 	    gothicFont.setColor(Color.BLACK);
-	    gothicFont.draw(spriteBatch, "You died, what a load of CRAP!!!!!!", Global.SCREEN_WIDTH/4, Global.SCREEN_HEIGHT/2);
+	    gothicFont.draw(spriteBatch, "Dead", Global.SCREEN_WIDTH/4, Global.SCREEN_HEIGHT/2);
 	    gothicFont.draw(spriteBatch, "Press enter to continue", Global.SCREEN_WIDTH/4, Global.SCREEN_HEIGHT/2 - 40);
 	    spriteBatch.end();
 	}

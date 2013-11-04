@@ -28,6 +28,7 @@ public class UI{
 	}
 	
 	public void draw(Player player, ArrayList<NPC> npcs){
+
 		
 		// Draws the messages and statuses on top of everything
 		for(int i=0; i<npcs.size(); i++){
@@ -64,8 +65,7 @@ public class UI{
 			Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
 			Global.mapShapes.circle(player.getX(), player.getY() + 20, font.getBounds(player.getStatus().toString()).width);
 			Global.mapShapes.end();
-		}
-		
+		}		
 
 		Entity.map.getSpriteBatch().begin();
 		font.draw(Entity.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
@@ -74,12 +74,6 @@ public class UI{
 		}
 		Entity.map.getSpriteBatch().end();
 		
-		// If near edge of map then don't update respective axis
-		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Entity.map.WIDTH*32 - 18*32)
-			Global.camera.position.x = player.getX() + player.getWidth() / 2;
-		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Entity.map.HEIGHT*32 - 9*32)
-			Global.camera.position.y = player.getY() + player.getHeight() / 2;
-		Global.camera.update();
 		
 		Global.screenShapes.begin(ShapeType.Filled);
 		Global.screenShapes.setColor(0, 0, 0, 1f);
@@ -106,6 +100,7 @@ public class UI{
 				((Shopkeep)(player.getMenuObject())).display(Global.screen, font);
 			}
 		}
+		
 		
 		update(Gdx.graphics.getDeltaTime());
 	}
