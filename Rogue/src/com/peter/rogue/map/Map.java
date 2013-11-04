@@ -72,7 +72,11 @@ public class Map implements MapRenderer{
 				else
 					tiles[x][y] = Tile.GROUND;
 		tiles[10][33] = Tile.DOWN;
-		
+		tiles[18][12] = Tile.WALL;
+		tiles[19][12] = Tile.WALL;
+		tiles[20][7] = Tile.WALL;
+		tiles[20][8] = Tile.WALL;
+		tiles[20][6] = Tile.WALL;
 		createRoom(WIDTH-8, 0, WIDTH, 6);
 	}
 	

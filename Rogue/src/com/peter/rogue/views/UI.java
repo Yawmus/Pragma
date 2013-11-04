@@ -118,23 +118,23 @@ public class UI{
 		spriteBatch.draw(texture1, 0, 0);
 		spriteBatch.draw(texture2, Global.SCREEN_WIDTH - 179, 0);
 		
-		spriteBatch.draw(player.getPicture(),  50, 15);
+		spriteBatch.draw(player.getPicture(),  200, 15);
 		
 		gothicFont.setScale(1f);
-		gothicFont.draw(spriteBatch, player.getName(), 130, 90);
+		gothicFont.draw(spriteBatch, player.getName(), 280, 90);
 		gothicFont.setScale(.7f);
-		gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel() + player.getStats().getLevelPending(), 130, 50);
-		gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), 280, 50);
-		gothicFont.draw(spriteBatch, "Strenght:  " + player.getStats().getStrength(), 280, 80);
-		gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), 480, 50);
-		gothicFont.draw(spriteBatch, "Experience: " + player.getStats().getExperience(), 480, 80);
-		gothicFont.draw(spriteBatch, "Demeanor: ", 720, 80);
+		gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel() + player.getStats().getLevelPending(), 280, 50);
+		gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), 430, 50);
+		gothicFont.draw(spriteBatch, "Strenght:  " + player.getStats().getStrength(), 430, 80);
+		gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), 630, 50);
+		gothicFont.draw(spriteBatch, "Experience: " + player.getStats().getExperience(), 630, 80);
+		gothicFont.draw(spriteBatch, "Demeanor: ", 870, 80);
 		if(player.isHostile())
-			gothicFont.draw(spriteBatch, "Hostile", 805, 80);
+			gothicFont.draw(spriteBatch, "Hostile", 955, 80);
 		else
-			gothicFont.draw(spriteBatch, "Friendly", 805, 80);
-		gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), 720, 50);
-		spriteBatch.draw(player.getInventory().getBackpack(),  1020, 30);
+			gothicFont.draw(spriteBatch, "Friendly", 955, 80);
+		gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), 870, 50);
+		spriteBatch.draw(player.getInventory().getBackpack(),  1150, 30);
 		spriteBatch.end();
 	}
 	

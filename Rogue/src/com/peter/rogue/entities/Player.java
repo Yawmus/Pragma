@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.peter.rogue.Global;
@@ -44,11 +46,11 @@ public class Player extends Animate implements InputProcessor {
 		stats.setExperience(0);
 		stats.setLevel(1);
 		stats.setStrength(5);
-		stats.setHitpoints(3);
+		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
 		stats.setLevelPending(false);
-		canDraw = true;
-
+		
+		
 		for(int i=0; i<90; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
 		}
@@ -57,6 +59,7 @@ public class Player extends Animate implements InputProcessor {
 	public void draw(SpriteBatch spriteBatch){
 		super.draw(spriteBatch);
 		update(Gdx.graphics.getDeltaTime());
+		canDraw = true;
 	}
 	
 	public Inventory getInventory(){
@@ -69,7 +72,6 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void update(float delta){
 		super.update(delta);
-		
 		if(delay >= .15){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);

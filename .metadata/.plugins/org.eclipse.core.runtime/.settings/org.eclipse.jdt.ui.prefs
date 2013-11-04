@@ -1,4 +1,5 @@
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="com.peter.rogue.map.Tile"><rhs name\="com.peter.rogue.map.Tile"/></lhs></history>
+breadcrumb.org.eclipse.jdt.ui.JavaPerspective=true
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="com.peter.rogue.map.Tile"><rhs name\="com.peter.rogue.map.Tile"/></lhs><lhs name\="com.badlogic.gdx.graphics.Color"><rhs name\="com.badlogic.gdx.graphics.Color"/></lhs><lhs name\="com.peter.rogue.entities.Entity"><rhs name\="com.peter.rogue.inventory.Food"/></lhs><lhs name\="com.badlogic.gdx.graphics.g2d.Sprite"><rhs name\="com.peter.rogue.inventory.Food"/></lhs><lhs name\="com.badlogic.gdx.graphics.g2d.TextureRegion"><rhs name\="com.peter.rogue.inventory.Food"/></lhs><lhs name\="com.peter.rogue.inventory.Item"><rhs name\="com.peter.rogue.inventory.Food"/></lhs></history>
 content_assist_number_of_computers=17
 content_assist_proposals_background=255,255,255
 content_assist_proposals_foreground=0,0,0

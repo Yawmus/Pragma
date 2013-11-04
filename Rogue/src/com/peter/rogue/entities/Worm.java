@@ -1,5 +1,6 @@
 package com.peter.rogue.entities;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.peter.rogue.Global;
@@ -13,7 +14,7 @@ public class Worm extends Monster{
 		super(filename, "Worm");
 		
 		stats.setLevel(1);
-		stats.setHitpoints(10);
+		stats.setHitpoints(20);
 		stats.setDexterity(5);
 		stats.setStrength(2);
 		stats.setExperience(0);
@@ -36,7 +37,15 @@ public class Worm extends Monster{
 		super.draw(spriteBatch);
 		update(Gdx.graphics.getDeltaTime());
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void update(float delta){
 		super.update(delta);
 		
@@ -55,3 +64,4 @@ public class Worm extends Monster{
 		npcs.get(npcs.size()-1).setPosition(Global.rand(3, (int)(this.getX()/32)-1), Global.rand(3, (int)(this.getY()/32)-1));
 	}
 }
+

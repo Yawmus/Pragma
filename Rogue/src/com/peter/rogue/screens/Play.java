@@ -22,6 +22,7 @@ public class Play implements Screen{
 	public Play(Rogue game){
 	//	this.game = game;
 		fps = new FPSLogger();
+		fps.log();
 	}
 	
 	@Override
