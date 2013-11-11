@@ -2,10 +2,10 @@ package com.peter.rogue.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -18,7 +18,6 @@ import com.peter.rogue.map.Tile;
 
 public class Player extends Animate implements InputProcessor {
 	
-	private float zoom = 1f;
 	private Texture picture;
 	private String info;
 	private String menu = "null";
@@ -26,9 +25,7 @@ public class Player extends Animate implements InputProcessor {
 	private Inventory inventory = new Inventory();
 	private ArrayList<Ray> rays = new ArrayList<Ray>();
 	private Entity menuObject;
-	private int wallet;
 	private int viewDistance;
-    private boolean newMap = false;
 	private boolean hostile;
 	
 	public Player(String filename){
@@ -38,9 +35,8 @@ public class Player extends Animate implements InputProcessor {
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
 		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		info = new String();
-		viewDistance = 224;
+		viewDistance = 7;
 		hostile = false;
-		setWallet(0);
 		stats.setDexterity(5);
 		stats.setMaxExperience(100);
 		stats.setExperience(0);
@@ -50,7 +46,7 @@ public class Player extends Animate implements InputProcessor {
 		stats.setMaxHitpoints(20);
 		stats.setLevelPending(false);
 		
-		for(int i=0; i<90; i++){
+		for(int i=0; i<100; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
 		}
 	}
@@ -71,26 +67,32 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void update(float delta){
 		super.update(delta);
+		
 		if(delay >= .15){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
 				delay = 0;
+				setMenuActive(false);
+				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.D)){
 				setX(getX() + 32);
 				delay = 0;
+				setMenuActive(false);
+				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.S)){
 				setY(getY() - 32);
 				delay = 0;
+				setMenuActive(false);
+				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.W)){
 				setY(getY() + 32);
 				delay = 0;
+				setMenuActive(false);
+				checkCollision();
 			}
-			if(delay == 0f)
-				menuActive = false;
-			checkCollision();
 		}
 	}
 	
@@ -102,18 +104,20 @@ public class Player extends Animate implements InputProcessor {
 		}
 		else if(map.getTile(getX(), getY()).hasStairs() && !map.getTile(oldX, oldY).hasStairs()){
 			if(map.getTile(getX(), getY()).direction()){
-				newMap = true;
 				map.load(1, getX(), getY());
 			}
 			else{
-				newMap = true;
 				map.load(-1, getX(), getY());
 			}
 		}
 		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
 			if(map.get(getX(), getY()).getType().equals("Item")){
-				inventory.add((Item)map.get(getX(), getY()));
-				map.remove(map.get(getX(), getY()).getID());
+				if(!inventory.checkIsFull((Item)map.get(getX(), getY()))){
+					inventory.add((Item)map.get(getX(), getY()));
+					map.remove(map.get(getX(), getY()).getID());
+				}
+				else
+					bump();
 			}
 			
 			else if(map.get(getX(), getY()).getType().equals("Chest")){
@@ -147,8 +151,8 @@ public class Player extends Animate implements InputProcessor {
 		
 		for(int i=0; i<rays.size(); i++){
 			rays.get(i).set(new Vector3(getX()+getWidth()/2, getY()+getHeight()/2, 0), 
-					        new Vector3((float)(getViewDistance()*Math.cos((2*Math.PI*i)/rays.size()) + getX()+getWidth()/2), 
-					        		    (float)(getViewDistance()*Math.sin((2*Math.PI*i)/rays.size()) + getY()+getHeight()/2), 0f));
+					        new Vector3((float)(32 * getViewDistance()*Math.cos((2*Math.PI*i)/rays.size()) + getX()+getWidth()/2), 
+					        		    (float)(32 * getViewDistance()*Math.sin((2*Math.PI*i)/rays.size()) + getY()+getHeight()/2), 0f));
     		map.getSpriteBatch().begin();
 			rays.get(i).direction.set(intersect(rays.get(i)));
     		map.getSpriteBatch().end();
@@ -160,20 +164,19 @@ public class Player extends Animate implements InputProcessor {
     }
     
     public Vector3 intersect(Ray ray){
-    	float x, y;
-    	for(int i=1; i<=getViewDistance()/32; i++){
-    		x = ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32));
-    		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32));
+    	float x, y, splits = 8; // Perfect number for splits and viewDistance to not have wall nonsense
+    	for(int i=1; i<=splits; i++){
+    		x = ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits);
+    		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits);
     		Tile tile = map.getTile(x, y);
     		map.setVisible(x, y, "visited");
-	    	if(tile.isBlocked()){
-	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/(getViewDistance()/32)), 
-	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/(getViewDistance()/32)), 0);
+	    	if(!tile.canSee()){
+	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits), 
+	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
 	    	}
 	    	// Render entities when in sight
-	    	else if(!(map.getMark(x, y).equals(ID) || map.getMark(x, y).equals(""))){
+	    	else if(!(map.getMark(x, y).equals(ID) || map.getMark(x, y).equals("")))
 		    	map.get(x, y).canDraw = true;
-	    	}
     	}
     	return ray.direction;
     }
@@ -193,20 +196,22 @@ public class Player extends Animate implements InputProcessor {
 			break;
 		case Keys.ESCAPE:
 			System.exit(0);
+			break;
 		}
-		return false;
+		
+		return true;
 	}
 
 
 	@Override
-	public boolean scrolled(int amount) {
-		zoom += (.1f / amount);
-		return true;
+	public boolean keyTyped(char character) {
+		return false;
 	}
-
-	// Mouse scroll zoom (may break)
-	public float getZoom() {
-		return zoom;
+	
+	
+	@Override
+	public boolean scrolled(int amount) {
+		return true;
 	}
 	
 	public void setInformation(String info){
@@ -221,6 +226,10 @@ public class Player extends Animate implements InputProcessor {
 		menu = request;
 		menuObject = null;
 		menuActive = !menuActive;
+	}
+	
+	public void setMenuActive(boolean menuActive){
+		this.menuActive = menuActive;
 	}
 	
 	public String getMenu(){
@@ -242,29 +251,7 @@ public class Player extends Animate implements InputProcessor {
 	public int getViewDistance() {
 		return viewDistance;
 	}
-
-	public int getWallet() {
-		return wallet;
-	}
-
-	public void setWallet(int wallet) {
-		this.wallet = wallet;
-	}
 	
-	public boolean isNewMap(){
-		return newMap;
-	}
-	
-	public void setNewMap(){
-		newMap = !newMap;
-	}
-	
-	public boolean isDead(){
-		if(stats.getHitpoints() <= 0)
-			return true;
-		return false;
-	}
-
 	public boolean isHostile() {
 		return hostile;
 	}
@@ -284,15 +271,12 @@ public class Player extends Animate implements InputProcessor {
 		return false;
 	}
 
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		if (button == Buttons.LEFT) {
+			return true;
+		}
 		return false;
 	}
 
@@ -310,7 +294,6 @@ public class Player extends Animate implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int x, int y) {
-		
 		return true;
 	}
 }

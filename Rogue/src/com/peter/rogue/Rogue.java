@@ -9,7 +9,7 @@ import com.peter.rogue.screens.Splash;
 
 public class Rogue extends Game {
 	
-	public static final String TITLE = "Rogue", VERSION = "0.0.5";
+	public static final String TITLE = "Rogue", VERSION = "0.2.5";
 	
 	Splash splash;
 	Play play;
@@ -29,6 +29,8 @@ public class Rogue extends Game {
 	@Override
 	public void render() {
 		super.render();
+		
+		
 		if(Global.gameOver){
 			setScreen(new Death(this));
 		    if(Gdx.input.isKeyPressed(Keys.ENTER)){

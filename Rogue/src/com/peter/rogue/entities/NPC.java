@@ -38,6 +38,7 @@ public class NPC extends Animate {
 				if(!moves.empty()){
 					setX(moves.peek().x);
 					setY(moves.peek().y);
+					checkCollision();
 					moves.clear();
 					delay = 1;
 				}
@@ -50,24 +51,27 @@ public class NPC extends Animate {
 				case 0:
 					setY(getY() + 32);
 					delay = 0;
+					checkCollision();
 					break;
 				case 1:
 					setY(getY() - 32);
 					delay = 0;
+					checkCollision();
 					break;
 				case 2:
 					setX(getX() - 32);
 					delay = 0;
+					checkCollision();
 					break;
 				case 3:
 					setX(getX() + 32);
 					delay = 0;
+					checkCollision();
 					break;
 				case 4:
 					delay = 0;
 				}
 			}
-			checkCollision();
 		}
 	}
 	
@@ -176,7 +180,6 @@ public class NPC extends Animate {
 								else
 									tempX = 10;
 								if(open.get(q).G > tempX + parent.G){
-									System.out.println("Hello");
 									open.get(q).parent = parent;
 									open.get(q).G = (int)tempX + parent.G;
 									open.get(q).F = open.get(q).G + open.get(q).H;

@@ -7,7 +7,7 @@ public class LevelData {
 		
 		citizens = 4;
 		shopkeeps = 1;
-		monsters = 3;
+		monsters = 2;
 	}
 	
 	public int getCitizens() {

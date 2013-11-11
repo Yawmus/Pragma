@@ -9,21 +9,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
+import com.peter.rogue.Global;
 import com.peter.rogue.entities.Entity;
+import com.peter.rogue.inventory.Chest;
+import com.peter.rogue.inventory.Item;
 
 public class Map implements MapRenderer{
 	protected Tile[][] tiles;
 	protected String[][] visible;
 	private String[][] marker;
     private HashMap<String, Entity> database;
-	public final int HEIGHT = 40, WIDTH = 40;
+	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
 	protected Rectangle viewBounds;
 	protected TextureRegion region;
 	protected static int floor;
 	private static int direction;
-	public ArrayList<Entity> objects;
+	public ArrayList<Item> items;
+	public ArrayList<Chest> chests;
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
@@ -34,7 +38,8 @@ public class Map implements MapRenderer{
 		visible = new String[WIDTH][HEIGHT];
 		marker = new String[WIDTH][HEIGHT];
 		database = new HashMap<String, Entity>();
-		objects = new ArrayList<Entity>();
+		items = new ArrayList<Item>();
+		chests = new ArrayList<Chest>();
 
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
@@ -75,24 +80,44 @@ public class Map implements MapRenderer{
 				else
 					tiles[x][y] = Tile.GROUND;
 		tiles[10][33] = Tile.DOWN;
-		tiles[18][12] = Tile.WALL;
-		tiles[19][12] = Tile.WALL;
-		tiles[20][7] = Tile.WALL;
-		tiles[20][8] = Tile.WALL;
-		tiles[20][6] = Tile.WALL;
-		createRoom(WIDTH-8, 0, WIDTH, 6);
 		
+		createRoom(WIDTH-11, HEIGHT-12, WIDTH-3, HEIGHT-3);
+		createRoom(WIDTH-11, 4, WIDTH-3, 12);
+		createRoom(12, 9, 20, 14);
+
+		tiles[WIDTH/2][HEIGHT/2+1] = Tile.WATER;
+		tiles[WIDTH/2][HEIGHT/2-1] = Tile.WATER;
+		tiles[WIDTH/2][HEIGHT/2] = Tile.WATER;
+		tiles[WIDTH/2-1][HEIGHT/2+1] = Tile.WATER;
+		tiles[WIDTH/2-1][HEIGHT/2-1] = Tile.WATER;
+		tiles[WIDTH/2-1][HEIGHT/2] = Tile.WATER;
+		tiles[WIDTH/2+1][HEIGHT/2+1] = Tile.WATER;
+		tiles[WIDTH/2+1][HEIGHT/2-1] = Tile.WATER;
+		tiles[WIDTH/2+1][HEIGHT/2] = Tile.WATER;
 	}
 	
 	private void createRoom(int x, int y, int dx, int dy){
-		System.out.println("Here");
-		for(int i=x; i<dx; i++)
-			for(int j=y; j<dy; j++)
-				if(j == y || j == dy-1 || i == x || i == dx-1)
+		for(int i=x; i<=dx; i++)
+			for(int j=y; j<=dy; j++)
+				if(j == y || j == dy || i == x || i == dx)
 					tiles[i][j] = Tile.WALL;
 				else
 					tiles[i][j] = Tile.GROUND;
-		tiles[x][dy/2] = Tile.DOOR;
+		switch(Global.rand(4, 0)){
+		case 0:
+			tiles[x][(y + dy)/2] = Tile.DOOR;
+			break;
+		case 1:
+			tiles[x + (dx - x)][(y + dy)/2] = Tile.DOOR;
+			break;
+		case 2:
+			tiles[(x + dx)/2][y] = Tile.DOOR;
+			break;
+		case 3:
+			tiles[(x + dx)/2][y + (dy - y)] = Tile.DOOR;
+			break;
+		}
+		
 	}
 	
 	private boolean generateFloor(int x, int y){
@@ -206,14 +231,17 @@ public class Map implements MapRenderer{
 				else
 					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y);
 			}
-		for(int i=0; i<objects.size(); i++){
-			if(objects.get(i).isPickedUp())
-				objects.remove(i);
-			else if(objects.get(i).canDraw)
-				objects.get(i).draw(getSpriteBatch());
+		for(int i=0; i<items.size(); i++){
+			if(items.get(i).isPickedUp())
+				items.remove(i);
+			else if(items.get(i).canDraw)
+				items.get(i).draw(getSpriteBatch());
+		}
+		for(int i=0; i<chests.size(); i++){
+			if(chests.get(i).canDraw)
+				chests.get(i).draw(getSpriteBatch());
 		}
 		spriteBatch.end();
-		
 	}
 	
 	// ------------- Getters -------------

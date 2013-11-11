@@ -54,7 +54,7 @@ public class Worm extends Monster{
 	
 	public void multiply(){
 		npcs.add(new Worm("tilda.png"));
-		npcs.get(npcs.size()-1).setPosition(Global.rand(3, (int)(this.getX()/32)-1), Global.rand(3, (int)(this.getY()/32)-1));
+		npcs.get(npcs.size()-1).setPosition((int)(this.getX()/32), (int)(this.getY()/32));
 		if(attacker != null)
 			npcs.get(npcs.size()-1).attacker = attacker;
 	}

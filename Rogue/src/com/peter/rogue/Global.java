@@ -3,10 +3,12 @@ package com.peter.rogue;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.peter.rogue.map.Map;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Global {
 	
@@ -18,11 +20,17 @@ public class Global {
 	public static ShapeRenderer mapShapes = new ShapeRenderer();
     public static SpriteBatch screen = new SpriteBatch();
     public static boolean gameOver = false;
+    public static BitmapFont font = new BitmapFont();
+    public static BitmapFont gothicFont = new BitmapFont(Gdx.files.internal("fonts/Cardinal.fnt"), Gdx.files.internal("fonts/Cardinal.png"), false);
+	public static InputMultiplexer multiplexer = new InputMultiplexer();
+    public static Stage stage = new Stage();
+    
+    static{
+    	multiplexer.addProcessor(stage);
+    }
 	
     private static Random generator = new Random();
     
-    public static void changeMap(int level, Map renderer){
-    }
     public static int rand(int range, int origin) {
     	return generator.nextInt(range) + origin;
     }

@@ -1,0 +1,20 @@
+package com.peter.rogue.inventory;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.peter.rogue.entities.Entity;
+
+public class Item extends Entity{
+	private int weight;
+	private static Skin skin = new Skin();
+	private TextButton button = new TextButton("Item", skin);
+	
+	public Item(String name, int weight, String filename){
+		super(filename, "Item");
+		this.name = name;
+		this.weight = weight;
+	}
+	public int getWeight() {
+		return weight;
+	}
+}

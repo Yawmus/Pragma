@@ -44,12 +44,48 @@
 		<item value="true" key="REG_EX_SEARCH"/>
 		<item value="false" key="SEARCH_DERIVED"/>
 		<item value="false" key="WHOLE_WORD"/>
-		<item value="1" key="HISTORY_SIZE"/>
+		<item value="4" key="HISTORY_SIZE"/>
+		<section name="HISTORY2">
+			<item value="true" key="isRegExSearch"/>
+			<item value="System.out" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="true" key="ignoreCase"/>
+			<item value="false" key="isWholeWord"/>
+			<list key="fileNamePatterns">
+				<item value="*.java"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
 		<section name="EXTENSIONS">
 			<item value="*.class" key="1"/>
 			<item value="*.java" key="0"/>
 		</section>
+		<section name="HISTORY3">
+			<item value="true" key="isRegExSearch"/>
+			<item value="setMenu" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="true" key="ignoreCase"/>
+			<item value="false" key="isWholeWord"/>
+			<list key="fileNamePatterns">
+				<item value="*.java"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
 		<section name="HISTORY0">
+			<item value="true" key="isRegExSearch"/>
+			<item value="npcs" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="true" key="ignoreCase"/>
+			<item value="false" key="isWholeWord"/>
+			<list key="fileNamePatterns">
+				<item value="*.java"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY1">
 			<item value="true" key="isRegExSearch"/>
 			<item value="\n[\s]*" key="textPattern"/>
 			<item value="0" key="scope"/>

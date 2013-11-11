@@ -1,0 +1,146 @@
+package com.peter.rogue.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
+import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.EntityManager;
+
+public class Play implements Screen{
+
+	//private Rogue game;
+	
+	private FPSLogger fps;
+	
+    private EntityManager manager;
+	Table table2 = new Table();
+    
+    
+	public Play(Rogue game){
+	//	this.game = game;
+		fps = new FPSLogger();
+		fps.log();
+	}
+	
+	@Override
+	public void render(float delta) {
+
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+	    fps.log();
+
+		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
+		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
+	    Entity.map.setView(Global.camera);
+	    
+		Entity.map.draw();
+		manager.draw();
+
+		
+		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		Global.camera.viewportWidth = width;
+		Global.camera.viewportHeight = height;
+		
+		table2.invalidateHierarchy();
+		table2.setSize(width, height);
+	}
+	
+	@Override
+	public void show() {
+		manager = new EntityManager();
+		manager.init();
+
+		Global.camera.setToOrtho(false);
+
+
+
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(multiplexer);
+
+        
+		//table.setFillParent(true);
+		//table.screenToLocalCoordinates(new Vector2(50, 50));
+		/*//table.stageToLocalCoordinates(new Vector2(200, 20));
+		final TextButton button = new TextButton("Item", skin);
+		final Label test = new Label("Inventory", ls);*/
+	/*	
+		table2.add(test);
+        table2.row();
+        table2.add(button).fill();
+        table2.row();
+        table2.add(new TextButton("Hi", skin));
+        table2.row();
+        table2.add(new TextButton("Hi", skin));
+        table2.row();
+        table2.add(new TextButton("Hi", skin));
+        table2.row();
+        table2.add(new TextButton("Hi", skin));
+        table2.row();
+        table2.add(new TextButton("Hi", skin));
+        table2.row();
+        table2.add(new TextButton("wazzup", skin));
+        table2.padRight(300);
+        table2.debug();
+        
+        
+		stage.addActor(table2);
+		
+		*/
+        
+        //table.addActorAt(10, new TextButton("between\n", skin));;
+        //table.add(new TextButton("Hi", skin));
+        
+        
+        
+        
+	}
+
+	@Override
+	public void hide() {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
+
+	@Override
+	public void dispose() {
+        Global.mapShapes.dispose();
+        Global.screenShapes.dispose();
+        Entity.map.getSpriteBatch().dispose();
+		manager.dispose();
+	}
+
+}

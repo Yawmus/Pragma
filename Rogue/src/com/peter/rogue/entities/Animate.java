@@ -43,7 +43,6 @@ public class Animate extends Entity{
 	public Animate(String filename, String type) {
 		super(filename, type);
 		list = new HostilityList();
-		animate = true;
 		stats = new Stats();
 		response = new Responses(type);
 		message = new String("");

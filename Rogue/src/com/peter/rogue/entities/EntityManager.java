@@ -10,12 +10,13 @@ import com.peter.rogue.inventory.Food;
 import com.peter.rogue.inventory.Head;
 import com.peter.rogue.views.UI;
 
-public class EntityManager {
+public class EntityManager{
 
     private LevelData data;
     private int randX, randY;
     private Player player;
-    private UI ui = new UI();
+    private UI ui;
+	private Vector3 mapCoord;
     
     
     public EntityManager(){
@@ -23,19 +24,20 @@ public class EntityManager {
 
 		player = new Player("at.png");
 		player.setPosition(18, 7);
+		ui = new UI(player);
 
-		Entity.map.objects.add(new Chest());
-		Entity.map.objects.get(Entity.map.objects.size()-1).setPosition(4, 4);
+		Entity.map.chests.add(new Chest());
+		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(4, 4);
 
-		Entity.map.objects.add(new Chest());
-		Entity.map.objects.get(Entity.map.objects.size()-1).setPosition(6, 4);
+		Entity.map.chests.add(new Chest());
+		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(6, 4);
 
-		Entity.map.objects.add(Food.BREAD);
-		Entity.map.objects.get(Entity.map.objects.size()-1).setPosition(8, 18);
+		Entity.map.items.add(Food.BREAD);
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(8, 12);
 		
-		Entity.map.objects.add(Head.HAT);
-		Entity.map.objects.get(Entity.map.objects.size()-1).setPosition(9, 18);
-		
+		Entity.map.items.add(Head.HAT);
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 12);
+			
     }
     
 	public void draw(){
@@ -64,19 +66,18 @@ public class EntityManager {
 		
 		ui.draw(player, NPC.npcs);
 		
-		Animate.pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-		Global.camera.unproject(Animate.pos);
-
-		if(!Entity.map.getMark(Animate.pos.x, Animate.pos.y).equals("") && Entity.map.get(Animate.pos.x, Animate.pos.y).canDraw){
-			player.setInformation(Entity.map.cursor(Entity.map.getMark(Animate.pos.x, Animate.pos.y)));
-			Global.camera.project(Animate.pos);
-			Global.screenShapes.begin(ShapeType.Filled);
-			Global.screenShapes.setColor(0, 0, 0, 1f);
-			Global.screenShapes.rect(Animate.pos.x, Animate.pos.y, Entity.font.getBounds(player.getInformation()).width, Entity.font.getLineHeight());
-			Global.screenShapes.end();
-			Global.screen.begin();
-			Entity.font.draw(Global.screen, player.getInformation(), Animate.pos.x, Animate.pos.y + Entity.font.getLineHeight() - 2);
-			Global.screen.end();
+		mapCoord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Global.camera.unproject(mapCoord);
+		
+		if(!Entity.map.getMark(mapCoord.x, mapCoord.y).equals("") && Entity.map.get(mapCoord.x, mapCoord.y).canDraw){
+			player.setInformation(Entity.map.cursor(Entity.map.getMark(mapCoord.x, mapCoord.y)));
+			Global.mapShapes.begin(ShapeType.Filled);
+			Global.mapShapes.setColor(0, 0, 0, 1f);
+			Global.mapShapes.rect(mapCoord.x, mapCoord.y, Global.font.getBounds(player.getInformation()).width, Global.font.getLineHeight());
+			Global.mapShapes.end();
+			Entity.map.getSpriteBatch().begin();
+			Global.font.draw(Entity.map.getSpriteBatch(), player.getInformation(), mapCoord.x, mapCoord.y + Global.font.getLineHeight() - 2);
+			Entity.map.getSpriteBatch().end();
 		}
 		else
 			player.setInformation("");
@@ -102,8 +103,8 @@ public class EntityManager {
 			NPC.npcs.add(new Worm("tilda.png"));
 			NPC.npcs.get(NPC.npcs.size()-1).setPosition(randX, randY);
     	}
-    	
-		Gdx.input.setInputProcessor(player);
+    	Global.multiplexer.addProcessor(player);
+		Gdx.input.setInputProcessor(Global.multiplexer);
 	}
     
     public void purge(){
@@ -119,5 +120,7 @@ public class EntityManager {
 		ui.dispose();
 		Global.mapShapes.dispose();
 		Global.screenShapes.dispose();
+		Global.gothicFont.dispose();
+		Global.font.dispose();
     }
 }

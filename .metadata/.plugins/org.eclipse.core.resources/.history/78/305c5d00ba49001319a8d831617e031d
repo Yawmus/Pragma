@@ -1,0 +1,18 @@
+package com.peter.rogue.inventory;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.peter.rogue.entities.Entity;
+
+public class Item extends Entity{
+	private int weight;
+	private Rectangle collision;
+	
+	public Item(String name, int weight, String filename){
+		super(filename, "Item");
+		this.name = name;
+		this.weight = weight;
+	}
+	public int getWeight() {
+		return weight;
+	}
+}

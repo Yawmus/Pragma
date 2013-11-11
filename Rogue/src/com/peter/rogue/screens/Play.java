@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.entities.Entity;
@@ -17,6 +17,7 @@ public class Play implements Screen{
 	private FPSLogger fps;
 	
     private EntityManager manager;
+	Table table2 = new Table();
     
     
 	public Play(Rogue game){
@@ -27,21 +28,19 @@ public class Play implements Screen{
 	
 	@Override
 	public void render(float delta) {
-
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glEnable(GL10.GL_BLEND);
-	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-	    fps.log();
+	    //fps.log();
 
 		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
 		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
 	    Entity.map.setView(Global.camera);
-	    
+
 		Entity.map.draw();
 		manager.draw();
-
+		
+		Gdx.gl.glDisable(GL10.GL_BLEND);
 	}
 
 	@Override
@@ -55,8 +54,7 @@ public class Play implements Screen{
 		manager = new EntityManager();
 		manager.init();
 
-		Global.camera.setToOrtho(false);
-
+		Global.camera.setToOrtho(false);        
 	}
 
 	@Override
@@ -73,8 +71,10 @@ public class Play implements Screen{
 
 	@Override
 	public void dispose() {
-		//renderer.dispose();
-		//entityManager.dispose();
+        Global.mapShapes.dispose();
+        Global.screenShapes.dispose();
+        Entity.map.getSpriteBatch().dispose();
+		manager.dispose();
 	}
 
 }
