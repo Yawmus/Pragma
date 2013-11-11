@@ -3,6 +3,7 @@ package com.peter.rogue.map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +11,9 @@ import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.peter.rogue.Global;
+import com.peter.rogue.data.LevelData;
 import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.NPC;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Item;
 
@@ -18,6 +21,7 @@ public class Map implements MapRenderer{
 	protected Tile[][] tiles;
 	protected String[][] visible;
 	private String[][] marker;
+	private LevelData data;
     private HashMap<String, Entity> database;
 	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
@@ -25,9 +29,9 @@ public class Map implements MapRenderer{
 	protected Rectangle viewBounds;
 	protected TextureRegion region;
 	protected static int floor;
-	private static int direction;
 	public ArrayList<Item> items;
 	public ArrayList<Chest> chests;
+	public ArrayList<NPC>npcs;
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
@@ -37,10 +41,13 @@ public class Map implements MapRenderer{
 		tiles = new Tile[WIDTH][HEIGHT];
 		visible = new String[WIDTH][HEIGHT];
 		marker = new String[WIDTH][HEIGHT];
+		setData(new LevelData());
 		database = new HashMap<String, Entity>();
 		items = new ArrayList<Item>();
 		chests = new ArrayList<Chest>();
+		npcs = new ArrayList<NPC>();
 
+		
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
 				visible[x][y] = "notVisited";
@@ -55,21 +62,39 @@ public class Map implements MapRenderer{
 	
 	public void load(int direction, float x, float y){
 		floor += direction;
-		setDirection(direction);
-		clear();
-		if(floor == 0){
-			baseFloor();
-		}
-		else if(direction == -1){
-			for(int i=0; i<WIDTH; i++)
-				for(int j=0; j<HEIGHT; j++)
-					visible[i][j] = "notVisited";
+
+		if(direction == -1){
+			data.save(WIDTH, HEIGHT, tiles, visible, marker, items, chests, npcs);
+			clean();
 			generateFloor((int)x/32, (int)y/32);
 			tiles[(int)x/32][(int)y/32] = Tile.UP;
 		}
 		else if(direction == 1){
-			
+			clean();
+			tiles = data.tiles.pop();
+			visible = data.visible.pop();
+			marker = data.marker.pop();
+			items = data.items.pop();
+			chests = data.chests.pop();
+			npcs = data.npcs.pop();
 		}
+		
+		
+	}
+	
+	public void clean(){
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				tiles[i][j] = Tile.BLANK;
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				visible[i][j] = "notVisited";
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				marker[i][j] = "";
+		items.clear();
+		chests.clear();
+		npcs.clear();
 	}
 	
 	private void baseFloor(){
@@ -212,12 +237,6 @@ public class Map implements MapRenderer{
 		return flag;
 	}
 	
-	private void clear(){
-		for(int i=0; i<WIDTH; i++)
-			for(int j=0; j<HEIGHT; j++)
-				tiles[i][j] = Tile.BLANK;
-	}
-	
 	public void draw(){
 		spriteBatch.begin();
 		for(int x=0; x<WIDTH; x++)
@@ -241,6 +260,12 @@ public class Map implements MapRenderer{
 			if(chests.get(i).canDraw)
 				chests.get(i).draw(getSpriteBatch());
 		}
+
+		for(int i=0; i<npcs.size(); i++)
+			if(npcs.get(i).canDraw)
+				npcs.get(i).draw(getSpriteBatch());
+			else
+				npcs.get(i).update(Gdx.graphics.getDeltaTime());
 		spriteBatch.end();
 	}
 	
@@ -257,10 +282,6 @@ public class Map implements MapRenderer{
 	
 	public static int getFloor(){
 		return floor;
-	}
-
-	public static int getDirection() {
-		return direction;
 	}
 	
 	public SpriteBatch getSpriteBatch () {
@@ -301,10 +322,6 @@ public class Map implements MapRenderer{
 		spriteBatch.setProjectionMatrix(projection);
 		viewBounds.set(x, y, width, height);
 	}
-
-	public static void setDirection(int direction) {
-		Map.direction = direction;
-	}
 	
 	public void setMark(String ID, float x, float y){
 		marker[(int)(x/32)][(int)(y/32)] = ID;
@@ -339,5 +356,13 @@ public class Map implements MapRenderer{
 
 	public void purge(String id) {
 		
+	}
+
+	public LevelData getData() {
+		return data;
+	}
+
+	public void setData(LevelData data) {
+		this.data = data;
 	}
 }

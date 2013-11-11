@@ -53,10 +53,10 @@ public class Worm extends Monster{
 	}
 	
 	public void multiply(){
-		npcs.add(new Worm("tilda.png"));
-		npcs.get(npcs.size()-1).setPosition((int)(this.getX()/32), (int)(this.getY()/32));
+		map.npcs.add(new Worm("tilda.png"));
+		map.npcs.get(map.npcs.size()-1).setPosition((int)(this.getX()/32), (int)(this.getY()/32));
 		if(attacker != null)
-			npcs.get(npcs.size()-1).attacker = attacker;
+			map.npcs.get(map.npcs.size()-1).attacker = attacker;
 	}
 }
 

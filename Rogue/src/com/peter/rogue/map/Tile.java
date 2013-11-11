@@ -24,6 +24,8 @@ public class Tile{
 		this.properties = properties;
 	}
 
+	
+
 	public Texture getTexture() {
 		return texture;
 	}

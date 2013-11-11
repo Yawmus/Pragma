@@ -1,6 +1,5 @@
 package com.peter.rogue.entities;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -23,7 +22,6 @@ public class Animate extends Entity{
 	protected Integer status;
 	protected String target;
 	public static Vector3 pos = new Vector3();
-	public static ArrayList<NPC>npcs = new ArrayList<NPC>();
 	protected Animate attacker;
 	protected Sound death;
 	
@@ -124,7 +122,7 @@ public class Animate extends Entity{
 			Entity.map.setMark("", entity.getX(), entity.getY());
 			stats.addExperience(entity.type);
 			if(entity instanceof NPC)
-				npcs.remove(entity);
+				map.npcs.remove(entity);
 			else if(entity instanceof Player){
 				Global.gameOver = true;
 				entity.death.play();

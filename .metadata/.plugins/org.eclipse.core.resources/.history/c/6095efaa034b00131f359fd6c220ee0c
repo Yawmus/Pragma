@@ -1,0 +1,78 @@
+package com.peter.rogue.data;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+import com.peter.rogue.Global;
+import com.peter.rogue.entities.Citizen;
+import com.peter.rogue.entities.NPC;
+import com.peter.rogue.entities.Shopkeep;
+import com.peter.rogue.entities.Worm;
+import com.peter.rogue.inventory.Chest;
+import com.peter.rogue.inventory.Item;
+import com.peter.rogue.map.Tile;
+
+public class LevelData {
+    private int citizens, shopkeeps, monsters;
+	public Stack<Tile[][]> tiles;
+	public Stack<String[][]> visible;
+	public Stack<String[][]> marker;
+	public Stack<ArrayList<Item>> items;
+	public Stack<ArrayList<Chest>> chests;
+    
+	public LevelData(){
+		tiles = new Stack<Tile[][]>();
+		visible = new Stack<String[][]>();
+		marker = new Stack<String[][]>();
+		items = new Stack<ArrayList<Item>>();
+		chests = new Stack<ArrayList<Chest>>();
+		citizens = 4;
+		shopkeeps = 1;
+		monsters = 2;
+		
+		
+	}
+	
+	public int getCitizens() {
+		return citizens;
+	}
+	public int getShopkeeps() {
+		return shopkeeps;
+	}
+	public int getMonsters() {
+		return monsters;
+	}
+	public int getNPCTotal() {
+		return monsters + citizens + shopkeeps;
+	}
+
+	public void save(int WIDTH, int HEIGHT, Tile[][] tiles, String[][] visible, String[][] marker, ArrayList<Item> items, ArrayList<Chest> chests){
+		Tile[][] temp1 = new Tile[WIDTH][HEIGHT];
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				temp1[x][y] = tiles[x][y];
+		this.tiles.push(temp1);
+		
+		String[][] temp2 = new String[WIDTH][HEIGHT];
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				temp2[x][y] = new String(visible[x][y]);
+		this.visible.push(temp2);
+		
+		temp2 = new String[WIDTH][HEIGHT];
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				temp2[x][y] = new String(marker[x][y]);
+		this.marker.push(temp2);
+
+		ArrayList<Item> temp3 = new ArrayList<Item>();
+		for(int i=0; i<items.size(); i++)
+			temp3.add(items.get(i));
+		this.items.push(temp3);
+		
+		ArrayList<Chest> temp4 = new ArrayList<Chest>();
+		for(int i=0; i<chests.size(); i++)
+			temp4.add(chests.get(i));
+		this.chests.push(temp4);
+	}
+}

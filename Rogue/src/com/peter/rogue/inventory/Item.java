@@ -15,6 +15,14 @@ public class Item extends Entity{
 		this.value = value;
 		this.filename = filename;
 	}
+	/*
+	public Item(Item item){
+		super(item.filename, "Item");
+		this.name = item.name;
+		this.weight = item.weight;
+		this.value = item.value;
+		this.filename = item.filename;
+	}*/
 	
 	@Override
 	public void setPosition(float x, float y){
