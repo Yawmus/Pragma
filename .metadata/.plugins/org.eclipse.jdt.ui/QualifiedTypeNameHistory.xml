@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="com.peter.rogue.lighting.Point"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.math.collision.Ray"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.OrthographicCamera"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer"/>
@@ -9,15 +7,11 @@
 <fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Food"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.NPC"/>
-<fullyQualifiedTypeName name="com.peter.rogue.map.Tile"/>
-<fullyQualifiedTypeName name="com.peter.rogue.data.LevelData"/>
 <fullyQualifiedTypeName name="com.peter.rogue.map.Map"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
 <fullyQualifiedTypeName name="com.peter.rogue.screens.Death"/>
 <fullyQualifiedTypeName name="com.peter.rogue.Rogue"/>
 <fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="java.util.Stack"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.audio.Sound"/>
@@ -59,5 +53,11 @@
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Shopkeep"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Player"/>
+<fullyQualifiedTypeName name="com.peter.rogue.data.LevelData"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.Stack"/>
+<fullyQualifiedTypeName name="java.util.Stack"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.bcel.internal.util.Objects"/>
 <fullyQualifiedTypeName name="com.peter.rogue.Global"/>
+<fullyQualifiedTypeName name="com.peter.rogue.map.Tile"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.NPC"/>
 </qualifiedTypeNameHistroy>
