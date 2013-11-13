@@ -237,10 +237,12 @@ public class Map implements MapRenderer{
 		return flag;
 	}
 	
-	public void draw(){
-		spriteBatch.begin();
-		for(int x=0; x<WIDTH; x++)
-			for(int y=0; y<HEIGHT; y++){
+	public void draw(int originX, int originY){
+		System.out.println((Gdx.graphics.getWidth()/64));
+		for(int x=originX - (int) (Gdx.graphics.getWidth()/64) > 0 ? originX - (int) (Gdx.graphics.getWidth()/64) : 0;
+		        x<WIDTH && x<originX + (int) (Gdx.graphics.getWidth()/64) + 1; x++)
+			for(int y=originY - (int) (Gdx.graphics.getHeight()/64) + 3 > 0 ? originY - (int) (Gdx.graphics.getHeight()/64) + 3 : 0;
+			y<HEIGHT && y<originY + (int) (Gdx.graphics.getHeight()/64) - 1; y++){
 				if(visible[x][y].equals("visited")){
 					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
 					visible[x][y] = "hasVisited";
@@ -266,7 +268,6 @@ public class Map implements MapRenderer{
 				npcs.get(i).draw(getSpriteBatch());
 			else
 				npcs.get(i).update(Gdx.graphics.getDeltaTime());
-		spriteBatch.end();
 	}
 	
 	// ------------- Getters -------------

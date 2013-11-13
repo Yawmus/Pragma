@@ -33,8 +33,6 @@ public class Play implements Screen{
 
 	    fps.log();
 
-
-		Entity.map.draw();
 		manager.draw();
 		
 		Gdx.gl.glDisable(GL10.GL_BLEND);
