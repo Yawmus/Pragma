@@ -146,9 +146,10 @@ public class Animate extends Entity{
 		if(entity instanceof Player && ((Player)(entity)).isHostile() && !list.check(entity))
 			list.addID(entity.getID());
 		if(!messageFlag)
-			if(type.equals("Player"))
+			// Uncomment for player responses
+			/*if(type.equals("Player"))
 				message = response.call(entity, entity.list.check(this));
-			else
+			else*/
 				message = response.call(entity, list.check(entity));
 	}
 	

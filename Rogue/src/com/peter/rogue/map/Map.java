@@ -46,16 +46,8 @@ public class Map implements MapRenderer{
 		items = new ArrayList<Item>();
 		chests = new ArrayList<Chest>();
 		npcs = new ArrayList<NPC>();
-
-		
-		for(int x=0; x<WIDTH; x++)
-			for(int y=0; y<HEIGHT; y++)
-				visible[x][y] = "notVisited";
 		
 		baseFloor();
-		for(int i=0; i<WIDTH; i++)
-			for(int j=0; j<HEIGHT; j++)
-				marker[i][j] = new String("");
 		
 		floor = 0;
 	}
@@ -98,6 +90,7 @@ public class Map implements MapRenderer{
 	}
 	
 	private void baseFloor(){
+		int seaX = WIDTH-9, seaY = 1;
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
 				if(y == 0 || y == HEIGHT-1 || x == 0 || x == WIDTH-1)
@@ -106,19 +99,28 @@ public class Map implements MapRenderer{
 					tiles[x][y] = Tile.GROUND;
 		tiles[10][33] = Tile.DOWN;
 		
-		createRoom(WIDTH-11, HEIGHT-12, WIDTH-3, HEIGHT-3);
-		createRoom(WIDTH-11, 4, WIDTH-3, 12);
+		createRoom(seaX-11, HEIGHT-12, seaX-3, HEIGHT-3);
+		createRoom(seaX-11, 4, seaX-3, 12);
 		createRoom(12, 9, 20, 14);
 
-		tiles[WIDTH/2][HEIGHT/2+1] = Tile.WATER;
-		tiles[WIDTH/2][HEIGHT/2-1] = Tile.WATER;
-		tiles[WIDTH/2][HEIGHT/2] = Tile.WATER;
-		tiles[WIDTH/2-1][HEIGHT/2+1] = Tile.WATER;
-		tiles[WIDTH/2-1][HEIGHT/2-1] = Tile.WATER;
-		tiles[WIDTH/2-1][HEIGHT/2] = Tile.WATER;
-		tiles[WIDTH/2+1][HEIGHT/2+1] = Tile.WATER;
-		tiles[WIDTH/2+1][HEIGHT/2-1] = Tile.WATER;
-		tiles[WIDTH/2+1][HEIGHT/2] = Tile.WATER;
+
+		for(int x=WIDTH/2-1; x<=WIDTH/2+1; x++)
+			for(int y=HEIGHT/2-1; y<=HEIGHT/2+1; y++)
+				tiles[x][y] = Tile.WATER;
+		
+		for(int x=seaX; x<WIDTH-1; x++)
+			for(int y=seaY; y<HEIGHT-1; y++)
+				tiles[x][y] = Tile.WATER;
+		
+		for(int y=0; y<HEIGHT-1; y++)
+			tiles[WIDTH-1][y] = Tile.BLANK;
+		
+		for(int x=0; x<WIDTH; x++)
+			for(int y=0; y<HEIGHT; y++)
+				visible[x][y] = "notVisited";
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				marker[i][j] = new String("");
 	}
 	
 	private void createRoom(int x, int y, int dx, int dy){
