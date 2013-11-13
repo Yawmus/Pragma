@@ -58,7 +58,8 @@ public class EntityManager{
 	public void draw(){
 
 		Entity.map.getSpriteBatch().begin();
-		Entity.map.draw();
+		System.out.println(player.getX());
+		Entity.map.draw((int) player.getX()/32, (int) player.getY()/32);
 		player.draw(Entity.map.getSpriteBatch());
 		Entity.map.getSpriteBatch().end();
 

@@ -239,9 +239,9 @@ public class Map implements MapRenderer{
 	
 	public void draw(){
 		for(int x=(int) (Global.camera.position.x/32 -  Gdx.graphics.getWidth()/64) > 0 ? (int) (Global.camera.position.x/32 - Gdx.graphics.getWidth()/64) : 0;
-		        x<WIDTH && x<(int) (Global.camera.position.x/32 + Gdx.graphics.getWidth()/64) +1; x++)
-			for(int y=(int) (Global.camera.position.y/32 -  Gdx.graphics.getHeight()/64) + 2 > 0 ? (int) (Global.camera.position.y/32 - Gdx.graphics.getHeight()/64) + 2 : 0;
-			y<HEIGHT && y<(int) (Global.camera.position.y/32 + Gdx.graphics.getHeight()/64) + 1; y++){
+		        x<WIDTH && x<(int) (Global.camera.position.x/32 + Gdx.graphics.getWidth()/64) - 1; x++)
+			for(int y=/*(int) (Global.camera.position.y - Gdx.graphics.getHeight()/64) + 3 > 0 ? (int) (Global.camera.position.y - Gdx.graphics.getHeight()/64) + 3 :*/ 0;
+			y<HEIGHT/* && y<(int) (Global.camera.position.y + Gdx.graphics.getHeight()/64) + 3*/; y++){
 				if(visible[x][y].equals("visited")){
 					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
 					visible[x][y] = "hasVisited";
