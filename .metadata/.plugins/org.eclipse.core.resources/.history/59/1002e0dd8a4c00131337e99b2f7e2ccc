@@ -56,6 +56,7 @@ public class EntityManager{
     }
     
 	public void draw(){
+		player.light();
 		Entity.map.getSpriteBatch().begin();
 		player.draw(Entity.map.getSpriteBatch());
 		Entity.map.getSpriteBatch().end();
@@ -68,8 +69,6 @@ public class EntityManager{
 		Global.camera.update();
 		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
 		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
-	    Entity.map.setView(Global.camera);
-		player.light();
 
 		ui.draw(player, Entity.map.npcs);
 		

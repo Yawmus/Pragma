@@ -56,9 +56,11 @@ public class EntityManager{
     }
     
 	public void draw(){
+		player.light();
 		Entity.map.getSpriteBatch().begin();
 		player.draw(Entity.map.getSpriteBatch());
 		Entity.map.getSpriteBatch().end();
+		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
 
 		// If near edge of map then don't update respective axis
 		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Entity.map.WIDTH*32 - 18*32)
@@ -67,9 +69,7 @@ public class EntityManager{
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
 		Global.camera.update();
 		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
-		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
 	    Entity.map.setView(Global.camera);
-		player.light();
 
 		ui.draw(player, Entity.map.npcs);
 		

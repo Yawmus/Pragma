@@ -33,6 +33,9 @@ public class Play implements Screen{
 
 	    fps.log();
 
+		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
+		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
+	    Entity.map.setView(Global.camera);
 
 		Entity.map.draw();
 		manager.draw();

@@ -56,6 +56,7 @@ public class EntityManager{
     }
     
 	public void draw(){
+		player.light();
 		Entity.map.getSpriteBatch().begin();
 		player.draw(Entity.map.getSpriteBatch());
 		Entity.map.getSpriteBatch().end();
@@ -66,10 +67,9 @@ public class EntityManager{
 		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Entity.map.HEIGHT*32 - 9*32)
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
 		Global.camera.update();
+	    Entity.map.setView(Global.camera);
 		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
 		Entity.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
-	    Entity.map.setView(Global.camera);
-		player.light();
 
 		ui.draw(player, Entity.map.npcs);
 		
