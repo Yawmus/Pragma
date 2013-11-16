@@ -2,13 +2,13 @@ package com.peter.rogue.entities;
 
 public class Stats{
 	private int level;
-	private boolean levelPending;
 	private int dexterity;
 	private int experience;
 	private int maxExperience;
 	private int strength;
 	private int hitpoints;
 	private int maxHitpoints;
+	private int points;
 	
 	public Stats(){
 		setLevel(1);
@@ -18,7 +18,7 @@ public class Stats{
 		setHitpoints(10);
 		setMaxHitpoints(20);
 		setMaxExperience(100);
-		setLevelPending(false);
+		points = 0;
 	}
 
 	public int getHitpoints() {
@@ -41,7 +41,7 @@ public class Stats{
 	public void mutateExperience(int experience){
 		this.experience += experience;
 		if(this.experience >= maxExperience){
-			setLevelPending(true);
+			mutateLevel(1);
 			maxExperience += maxExperience*(level+1);
 		}
 	}
@@ -89,14 +89,9 @@ public class Stats{
 		this.level = level;
 	}
 	
-	public void setLevelPending(boolean status){
-		levelPending = status;
-	}
-	
-	public char getLevelPending(){
-		if(levelPending)
-			return '+';
-		return ' ';
+	public void mutateLevel(int amount){
+		this.level += amount;
+		mutatePoints(5);
 	}
 
 	public int getMaxHitpoints() {
@@ -105,5 +100,13 @@ public class Stats{
 
 	public void setMaxHitpoints(int maxHitpoints) {
 		this.maxHitpoints = maxHitpoints;
+	}
+	
+	public int getPoints(){
+		return points;
+	}
+	
+	public void mutatePoints(int amount){
+		points += amount;
 	}
 }

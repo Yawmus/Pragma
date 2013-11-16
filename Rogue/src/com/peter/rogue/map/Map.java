@@ -14,6 +14,7 @@ import com.peter.rogue.Global;
 import com.peter.rogue.data.LevelData;
 import com.peter.rogue.entities.Entity;
 import com.peter.rogue.entities.NPC;
+import com.peter.rogue.entities.Shopkeep;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Item;
 
@@ -31,7 +32,7 @@ public class Map implements MapRenderer{
 	protected static int floor;
 	public ArrayList<Item> items;
 	public ArrayList<Chest> chests;
-	public ArrayList<NPC>npcs;
+	public ArrayList<NPC> npcs;
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
@@ -41,7 +42,7 @@ public class Map implements MapRenderer{
 		tiles = new Tile[WIDTH][HEIGHT];
 		visible = new String[WIDTH][HEIGHT];
 		marker = new String[WIDTH][HEIGHT];
-		setData(new LevelData());
+		data = new LevelData();
 		database = new HashMap<String, Entity>();
 		items = new ArrayList<Item>();
 		chests = new ArrayList<Chest>();
@@ -144,7 +145,6 @@ public class Map implements MapRenderer{
 			tiles[(x + dx)/2][y + (dy - y)] = Tile.DOOR;
 			break;
 		}
-		
 	}
 	
 	private boolean generateFloor(int x, int y){

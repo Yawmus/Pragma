@@ -98,7 +98,7 @@ public class NPC extends Animate {
 		map.setMark(ID, getX(), getY());
 		oldX = getX();
 		oldY = getY();
-	}	
+	}
 	
 	private ArrayList<Node> open = new ArrayList<Node>();
 	private ArrayList<Node> closed = new ArrayList<Node>(); // 0 up. 1 down. 2 left. 3 right.

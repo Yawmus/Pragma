@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -20,7 +19,6 @@ public class Chest extends Entity {
 	
 	private ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
-	private Texture model = new Texture("img/model.png");
 	private Item hover;
 	public static final int HEIGHT = 300, WIDTH = 350;
 	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
@@ -55,7 +53,7 @@ public class Chest extends Entity {
 		Global.screenShapes.end();
 
 		Global.screenShapes.begin(ShapeType.Filled);
-		Global.screenShapes.setColor(0.03f, 0.03f, 0.03f, 1f);
+		Global.screenShapes.setColor(0.1f, 0.1f, 0.1f, 1f);
 		Global.screenShapes.rect(ORIGIN_X + 5, ORIGIN_Y + 5, WIDTH/2 - 15, HEIGHT - 10);
 		Global.screenShapes.end();
 		
@@ -84,14 +82,14 @@ public class Chest extends Entity {
 		
 		
 		
-		// Item-mouse collision
-		Gdx.gl.glEnable(GL10.GL_BLEND);
+		/*Gdx.gl.glEnable(GL10.GL_BLEND);
         Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		Global.screenShapes.begin(ShapeType.Filled);
-		Global.screenShapes.setColor(0f, 1f, 1f, .4f);
+		Global.screenShapes.setColor(0f, 1f, 1f, .4f);*/
 
+		// Item-mouse collision
 		for(int i=0; i<getItems().size(); i++){
-			Global.screenShapes.rect(getCollision().get(i).x, getCollision().get(i).y, 150, 15);
+			//Global.screenShapes.rect(getCollision().get(i).x, getCollision().get(i).y, 150, 15);
 			if(getCollision().get(i).contains(screenCoord)){
 				if(Gdx.input.isButtonPressed(Buttons.RIGHT))
 					System.out.println("Pressed right mouse button");

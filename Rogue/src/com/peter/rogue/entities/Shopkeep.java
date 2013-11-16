@@ -46,6 +46,33 @@ public class Shopkeep extends NPC{
 	public void update(float delta){
 		super.update(delta);
 	}
+	
+	@Override
+	public void checkCollision(){
+		if(map.getTile(getX(), getY()).isBlocked()){
+			setX(oldX);
+			setY(oldY);
+		}
+		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
+			if(map.get(getX(), getY()).getType().equals("Item") || map.get(getX(), getY()).getType().equals("Chest")
+					|| map.getTile(getX(), getY()).isDoor())
+				bump();
+			else
+				if(list.check((Animate)map.get(getX(), getY())))
+					if(map.get(getX(), getY()).getType().equals("Player"))
+						attack((Player) map.get(getX(), getY()));
+					else
+						attack((NPC) map.get(getX(), getY()));
+				else
+					bump((Animate) map.get(getX(), getY()));
+		}
+		
+
+		map.setMark("", oldX, oldY);
+		map.setMark(ID, getX(), getY());
+		oldX = getX();
+		oldY = getY();
+	}
 
 	public void add(Item item){
 		items.add(item);
@@ -64,7 +91,7 @@ public class Shopkeep extends NPC{
 		Global.screenShapes.end();
 
 		Global.screenShapes.begin(ShapeType.Filled);
-		Global.screenShapes.setColor(0.03f, 0.03f, 0.03f, 1f);
+		Global.screenShapes.setColor(0.1f, 0.1f, 0.1f, 1f);
 		Global.screenShapes.rect(ORIGIN_X + 5, ORIGIN_Y + 5, WIDTH/2 - 15, HEIGHT - 10);
 		Global.screenShapes.end();
 		
@@ -93,14 +120,14 @@ public class Shopkeep extends NPC{
 		
 		
 		
-		// Item-mouse collision
-		Gdx.gl.glEnable(GL10.GL_BLEND);
+		/*Gdx.gl.glEnable(GL10.GL_BLEND);
         Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		Global.screenShapes.begin(ShapeType.Filled);
-		Global.screenShapes.setColor(0f, 1f, 1f, .4f);
+		Global.screenShapes.setColor(0f, 1f, 1f, .4f);*/
 
+		// Item-mouse collision
 		for(int i=0; i<getItems().size(); i++){
-			Global.screenShapes.rect(getCollision().get(i).x, getCollision().get(i).y, 150, 15);
+			//Global.screenShapes.rect(getCollision().get(i).x, getCollision().get(i).y, 150, 15);
 			if(getCollision().get(i).contains(screenCoord)){
 				if(Gdx.input.isButtonPressed(Buttons.RIGHT))
 					System.out.println("Pressed right mouse button");

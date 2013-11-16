@@ -87,20 +87,20 @@ public class UI{
 		if(player.isMenuActive()){
 			screenCoord = new Vector2(Gdx.input.getX(), (Gdx.input.getY() * -1 + Global.SCREEN_HEIGHT));
 			if(player.getMenu().equals("Inventory")){
-				player.getInventory().display(Global.screen, Global.font, screenCoord);
+				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 			}
 			
 			else if(player.getMenu().equals("Chest")){
 				player.getInventory().setTrade(((Chest)(player.getMenuObject())));
 				((Chest)(player.getMenuObject())).setTrade(player);
-				player.getInventory().display(Global.screen, Global.font, screenCoord);
+				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 				((Chest)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
 			}
 			
 			else if(player.getMenu().equals("Barter")){
 				player.getInventory().setTrade(((Shopkeep)(player.getMenuObject())));
 				((Shopkeep)(player.getMenuObject())).setTrade(player);
-				player.getInventory().display(Global.screen, Global.font, screenCoord);
+				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 				((Shopkeep)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
 			}
 		}
@@ -123,11 +123,15 @@ public class UI{
 		Global.gothicFont.setScale(1f);
 		Global.gothicFont.draw(spriteBatch, player.getName(), 280, 90);
 		Global.gothicFont.setScale(.7f);
-		Global.gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel() + player.getStats().getLevelPending(), 280, 50);
+		if(player.getStats().getPoints() > 0){
+			Global.gothicFont.setColor(Color.GREEN);
+			Global.gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel(), 280, 50);
+			Global.gothicFont.setColor(Color.WHITE);
+		}
+		else
+			Global.gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel(), 280, 50);
 		Global.gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), 430, 50);
-		Global.gothicFont.draw(spriteBatch, "Strenght:  " + player.getStats().getStrength(), 430, 80);
-		Global.gothicFont.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), 630, 50);
-		Global.gothicFont.draw(spriteBatch, "Experience: " + player.getStats().getExperience(), 630, 80);
+		Global.gothicFont.draw(spriteBatch, "Experience:  " + player.getStats().getExperience(), 430, 80);
 		Global.gothicFont.draw(spriteBatch, "Demeanor: ", 870, 80);
 		if(player.isHostile())
 			Global.gothicFont.draw(spriteBatch, "Hostile", 955, 80);

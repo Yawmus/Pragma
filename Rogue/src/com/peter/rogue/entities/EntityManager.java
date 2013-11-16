@@ -78,7 +78,7 @@ public class EntityManager{
 		mapCoord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(mapCoord);
 		
-		if(!Entity.map.getMark(mapCoord.x, mapCoord.y).equals("") && Entity.map.get(mapCoord.x, mapCoord.y).canDraw){
+		if(!player.isMenuActive() && !Entity.map.getMark(mapCoord.x, mapCoord.y).equals("") && Entity.map.get(mapCoord.x, mapCoord.y).canDraw){
 			player.setInformation(Entity.map.cursor(Entity.map.getMark(mapCoord.x, mapCoord.y)));
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);
