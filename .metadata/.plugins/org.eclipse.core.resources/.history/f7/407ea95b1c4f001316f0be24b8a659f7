@@ -1,0 +1,36 @@
+package com.peter.rogue.inventory;
+
+public class Wearable extends Item{
+	public static final Wearable HELMET = new Head("Helmet", 5, 17, 3, "at.png", "Head");
+	public static final Wearable HAT = new Head("Hat", 2, 6, 1, "at.png", "Head");
+	
+	public Wearable(String name, int weight, int value, int defense, String filename) {
+		super(name, weight, value, filename);
+		this.defense = defense;
+	}
+	private boolean on;
+	private int defense;
+	
+	public int getDefense(){
+		return defense;
+	}
+	public void putOn(){
+		on = true;
+	}
+	public void takeOff(){
+		on = false;
+	}
+	public boolean isOn(){
+		return on;
+	}
+}
+
+class Head extends Equipable{
+
+	
+	
+	public Head(String name, int weight, int value, int defense, String filename) {
+		super(name, weight, value, defense, filename);
+	}
+
+}

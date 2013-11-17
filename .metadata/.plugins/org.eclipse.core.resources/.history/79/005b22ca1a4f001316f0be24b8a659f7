@@ -1,0 +1,19 @@
+package com.peter.rogue.inventory;
+
+public class Equipable {
+	private boolean on;
+	private int defense;
+	
+	public int getDefense(){
+		return defense;
+	}
+	public void putOn(){
+		on = true;
+	}
+	public void takeOff(){
+		on = false;
+	}
+	public boolean isOn(){
+		return on;
+	}
+}

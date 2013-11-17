@@ -1,0 +1,24 @@
+package com.peter.rogue.data;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.peter.rogue.entities.Entity;
+import com.peter.rogue.inventory.Item;
+
+public class ItemEntry{
+	public Item item;
+	public float x, y;
+	
+	public ItemEntry(Item item, float x, float y){
+		this.item = item;
+		this.x =  x * 32;
+		this.y = y * 32;
+		
+		Entity.map.put(item.getID(), item);
+		Entity.map.setMark(item.getID(), this.x, this.y);
+	}
+	
+	public void draw(SpriteBatch spriteBatch){
+		spriteBatch.draw(item.getTexture(), x, y);
+		item.canDraw = false;
+	}
+}

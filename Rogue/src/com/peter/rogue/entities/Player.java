@@ -45,7 +45,7 @@ public class Player extends Animate implements InputProcessor {
 		stats.setStrength(5);
 		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
-		setHunger(1.01f);
+		hunger = 1.01f;
 		
 		for(int i=0; i<100; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
@@ -68,7 +68,7 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void update(float delta){
 		super.update(delta);
-		hunger -= delta/20000;
+		hunger -= delta/8000;
 		if(delay >= .15){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
@@ -104,6 +104,7 @@ public class Player extends Animate implements InputProcessor {
 			setY(oldY);
 		}
 		else if(map.getTile(getX(), getY()).hasStairs() && !map.getTile(oldX, oldY).hasStairs()){
+			map.setMark("", oldX, oldY);
 			if(map.getTile(getX(), getY()).direction()){
 				map.load(1, getX(), getY());
 			}
@@ -112,7 +113,7 @@ public class Player extends Animate implements InputProcessor {
 			}
 		}
 		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
-			if(map.get(getX(), getY()).getType().equals("Item")){
+			if(map.get(getX(), getY()) instanceof Item){
 				if(!inventory.checkIsFull((Item)map.get(getX(), getY()))){
 					inventory.add((Item)map.get(getX(), getY()));
 					map.remove(map.get(getX(), getY()).getID());
@@ -121,7 +122,7 @@ public class Player extends Animate implements InputProcessor {
 					bump();
 			}
 			
-			else if(map.get(getX(), getY()).getType().equals("Chest")){
+			else if(map.get(getX(), getY()) instanceof Chest){
 				setMenu("Chest");
 				setMenuObject((Chest)map.get(getX(), getY()));
 				bump();
@@ -302,7 +303,10 @@ public class Player extends Animate implements InputProcessor {
 		return hunger;
 	}
 
-	public void setHunger(float hunger) {
-		this.hunger = hunger;
+	public void mutateHunger(float amount) {
+		if(amount + this.hunger > 1.01f)
+			this.hunger = 1.01f;
+		else
+			this.hunger += amount;
 	}
 }

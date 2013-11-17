@@ -1,0 +1,25 @@
+package com.peter.rogue.inventory;
+
+public class Equipable extends Item{
+	public static final Equipable HELMET = new Equipable("Helmet", 5, 17, "at.png", "Head", 3);
+	public static final Equipable HAT = new Equipable("Hat", 2, 6, "c1.png", "Head", 1);
+	public static final Equipable BREAST_PLATE = new Equipable("Breast Plate", 5, 17, "[.png", "Body", 3);
+	public static final Equipable SHOES = new Equipable("Shoes", 2, 6, "at.png", "Feet", 1);
+	public static final Equipable RING = new Equipable("Shoes", 2, 6, "=.png", "Feet", 1);
+	
+	private int defense;
+	private String type;
+	
+	public Equipable(String name, int weight, int value, String filename, String type, int defense) {
+		super(name, weight, value, filename);
+		this.defense = defense;
+		this.type = type;
+	}
+	
+	public int getDefense(){
+		return defense;
+	}
+	public String getType(){
+		return type;
+	}
+}

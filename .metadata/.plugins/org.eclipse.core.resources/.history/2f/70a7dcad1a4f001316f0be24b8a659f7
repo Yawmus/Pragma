@@ -1,0 +1,7 @@
+package com.peter.rogue.inventory;
+
+interface Equipable {
+	public boolean on = false;
+	
+	
+}

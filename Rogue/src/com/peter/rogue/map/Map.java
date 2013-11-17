@@ -14,7 +14,6 @@ import com.peter.rogue.Global;
 import com.peter.rogue.data.LevelData;
 import com.peter.rogue.entities.Entity;
 import com.peter.rogue.entities.NPC;
-import com.peter.rogue.entities.Shopkeep;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Item;
 
@@ -98,7 +97,6 @@ public class Map implements MapRenderer{
 					tiles[x][y] = Tile.WALL;
 				else
 					tiles[x][y] = Tile.GROUND;
-		tiles[10][33] = Tile.DOWN;
 		
 		createRoom(seaX-11, HEIGHT-12, seaX-3, HEIGHT-3);
 		createRoom(seaX-11, 4, seaX-3, 12);
@@ -122,6 +120,7 @@ public class Map implements MapRenderer{
 		for(int i=0; i<WIDTH; i++)
 			for(int j=0; j<HEIGHT; j++)
 				marker[i][j] = new String("");
+		tiles[24][10] = Tile.DOWN;
 	}
 	
 	private void createRoom(int x, int y, int dx, int dy){
@@ -243,7 +242,7 @@ public class Map implements MapRenderer{
 		for(int x=(int) (Global.camera.position.x/32 -  Gdx.graphics.getWidth()/64) > 0 ? (int) (Global.camera.position.x/32 - Gdx.graphics.getWidth()/64) : 0;
 		        x<WIDTH && x<(int) (Global.camera.position.x/32 + Gdx.graphics.getWidth()/64) +1; x++)
 			for(int y=(int) (Global.camera.position.y/32 -  Gdx.graphics.getHeight()/64) + 2 > 0 ? (int) (Global.camera.position.y/32 - Gdx.graphics.getHeight()/64) + 2 : 0;
-			y<HEIGHT && y<(int) (Global.camera.position.y/32 + Gdx.graphics.getHeight()/64) + 1; y++){
+			        y<HEIGHT && y<(int) (Global.camera.position.y/32 + Gdx.graphics.getHeight()/64) + 1; y++){
 				if(visible[x][y].equals("visited")){
 					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
 					visible[x][y] = "hasVisited";

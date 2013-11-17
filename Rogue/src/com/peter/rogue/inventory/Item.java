@@ -15,14 +15,14 @@ public class Item extends Entity{
 		this.value = value;
 		this.filename = filename;
 	}
-	/*
+	
 	public Item(Item item){
 		super(item.filename, "Item");
 		this.name = item.name;
 		this.weight = item.weight;
 		this.value = item.value;
 		this.filename = item.filename;
-	}*/
+	}
 	
 	@Override
 	public void setPosition(float x, float y){
@@ -43,13 +43,14 @@ public class Item extends Entity{
 	public String getFilename() {
 		return filename;
 	}
-	
-
-
 	public void pickedUp(boolean pickedUp){
 		this.pickedUp = pickedUp;
 	}
 	public boolean isPickedUp(){
 		return pickedUp;
 	}
+	
+	/*public Item clone(){
+		return new Item(this.name, this.weight, this.value, this.filename);
+	}*/
 }

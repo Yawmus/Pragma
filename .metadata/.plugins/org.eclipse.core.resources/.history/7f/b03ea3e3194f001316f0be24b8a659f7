@@ -1,0 +1,5 @@
+package com.peter.rogue.inventory;
+
+public class Equipable {
+
+}

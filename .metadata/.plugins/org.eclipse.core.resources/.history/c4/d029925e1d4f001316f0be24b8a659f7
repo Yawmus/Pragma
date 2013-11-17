@@ -1,0 +1,24 @@
+package com.peter.rogue.inventory;
+
+public class Wearable extends Item{
+	public static final Wearable HELMET = new Wearable("Helmet", 5, 17, "at.png", "Head", 3);
+	public static final Wearable HAT = new Wearable("Hat", 2, 6, "at.png", "Head", 1);
+	public static final Wearable BREAST_PLATE = new Wearable("Breast Plate", 5, 17, "at.png", "Torso", 3);
+	public static final Wearable SHOES = new Wearable("Shoes", 2, 6, 1, "at.png", "Feet");
+	
+	private int defense;
+	private String type;
+	
+	public Wearable(String name, int weight, int value, int defense, String filename, String type) {
+		super(name, weight, value, filename);
+		this.defense = defense;
+		this.type = type;
+	}
+	
+	public int getDefense(){
+		return defense;
+	}
+	public String getType(){
+		return type;
+	}
+}

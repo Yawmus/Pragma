@@ -20,6 +20,7 @@ public class Chest extends Entity {
 	private ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
 	private Item hover;
+	private Rectangle hoverCollision;
 	public static final int HEIGHT = 300, WIDTH = 350;
 	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
 	private Entity trade;
@@ -63,6 +64,20 @@ public class Chest extends Entity {
 		Global.screenShapes.line(ORIGIN_X + 170, ORIGIN_Y + 100, ORIGIN_X + WIDTH, ORIGIN_Y + 100);
 		Global.screenShapes.line(ORIGIN_X + 170, ORIGIN_Y, ORIGIN_X + 170, HEIGHT + 250);
 		Global.screenShapes.end();
+		
+		if(hover != null){
+			spriteBatch.begin();
+			spriteBatch.draw(hover.getTexture(), ORIGIN_X + 205, ORIGIN_Y + 50);
+			font.draw(spriteBatch, hover.getName(), ORIGIN_X + 245, ORIGIN_Y + 70);
+			font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 180, ORIGIN_Y + 30);
+			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 260, ORIGIN_Y + 30);
+			spriteBatch.end();
+			Global.screenShapes.begin(ShapeType.Filled);
+			Global.screenShapes.setColor(.2f, .2f, .2f, 1f);
+			Global.screenShapes.rect(hoverCollision.x, hoverCollision.y, hoverCollision.width, hoverCollision.height);
+			Global.screenShapes.end();
+			hover = null;
+		}
 
 		spriteBatch.begin();
 		
@@ -70,13 +85,7 @@ public class Chest extends Entity {
 			font.draw(spriteBatch, items.get(i).getName(), ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 10) - i*15);
 			collisions.get(i).setPosition(ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 24) - i*15);
 		}
-		if(hover != null){
-			spriteBatch.draw(hover.getTexture(), ORIGIN_X + 210, ORIGIN_Y + 50);
-			font.draw(spriteBatch, hover.getName(), ORIGIN_X + 250, ORIGIN_Y + 70);
-			font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 190, ORIGIN_Y + 30);
-			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 265, ORIGIN_Y + 30);
-			hover = null;
-		}
+		
 		spriteBatch.end();
 		
 		
@@ -106,7 +115,7 @@ public class Chest extends Entity {
 					}
 				}
 				else{
-					setHover(getItems().get(i));
+					setHover(getItems().get(i), collisions.get(i));
 				}
 			}
 		}
@@ -126,8 +135,9 @@ public class Chest extends Entity {
 			return false;
 		return true;
 	}
-	public void setHover(Item hover){
+	public void setHover(Item hover, Rectangle collision){
 		this.hover = hover;
+		this.hoverCollision = collision;
 	}
 	
 	public ArrayList<Item> getItems(){

@@ -1,0 +1,14 @@
+package com.peter.rogue.data;
+
+import com.peter.rogue.inventory.Item;
+
+class ItemEntry{
+	public Item item;
+	public float x, y;
+	
+	public ItemEntry(Item item, float x, float y){
+		this.item = item;
+		this.x = x;
+		this.y = y;
+	}
+}

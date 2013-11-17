@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Food;
-import com.peter.rogue.inventory.Head;
+import com.peter.rogue.inventory.Item;
+import com.peter.rogue.inventory.Wearable;
 import com.peter.rogue.views.UI;
 
 public class EntityManager{
@@ -29,11 +30,17 @@ public class EntityManager{
 		Entity.map.chests.add(new Chest());
 		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(6, 4);
 
-		Entity.map.items.add(Food.BREAD);
+		Entity.map.items.add(new Food(Food.BREAD));
 		Entity.map.items.get(Entity.map.items.size()-1).setPosition(8, 32);
 		
-		Entity.map.items.add(Head.HAT);
+		Entity.map.items.add(new Wearable(Wearable.HAT));
 		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 32);
+		
+		Entity.map.items.add(new Wearable(Wearable.HAT));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 31);
+		
+		Entity.map.items.add(new Wearable(Wearable.RING));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 34);
 		
 		for(int i=0; i<Entity.map.getData().getCitizens(); i++){
 			randX = Global.rand(13, 3);

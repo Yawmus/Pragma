@@ -1,0 +1,14 @@
+package com.peter.rogue.inventory;
+
+public class Equipable extends Item{
+
+	public static final Equipable BRONZE_SWORD = new Equipable("Bronze Sword", 3, 10, "G.png");
+	public static final Equipable IRON_SWORD = new Equipable("Iron Sword", 3, 10, "G.png");
+	
+	private int damage;
+	
+	public Equipable(String name, int weight, int value, String filename) {
+		super(name, weight, value, filename);
+	}
+	
+}

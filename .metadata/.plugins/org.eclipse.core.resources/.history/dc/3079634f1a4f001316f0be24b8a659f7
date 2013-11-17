@@ -1,0 +1,7 @@
+package com.peter.rogue.inventory;
+
+public class Equipable {
+	private String type;
+	private boolean on;
+	
+}
