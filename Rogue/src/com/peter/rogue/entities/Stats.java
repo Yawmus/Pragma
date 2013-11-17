@@ -9,6 +9,7 @@ public class Stats{
 	private int hitpoints;
 	private int maxHitpoints;
 	private int points;
+	private int defense;
 	
 	public Stats(){
 		setLevel(1);
@@ -18,6 +19,7 @@ public class Stats{
 		setHitpoints(10);
 		setMaxHitpoints(20);
 		setMaxExperience(100);
+		setDefense(0);
 		points = 0;
 	}
 
@@ -108,5 +110,16 @@ public class Stats{
 	
 	public void mutatePoints(int amount){
 		points += amount;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
+	}
+	public void mutateDefense(int amount) {
+		this.defense += amount;
 	}
 }

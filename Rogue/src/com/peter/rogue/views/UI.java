@@ -41,7 +41,7 @@ public class UI{
 				if(npcs.get(i).statusFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
-					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, Global.font.getBounds(npcs.get(i).getStatus().toString()).width);
+					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, 13);
 					Global.mapShapes.end();
 				}
 				Entity.map.getSpriteBatch().begin();
@@ -62,7 +62,7 @@ public class UI{
 		if(player.statusFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
-			Global.mapShapes.circle(player.getX(), player.getY() + 20, Global.font.getBounds(player.getStatus().toString()).width);
+			Global.mapShapes.circle(player.getX(), player.getY() + 20, 13);
 			Global.mapShapes.end();
 		}		
 

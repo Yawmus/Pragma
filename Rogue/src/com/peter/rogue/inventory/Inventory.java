@@ -23,13 +23,14 @@ public class Inventory {
 	private Backpack backpack = new Backpack();
 	private ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
+	private Rectangle[] pointCollisions;
 	private Gear gear;
 	private int weight;
 	private int wallet;
 	private Item hover;
 	private Rectangle hoverCollision;
 	public static final int BOX1_WIDTH = 150, BOX2_WIDTH = 165, HEIGHT = 300, WIDTH = 500;
-	public static final int ORIGIN_X = 670, ORIGIN_Y = 250;
+	public static final int ORIGIN_X = 670, ORIGIN_Y = 250, STATS = 5;
 	private Entity trade;
 	
 	public Inventory(){
@@ -37,7 +38,11 @@ public class Inventory {
 		items = new ArrayList<Item>();
 		collisions = new ArrayList<Rectangle>();
 		gear = new Gear(ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y);
-		
+		pointCollisions = new Rectangle[STATS];
+		for(int i=0; i<STATS; i++){
+			pointCollisions[i] = new Rectangle();
+			pointCollisions[i].setSize(8);
+		}
 		wallet = 0;
 		add(new Wearable(Wearable.HAT));
 		add(new Wearable(Wearable.HAT));
@@ -116,16 +121,18 @@ public class Inventory {
 		
 		
 		spriteBatch.begin();
-		font.draw(spriteBatch, "    Speed: " + 30, ORIGIN_X + 190, ORIGIN_Y + 225);
+		font.draw(spriteBatch, "    ?????: " + 30, ORIGIN_X + 190, ORIGIN_Y + 225);
 		font.draw(spriteBatch, " Strength: " + player.getStats().getStrength(), ORIGIN_X + 190, ORIGIN_Y + 205);
 		font.draw(spriteBatch, "    Health: " + player.getStats().getMaxHitpoints(), ORIGIN_X + 190, ORIGIN_Y + 185);
-		font.draw(spriteBatch, " Defense: " + 2, ORIGIN_X + 190, ORIGIN_Y + 165);
+		font.draw(spriteBatch, " Defense: " + player.getStats().getDefense(), ORIGIN_X + 190, ORIGIN_Y + 165);
 		font.draw(spriteBatch, "Dexterity: " + player.getStats().getDexterity(), ORIGIN_X + 190, ORIGIN_Y + 145);
 		font.draw(spriteBatch, "  Points: " + player.getStats().getPoints(), ORIGIN_X + 200, ORIGIN_Y + 125);
-		
+
 		if(player.getStats().getPoints() > 0)
-			for(int i=0; i<5; i++)
-				font.draw(spriteBatch, "+", ORIGIN_X + 285, ORIGIN_Y + 145 + i*15);
+			for(int i=0; i<STATS; i++){
+				font.draw(spriteBatch, "+", ORIGIN_X + 285, ORIGIN_Y + 145 + i*20);
+				pointCollisions[i].setPosition(ORIGIN_X + 285, ORIGIN_Y + 134 + i*20);
+			}
 		
 		font.draw(spriteBatch, "Hunger   " + (int)(player.getHunger()*100) + "%", ORIGIN_X + WIDTH - 120, ORIGIN_Y + HEIGHT - 15);
 		font.draw(spriteBatch, "Thirst        " + "90%", ORIGIN_X + WIDTH - 120, ORIGIN_Y + HEIGHT - 30);
@@ -141,6 +148,32 @@ public class Inventory {
 
 		spriteBatch.end();
 		
+		for(int i=0; i<STATS && player.getStats().getPoints() != 0; i++){
+			if(pointCollisions[i].contains(screenCoord)){
+				if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
+					switch(i){
+					case 0:
+						player.getStats().setDexterity(player.getStats().getDexterity() + 1);
+						break;
+					case 1:
+						player.getStats().mutateDefense(1);
+						break;
+					case 2:
+						player.getStats().setMaxHitpoints(player.getStats().getMaxHitpoints() + 1);
+						player.getStats().mutateHitpoints(1);
+						break;
+					case 3:
+						player.getStats().setStrength(player.getStats().getStrength() + 1);
+						break;
+					case 4:
+						// Stub
+						break;
+					}
+					player.getStats().mutatePoints(-1);
+				}
+			}
+		}
+		
 		// Uncomment shape rendering for item collision debug
 		/*Gdx.gl.glEnable(GL10.GL_BLEND);
         Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -148,7 +181,7 @@ public class Inventory {
 		Global.screenShapes.setColor(0f, 1f, 1f, .4f);
 		*/
 
-		setHover(gear.check(screenCoord, coord, this));
+		setHover(gear.check(screenCoord, coord, player));
 		// Item-mouse collision
 		for(int i=0; i<getItems().size(); i++){
 			//Global.screenShapes.rect(collisions.get(i).x, collisions.get(i).y, 130, 15);
@@ -172,15 +205,35 @@ public class Inventory {
 				else if(items.get(i) instanceof Wearable || items.get(i) instanceof Equipable){
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(0f, 0, 0, 1f);
-					Global.mapShapes.rect(coord.x, coord.y, Global.font.getBounds("wear").width, Global.font.getLineHeight());
+					Global.mapShapes.rect(coord.x + 2, coord.y, Global.font.getBounds("wear").width, Global.font.getLineHeight());
 					Global.mapShapes.end();
 					Entity.map.getSpriteBatch().begin();
 					
-					Global.font.draw(Entity.map.getSpriteBatch(), "wear", coord.x, coord.y + Global.font.getLineHeight() - 2);
+					Global.font.draw(Entity.map.getSpriteBatch(), "wear", coord.x + 2, coord.y + Global.font.getLineHeight() - 2);
 					Entity.map.getSpriteBatch().end();
 					
 					if(Gdx.input.isButtonPressed(Buttons.RIGHT) && Gdx.input.justTouched())
-						gear.wear((Wearable) move(i), this);
+						gear.wear((Wearable) move(i), player);
+				}
+				if(trade instanceof Shopkeep){
+					Global.mapShapes.begin(ShapeType.Filled);
+					Global.mapShapes.setColor(0f, 0, 0, 1f);
+					Global.mapShapes.rect(coord.x - Global.font.getBounds("sell").width - 2, coord.y, Global.font.getBounds("sell").width, Global.font.getLineHeight());
+					Global.mapShapes.end();
+					Entity.map.getSpriteBatch().begin();
+					
+					Global.font.draw(Entity.map.getSpriteBatch(), "sell", coord.x - Global.font.getBounds("sell").width - 2, coord.y + Global.font.getLineHeight() - 2);
+					Entity.map.getSpriteBatch().end();
+				}
+				else if(trade instanceof Chest){
+					Global.mapShapes.begin(ShapeType.Filled);
+					Global.mapShapes.setColor(0f, 0, 0, 1f);
+					Global.mapShapes.rect(coord.x - Global.font.getBounds("move").width - 2, coord.y, Global.font.getBounds("move").width, Global.font.getLineHeight());
+					Global.mapShapes.end();
+					Entity.map.getSpriteBatch().begin();
+					
+					Global.font.draw(Entity.map.getSpriteBatch(), "move", coord.x - Global.font.getBounds("move").width - 2, coord.y + Global.font.getLineHeight() - 2);
+					Entity.map.getSpriteBatch().end();
 				}
 				if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
 					if(trade != null){
@@ -293,7 +346,7 @@ class Gear{
 		names[5] = "Hand";
 		names[6] = "Ring";
 	}
-	public Item check(Vector2 screenCoord, Vector3 coord, Inventory inventory) {
+	public Item check(Vector2 screenCoord, Vector3 coord, Player player) {
 		for(int i=0; i<SLOTS; i++)
 			if(collisions[i].contains(screenCoord) && this.items[i] != null){
 				Global.mapShapes.begin(ShapeType.Filled);
@@ -306,7 +359,8 @@ class Gear{
 				Entity.map.getSpriteBatch().end();
 				
 				if(Gdx.input.isButtonPressed(Buttons.RIGHT) && Gdx.input.justTouched()){
-					inventory.move(this.items[i]);
+					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
+					player.getInventory().move(items[i]);
 					this.items[i] = null;
 				}
 				return this.items[i] != null ? this.items[i] : null;
@@ -323,12 +377,15 @@ class Gear{
 		spriteBatch.draw(items[6] != null ? items[6].getTexture() : unused[6], originX + 40, originY + 165);
 	}
 	
-	public void wear(Wearable item, Inventory inventory){
+	public void wear(Wearable item, Player player){
 		for(int i=0; i<SLOTS; i++)
 			if(names[i] == item.getType()){
-				if(items[i] != null)
-					inventory.move(items[0]);
+				if(items[i] != null){
+					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
+					player.getInventory().move(items[i]);
+				}
 				items[i] = item;
+				player.getStats().mutateDefense(((Wearable) (items[i])).getDefense());
 			}
 	}
 }

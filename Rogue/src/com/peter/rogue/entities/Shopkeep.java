@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Food;
 import com.peter.rogue.inventory.Item;
@@ -86,6 +87,9 @@ public class Shopkeep extends NPC{
 	}
 	
 	public void display(SpriteBatch spriteBatch, BitmapFont font, Vector2 screenCoord){
+		Vector3 coord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Global.camera.unproject(coord);
+		
 		Global.screenShapes.begin(ShapeType.Filled);
 		Global.screenShapes.setColor(0f, 0f, 0f, 1f);
 		Global.screenShapes.rect(ORIGIN_X, ORIGIN_Y, WIDTH, HEIGHT);
@@ -138,6 +142,16 @@ public class Shopkeep extends NPC{
 		for(int i=0; i<getItems().size(); i++){
 			//Global.screenShapes.rect(getCollision().get(i).x, getCollision().get(i).y, 150, 15);
 			if(getCollision().get(i).contains(screenCoord)){
+
+				Global.mapShapes.begin(ShapeType.Filled);
+				Global.mapShapes.setColor(0f, 0, 0, 1f);
+				Global.mapShapes.rect(coord.x - Global.font.getBounds("buy").width - 2, coord.y, Global.font.getBounds("buy").width, Global.font.getLineHeight());
+				Global.mapShapes.end();
+				Entity.map.getSpriteBatch().begin();
+				
+				Global.font.draw(Entity.map.getSpriteBatch(), "buy", coord.x - Global.font.getBounds("buy").width - 2, coord.y + Global.font.getLineHeight() - 2);
+				Entity.map.getSpriteBatch().end();
+				
 				if(Gdx.input.isButtonPressed(Buttons.RIGHT))
 					System.out.println("Pressed right mouse button");
 				else if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
