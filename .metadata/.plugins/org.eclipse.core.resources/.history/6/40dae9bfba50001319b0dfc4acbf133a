@@ -1,0 +1,58 @@
+// Peter Jacobsen
+// CS 2420 - Nov 17, 2013
+// jacoProj10.java
+
+package jacoProj10;
+
+import java.util.Scanner;
+
+// jacoProj10 class: tests the priority queue
+public class jacoProj10 {
+
+	// Scanner object for input
+    private static Scanner in = new Scanner(System.in);
+    
+    // main method: handles user input and controls the program flow
+    public static void main(String[] args) {
+        PriorityQueue pq = new PriorityQueue();
+        
+        while(true){
+        	// Uses the user's response to dictate the case
+            switch(menu()){
+            case 1:
+                System.out.print("Item: ");
+                pq.insert(in.nextInt());
+                break;
+            case 2:
+            	// Trys to delete, throws an exception if it fails
+                try{
+                    System.out.print("Deleted: " + pq.delete());
+                } catch(Exception e){
+                    System.out.println(e);
+                    
+                }
+                break;
+            case 3:
+                System.out.print(pq.isEmpty());
+                break;
+            case 4:
+                System.exit(0);
+                System.out.println("Goodbye!\n");
+                break;
+            default:
+                System.out.println("Incorrect input!");	
+            }
+        }
+    }
+    
+    // menu method: draws the menu and returns the user's input
+    public static int menu(){
+        System.out.print("\n\n1) Insert item\n"
+                + "2) Delete\n"
+                + "3) Is empty?\n"
+                + "4) Quit\n"
+                + "\n-> ");
+        return in.nextInt();
+    }
+    
+}

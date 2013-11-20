@@ -3,6 +3,9 @@ package com.peter.rogue.inventory;
 import com.peter.rogue.entities.Entity;
 
 public class Item extends Entity{
+	
+	public static Item MONEY = new Item("Money", 0, 5, "$.png");
+	
 	private int weight;
 	private int value;
 	private String filename;

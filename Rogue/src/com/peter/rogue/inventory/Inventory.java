@@ -44,8 +44,6 @@ public class Inventory {
 			pointCollisions[i].setSize(8);
 		}
 		wallet = 0;
-		add(new Wearable(Wearable.HAT));
-		add(new Wearable(Wearable.HAT));
 		add(new Wearable(Wearable.BREAST_PLATE));
 		add(new Wearable(Wearable.SHOES));
 		add(new Food(Food.BREAD));
@@ -60,7 +58,9 @@ public class Inventory {
 	}
 	
 	public void add(Item item){
-		if(!checkIsFull(item)){
+		if(item.getName().equals("Money"))
+			wallet += item.getValue();
+		else if(!checkIsFull(item)){
 			weight += item.getWeight();
 			collisions.add(new Rectangle());
 			collisions.get(collisions.size()-1).setSize(130, 15);

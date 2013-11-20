@@ -18,6 +18,9 @@ import com.peter.rogue.inventory.Item;
 
 public class Shopkeep extends NPC{
 
+	public static Shopkeep Bartender = new Shopkeep("s_.png", "Bartender");
+	public static Shopkeep Shopkeep = new Shopkeep("s_.png", "Shopkeep");
+	
 	private ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
 	private Item hover;
@@ -27,7 +30,7 @@ public class Shopkeep extends NPC{
 	public static final int HEIGHT = 300, WIDTH = 350;
 	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
 	
-	public Shopkeep(String filename) {
+	public Shopkeep(String filename, String name) {
 		super(filename, "Shopkeep");
 		
 		this.items = new ArrayList<Item>();

@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Food;
-import com.peter.rogue.inventory.Item;
 import com.peter.rogue.inventory.Wearable;
 import com.peter.rogue.views.UI;
 
@@ -23,43 +22,6 @@ public class EntityManager{
 		player.setPosition(28, 7);
 
 		ui = new UI(player);
-		
-		Entity.map.chests.add(new Chest());
-		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(4, 4);
-
-		Entity.map.chests.add(new Chest());
-		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(6, 4);
-
-		Entity.map.items.add(new Food(Food.BREAD));
-		Entity.map.items.get(Entity.map.items.size()-1).setPosition(8, 32);
-		
-		Entity.map.items.add(new Wearable(Wearable.HAT));
-		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 32);
-		
-		Entity.map.items.add(new Wearable(Wearable.HAT));
-		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 31);
-		
-		Entity.map.items.add(new Wearable(Wearable.RING));
-		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 34);
-		
-		for(int i=0; i<Entity.map.getData().getCitizens(); i++){
-			randX = Global.rand(13, 3);
-			randY = Global.rand(7, 3);
-			Entity.map.npcs.add(new Citizen("c_.png"));
-			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-		}
-    	for(int i=0; i<Entity.map.getData().getShopkeeps(); i++){
-			randX = Global.rand(13, 3);
-			randY = Global.rand(7, 3);
-			Entity.map.npcs.add(new Shopkeep("s_.png"));
-			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-		}
-    	for(int i=0; i<Entity.map.getData().getMonsters(); i++){
-			randX = Global.rand(13, 3);
-			randY = Global.rand(7, 3);
-			Entity.map.npcs.add(new Worm("tilda.png"));
-			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-    	}
     }
     
 	public void draw(){
@@ -85,8 +47,8 @@ public class EntityManager{
 		mapCoord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(mapCoord);
 		
-		if(!player.isMenuActive() && !Entity.map.getMark(mapCoord.x, mapCoord.y).equals("") && Entity.map.get(mapCoord.x, mapCoord.y).canDraw){
-			player.setInformation(Entity.map.cursor(Entity.map.getMark(mapCoord.x, mapCoord.y)));
+		if(!player.isMenuActive()){
+			player.setInformation(Entity.map.cursor(Entity.map.getMark(mapCoord.x, mapCoord.y), mapCoord.x, mapCoord.y));
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);
 			Global.mapShapes.rect(mapCoord.x, mapCoord.y, Global.font.getBounds(player.getInformation()).width, Global.font.getLineHeight());
@@ -103,6 +65,48 @@ public class EntityManager{
     public void init(){    	
     	Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
+		
+		Entity.map.chests.add(new Chest());
+		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(4, 4);
+
+		Entity.map.chests.add(new Chest());
+		Entity.map.chests.get(Entity.map.chests.size()-1).setPosition(6, 4);
+
+		Entity.map.items.add(new Food(Food.BREAD));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(8, 32);
+		
+		Entity.map.items.add(new Wearable(Wearable.HAT));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 32);
+		
+		Entity.map.items.add(new Wearable(Wearable.HAT));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 31);
+		
+		Entity.map.items.add(new Wearable(Wearable.RING));
+		Entity.map.items.get(Entity.map.items.size()-1).setPosition(9, 34);
+		
+		for(int i=0; i<Entity.map.getData().getCitizens(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			Entity.map.npcs.add(new Citizen("c_.png"));
+			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
+		}
+		
+		randX = Global.rand(13, 3);
+		randY = Global.rand(7, 3);
+		Entity.map.npcs.add(Shopkeep.Bartender);
+		Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
+		
+		randX = Global.rand(13, 3);
+		randY = Global.rand(7, 3);
+		Entity.map.npcs.add(Shopkeep.Shopkeep);
+		Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
+			
+    	for(int i=0; i<Entity.map.getData().getMonsters(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			Entity.map.npcs.add(new Worm("tilda.png"));
+			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
+    	}
 	}
     
     public void dispose(){

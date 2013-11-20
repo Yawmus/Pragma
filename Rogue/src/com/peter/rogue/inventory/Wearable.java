@@ -2,7 +2,7 @@ package com.peter.rogue.inventory;
 
 public class Wearable extends Item{
 	public static Wearable HELMET = new Wearable("Helmet", 5, 17, "at.png", "Head", 3);
-	public static Wearable HAT = new Wearable("Hat", 2, 6, "c1.png", "Head", 1);
+	public static Wearable HAT = new Wearable("Hat", 2, 6, "^.png", "Head", 1);
 	public static Wearable BREAST_PLATE = new Wearable("Breast Plate", 5, 17, "[.png", "Body", 3);
 	public static Wearable SHOES = new Wearable("Shoes", 2, 6, "at.png", "Feet", 1);
 	public static Wearable RING = new Wearable("Ring", 1, 20, "=.png", "Ring", 1);

@@ -1,0 +1,48 @@
+// Peter Jacobsen
+// CS 2420 - Nov 17, 2013
+// PriorityQueue.java
+
+package jacoProj10;
+
+// PriorityQueue class: manages the data in the from of a priority queue
+public class PriorityQueue{
+	// PriorityQueue data fields
+    private final int SIZE = 100;
+    private int size = 0;
+    private float[] pq;
+    
+    // PriorityQueue method: initializes the priority queue
+    public PriorityQueue(){
+        pq = new float[SIZE];
+    }
+    
+    // insert method: places an item in a location based on priority
+    public void insert(float item){
+        boolean moved = false;
+        size++;
+        for(int i=0; i<=size; i++)
+            if(item < pq[i]){
+                moved = true;
+                // Copies the array over one unit to make room for the new item
+                System.arraycopy(pq, i, pq, i+1, size-i);
+                pq[i] = item;
+                break;
+            }
+        // Hits this block if the item is smaller than the entire group
+        if(!moved)
+            pq[size] = item;
+    }
+    
+    // isEmpty method: returns true if the priority queue is empty
+    public boolean isEmpty(){
+        return size == 0;
+    }
+    
+    // delete method: removes the item with the highest priority (last in size)
+    public float delete() throws Exception{
+    	// Makes sure the size isn't already empty
+        if(size == 0)
+            throw new Exception("Empty queue!");
+        return pq[size--];
+    }
+}

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.peter.rogue.Global;
 import com.peter.rogue.data.LevelData;
+import com.peter.rogue.entities.Animate;
 import com.peter.rogue.entities.Entity;
 import com.peter.rogue.entities.NPC;
 import com.peter.rogue.inventory.Chest;
@@ -98,9 +99,9 @@ public class Map implements MapRenderer{
 				else
 					tiles[x][y] = Tile.GROUND;
 		
-		createRoom(seaX-11, HEIGHT-12, seaX-3, HEIGHT-3);
-		createRoom(seaX-11, 4, seaX-3, 12);
-		createRoom(12, 9, 20, 14);
+		createRoom(seaX-11, HEIGHT-12, seaX-3, HEIGHT-3, Tile.ONE);
+		createRoom(seaX-11, 4, seaX-3, 12, Tile.DOOR);
+		createRoom(12, 9, 20, 14, Tile.DOOR);
 
 
 		for(int x=WIDTH/2-1; x<=WIDTH/2+1; x++)
@@ -123,7 +124,7 @@ public class Map implements MapRenderer{
 		tiles[24][10] = Tile.DOWN;
 	}
 	
-	private void createRoom(int x, int y, int dx, int dy){
+	private void createRoom(int x, int y, int dx, int dy, Tile type){
 		for(int i=x; i<=dx; i++)
 			for(int j=y; j<=dy; j++)
 				if(j == y || j == dy || i == x || i == dx)
@@ -132,16 +133,16 @@ public class Map implements MapRenderer{
 					tiles[i][j] = Tile.GROUND;
 		switch(Global.rand(4, 0)){
 		case 0:
-			tiles[x][(y + dy)/2] = Tile.DOOR;
+			tiles[x][(y + dy)/2] = type;
 			break;
 		case 1:
-			tiles[x + (dx - x)][(y + dy)/2] = Tile.DOOR;
+			tiles[x + (dx - x)][(y + dy)/2] = type;
 			break;
 		case 2:
-			tiles[(x + dx)/2][y] = Tile.DOOR;
+			tiles[(x + dx)/2][y] = type;
 			break;
 		case 3:
-			tiles[(x + dx)/2][y + (dy - y)] = Tile.DOOR;
+			tiles[(x + dx)/2][y + (dy - y)] = type;
 			break;
 		}
 	}
@@ -333,9 +334,15 @@ public class Map implements MapRenderer{
 		database.remove(ID);
 	}
 
-	public String cursor(String ID){
-		if(!(ID.equals("") || ID.equals(null)))
-			return database.get(ID).getName();
+	public String cursor(String ID, float x, float y){
+		if(!ID.equals("") && get(x, y).canDraw)
+			if(database.get(ID) instanceof NPC)
+				return database.get(ID).getName() + ", level " + ((Animate) (database.get(ID))).getStats().getLevel();
+			else
+				return database.get(ID).getName();
+		else if(getTile(x, y) != null){
+			return getTile(x, y).getName();
+		}
 		return "";
 	}
 	

@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
+import com.peter.rogue.inventory.Food;
+import com.peter.rogue.inventory.Item;
 
 public class Animate extends Entity{
 	protected Stats stats;
@@ -121,8 +123,12 @@ public class Animate extends Entity{
 		if(entity.getStats().getHitpoints() <= 0){
 			Entity.map.setMark("", entity.getX(), entity.getY());
 			stats.addExperience(entity.type);
-			if(entity instanceof NPC)
+			if(entity instanceof NPC){
 				map.npcs.remove(entity);
+				map.remove(entity.getID());
+				Entity.map.items.add(new Item(Item.MONEY));
+				Entity.map.items.get(Entity.map.items.size()-1).setPosition(entity.getX()/32, entity.getY()/32);
+			}
 			else if(entity instanceof Player){
 				Global.gameOver = true;
 				entity.death.play();
