@@ -60,6 +60,10 @@ public class EntityManager{
 		else
 			player.setInformation("");
 		
+
+		Global.screen.begin();
+		Global.font.draw(Global.screen, "v 0.4.1", 0, Global.SCREEN_HEIGHT);
+		Global.screen.end();
     }
     
     public void init(){    	

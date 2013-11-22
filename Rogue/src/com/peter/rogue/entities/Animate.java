@@ -126,7 +126,7 @@ public class Animate extends Entity{
 			if(entity instanceof NPC){
 				map.npcs.remove(entity);
 				map.remove(entity.getID());
-				Entity.map.items.add(new Item(Item.MONEY));
+				Entity.map.items.add(new Item(Item.GOLD));
 				Entity.map.items.get(Entity.map.items.size()-1).setPosition(entity.getX()/32, entity.getY()/32);
 			}
 			else if(entity instanceof Player){

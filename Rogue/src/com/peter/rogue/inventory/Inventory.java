@@ -58,7 +58,7 @@ public class Inventory {
 	}
 	
 	public void add(Item item){
-		if(item.getName().equals("Money"))
+		if(item.getName().equals("Gold"))
 			wallet += item.getValue();
 		else if(!checkIsFull(item)){
 			weight += item.getWeight();
@@ -215,28 +215,40 @@ public class Inventory {
 					if(Gdx.input.isButtonPressed(Buttons.RIGHT) && Gdx.input.justTouched())
 						gear.wear((Wearable) move(i), player);
 				}
-				if(trade instanceof Shopkeep){
-					Global.mapShapes.begin(ShapeType.Filled);
-					Global.mapShapes.setColor(0f, 0, 0, 1f);
-					Global.mapShapes.rect(coord.x - Global.font.getBounds("sell").width - 2, coord.y, Global.font.getBounds("sell").width, Global.font.getLineHeight());
-					Global.mapShapes.end();
-					Entity.map.getSpriteBatch().begin();
-					
-					Global.font.draw(Entity.map.getSpriteBatch(), "sell", coord.x - Global.font.getBounds("sell").width - 2, coord.y + Global.font.getLineHeight() - 2);
-					Entity.map.getSpriteBatch().end();
+				if(trade != null){
+					if(trade instanceof Shopkeep){
+						Global.mapShapes.begin(ShapeType.Filled);
+						Global.mapShapes.setColor(0f, 0, 0, 1f);
+						Global.mapShapes.rect(coord.x - Global.font.getBounds("sell").width - 2, coord.y, Global.font.getBounds("sell").width, Global.font.getLineHeight());
+						Global.mapShapes.end();
+						Entity.map.getSpriteBatch().begin();
+						
+						Global.font.draw(Entity.map.getSpriteBatch(), "sell", coord.x - Global.font.getBounds("sell").width - 2, coord.y + Global.font.getLineHeight() - 2);
+						Entity.map.getSpriteBatch().end();
+					}
+					else if(trade instanceof Chest){
+						Global.mapShapes.begin(ShapeType.Filled);
+						Global.mapShapes.setColor(0f, 0, 0, 1f);
+						Global.mapShapes.rect(coord.x - Global.font.getBounds("move").width - 2, coord.y, Global.font.getBounds("move").width, Global.font.getLineHeight());
+						Global.mapShapes.end();
+						Entity.map.getSpriteBatch().begin();
+						
+						Global.font.draw(Entity.map.getSpriteBatch(), "move", coord.x - Global.font.getBounds("move").width - 2, coord.y + Global.font.getLineHeight() - 2);
+						Entity.map.getSpriteBatch().end();
+					}
 				}
-				else if(trade instanceof Chest){
+				else{
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(0f, 0, 0, 1f);
-					Global.mapShapes.rect(coord.x - Global.font.getBounds("move").width - 2, coord.y, Global.font.getBounds("move").width, Global.font.getLineHeight());
+					Global.mapShapes.rect(coord.x - Global.font.getBounds("drop").width - 2, coord.y, Global.font.getBounds("drop").width, Global.font.getLineHeight());
 					Global.mapShapes.end();
 					Entity.map.getSpriteBatch().begin();
 					
-					Global.font.draw(Entity.map.getSpriteBatch(), "move", coord.x - Global.font.getBounds("move").width - 2, coord.y + Global.font.getLineHeight() - 2);
+					Global.font.draw(Entity.map.getSpriteBatch(), "drop", coord.x - Global.font.getBounds("drop").width - 2, coord.y + Global.font.getLineHeight() - 2);
 					Entity.map.getSpriteBatch().end();
 				}
 				if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
-					if(trade != null){
+					if(trade != null)
 						// In essence -> sells the item, then adds it to shopkeep's inventory
 						if(trade instanceof Shopkeep){
 							wallet += getItems().get(i).getValue();
@@ -245,7 +257,8 @@ public class Inventory {
 						// In essence -> adds item to chest and removes from inventory
 						else if(trade instanceof Chest)
 							((Chest) trade).add(remove(i));
-					}
+					else
+						remove(i);
 				}
 			}
 		}
@@ -254,8 +267,6 @@ public class Inventory {
 		
 	}
 	
-	
-
 	public Texture getBackpack(){
 		return backpack.getTexture();
 	}

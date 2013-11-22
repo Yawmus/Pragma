@@ -30,8 +30,8 @@ public class Shopkeep extends NPC{
 	public static final int HEIGHT = 300, WIDTH = 350;
 	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
 	
-	public Shopkeep(String filename, String name) {
-		super(filename, "Shopkeep");
+	public Shopkeep(String filename, String type) {
+		super(filename, type);
 		
 		this.items = new ArrayList<Item>();
 		this.collisions = new ArrayList<Rectangle>();

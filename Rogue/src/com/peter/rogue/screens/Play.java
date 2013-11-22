@@ -32,7 +32,7 @@ public class Play implements Screen{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 	    fps.log();
-
+	    
 		manager.draw();
 		
 		Gdx.gl.glDisable(GL10.GL_BLEND);

@@ -14,6 +14,7 @@ import com.peter.rogue.Global;
 import com.peter.rogue.data.LevelData;
 import com.peter.rogue.entities.Animate;
 import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.Monster;
 import com.peter.rogue.entities.NPC;
 import com.peter.rogue.inventory.Chest;
 import com.peter.rogue.inventory.Item;
@@ -336,8 +337,10 @@ public class Map implements MapRenderer{
 
 	public String cursor(String ID, float x, float y){
 		if(!ID.equals("") && get(x, y).canDraw)
-			if(database.get(ID) instanceof NPC)
+			if(database.get(ID) instanceof Monster)
 				return database.get(ID).getName() + ", level " + ((Animate) (database.get(ID))).getStats().getLevel();
+			else if(database.get(ID) instanceof NPC)
+				return database.get(ID).getName() + ", " + ((Animate) (database.get(ID))).getType();
 			else
 				return database.get(ID).getName();
 		else if(getTile(x, y) != null){

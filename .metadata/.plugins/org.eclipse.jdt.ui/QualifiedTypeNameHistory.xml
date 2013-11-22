@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Food"/>
@@ -35,7 +34,6 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.InputAdapter"/>
 <fullyQualifiedTypeName name="com.peter.rogue.views.UI"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Input.Buttons"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="com.peter.rogue.data.ItemEntry"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Item"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
 </qualifiedTypeNameHistroy>
