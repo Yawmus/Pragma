@@ -33,7 +33,7 @@ public class LevelData {
 		npcs = new Stack<ArrayList<NPC>>();
 		citizens = 4;
 		shopkeeps = 2;
-		monsters = 8;
+		monsters = 2;
 	}
 	
 	public int getCitizens() {

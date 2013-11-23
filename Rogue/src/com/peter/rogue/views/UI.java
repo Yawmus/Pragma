@@ -40,15 +40,23 @@ public class UI{
 				}
 				if(npcs.get(i).statusFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
-					Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
+					if(npcs.get(i).getStatus() == 0)
+						Global.mapShapes.setColor(0f, 0f, .45f, 1f);
+					else if(npcs.get(i).getStatus() < 0)
+						Global.mapShapes.setColor(.35f, 0f, 0f, 1f);
+					else if(npcs.get(i).getStatus() > 0)
+						Global.mapShapes.setColor(0f, .4f, 0f, 1f);
+					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, 13);
+					Global.mapShapes.end();
+					Global.mapShapes.begin(ShapeType.Line);
+					Global.mapShapes.setColor(0f, 0f, 0f, 1f);
 					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, 13);
 					Global.mapShapes.end();
 				}
 				Entity.map.getSpriteBatch().begin();
 				Global.font.draw(Entity.map.getSpriteBatch(), npcs.get(i).getMessage(), npcs.get(i).getX(), npcs.get(i).getY());
-				if(npcs.get(i).getStatus() != 0){
-					Global.font.draw(Entity.map.getSpriteBatch(), npcs.get(i).getStatus().toString(), npcs.get(i).getX() - 8, npcs.get(i).getY() + 26);
-				}
+				if(npcs.get(i).getStatus() != null)
+					Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(npcs.get(i).getStatus()))).toString(), npcs.get(i).getX() - 5, npcs.get(i).getY() + 26);
 				Entity.map.getSpriteBatch().end();
 			}
 		}
@@ -61,16 +69,21 @@ public class UI{
 		}
 		if(player.statusFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
-			Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
+			if(player.getStatus() == 0)
+				Global.mapShapes.setColor(0f, 0f, .4f, 1f);
+			else if(player.getStatus() < 0)
+				Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
+			else if(player.getStatus() > 0)
+				Global.mapShapes.setColor(0f, .4f, 0f, 1f);
 			Global.mapShapes.circle(player.getX(), player.getY() + 20, 13);
 			Global.mapShapes.end();
 		}		
 
 		Entity.map.getSpriteBatch().begin();
 		Global.font.draw(Entity.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
-		if(player.getStatus() != 0){
-			Global.font.draw(Entity.map.getSpriteBatch(), player.getStatus().toString(), player.getX() - 8, player.getY() + 26);
-		}
+		if(player.getStatus() != null)
+			Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 5, player.getY() + 26);
+		
 		Entity.map.getSpriteBatch().end();
 
 		Global.screenShapes.begin(ShapeType.Filled);
@@ -132,13 +145,13 @@ public class UI{
 			Global.gothicFont.draw(spriteBatch, "Level: " + player.getStats().getLevel(), 280, 50);
 		Global.gothicFont.draw(spriteBatch, "Hitpoints: " + player.getStats().getHitpoints() + "/" + player.getStats().getMaxHitpoints(), 430, 50);
 		Global.gothicFont.draw(spriteBatch, "Experience:  " + player.getStats().getExperience(), 430, 80);
-		Global.gothicFont.draw(spriteBatch, "Demeanor: ", 870, 80);
+		Global.gothicFont.draw(spriteBatch, "Demeanor: ", 670, 80);
 		if(player.isHostile())
-			Global.gothicFont.draw(spriteBatch, "Hostile", 955, 80);
+			Global.gothicFont.draw(spriteBatch, "Hostile", 755, 80);
 		else
-			Global.gothicFont.draw(spriteBatch, "Friendly", 955, 80);
-		Global.gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), 870, 50);
-		spriteBatch.draw(player.getInventory().getBackpack(),  1150, 30);
+			Global.gothicFont.draw(spriteBatch, "Friendly", 755, 80);
+		Global.gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), 670, 50);
+		
 		spriteBatch.end();
 	}
 	

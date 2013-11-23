@@ -5,6 +5,7 @@ import com.peter.rogue.entities.Entity;
 public class Item extends Entity{
 	
 	public static Item GOLD = new Item("Gold", 0, 5, "$.png");
+	public static Item GEM = new Item("Gem", 0, 10, "asterisk.png");
 	
 	private int weight;
 	private int value;

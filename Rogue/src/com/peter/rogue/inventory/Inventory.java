@@ -63,7 +63,7 @@ public class Inventory {
 		else if(!checkIsFull(item)){
 			weight += item.getWeight();
 			collisions.add(new Rectangle());
-			collisions.get(collisions.size()-1).setSize(130, 15);
+			collisions.get(collisions.size()-1).setSize(130, 14);
 			items.add(item);
 		}
 		else
@@ -190,11 +190,11 @@ public class Inventory {
 				if(items.get(i) instanceof Food){
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(0f, 0, 0, 1f);
-					Global.mapShapes.rect(coord.x, coord.y, Global.font.getBounds("eat").width, Global.font.getLineHeight());
+					Global.mapShapes.rect(coord.x + 2, coord.y, Global.font.getBounds("eat").width, Global.font.getLineHeight());
 					Global.mapShapes.end();
 					Entity.map.getSpriteBatch().begin();
 					
-					Global.font.draw(Entity.map.getSpriteBatch(), "eat", coord.x, coord.y + Global.font.getLineHeight() - 2);
+					Global.font.draw(Entity.map.getSpriteBatch(), "eat", coord.x + 2, coord.y + Global.font.getLineHeight() - 2);
 					Entity.map.getSpriteBatch().end();
 					
 					if(Gdx.input.isButtonPressed(Buttons.RIGHT) && Gdx.input.justTouched()){
@@ -248,15 +248,14 @@ public class Inventory {
 					Entity.map.getSpriteBatch().end();
 				}
 				if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
-					if(trade != null)
-						// In essence -> sells the item, then adds it to shopkeep's inventory
-						if(trade instanceof Shopkeep){
-							wallet += getItems().get(i).getValue();
-							((Shopkeep) trade).add(remove(i));
-						}
-						// In essence -> adds item to chest and removes from inventory
-						else if(trade instanceof Chest)
-							((Chest) trade).add(remove(i));
+					// In essence -> sells the item, then adds it to shopkeep's inventory
+					if(trade instanceof Shopkeep){
+						wallet += getItems().get(i).getValue();
+						((Shopkeep) trade).add(remove(i));
+					}
+					// In essence -> adds item to chest and removes from inventory
+					else if(trade instanceof Chest)
+						((Chest) trade).add(remove(i));
 					else
 						remove(i);
 				}

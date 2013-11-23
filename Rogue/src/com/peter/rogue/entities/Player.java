@@ -38,14 +38,15 @@ public class Player extends Animate implements InputProcessor {
 		info = new String();
 		viewDistance = 7;
 		hostile = false;
-		stats.setDexterity(5);
-		stats.setMaxExperience(10);
+		stats.setDexterity(0);
+		stats.setMaxExperience(20);
 		stats.setExperience(0);
 		stats.setLevel(1);
-		stats.setStrength(5);
+		stats.setStrength(0);
 		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
 		hunger = 1.01f;
+		delay = .2f;
 		
 		for(int i=0; i<100; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
@@ -69,28 +70,28 @@ public class Player extends Animate implements InputProcessor {
 	public void update(float delta){
 		super.update(delta);
 		hunger -= delta/8000;
-		if(delay >= .15){
+		if(time >= delay){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
-				delay = 0;
+				time = 0;
 				setMenuActive(false);
 				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.D)){
 				setX(getX() + 32);
-				delay = 0;
+				time = 0;
 				setMenuActive(false);
 				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.S)){
 				setY(getY() - 32);
-				delay = 0;
+				time = 0;
 				setMenuActive(false);
 				checkCollision();
 			}
 			if(Gdx.input.isKeyPressed(Keys.W)){
 				setY(getY() + 32);
-				delay = 0;
+				time = 0;
 				setMenuActive(false);
 				checkCollision();
 			}
@@ -200,6 +201,10 @@ public class Player extends Animate implements InputProcessor {
 		case Keys.ESCAPE:
 			System.exit(0);
 			break;
+		case Keys.SHIFT_LEFT:
+		case Keys.SHIFT_RIGHT:
+			delay = .5f;
+			break;
 		}
 		
 		return true;
@@ -269,6 +274,10 @@ public class Player extends Animate implements InputProcessor {
 		switch(keycode){
 		case Keys.TAB:
 			Global.camera.zoom -= .4;
+			break;
+		case Keys.SHIFT_LEFT:
+		case Keys.SHIFT_RIGHT:
+			delay = .2f;
 			break;
 		}
 		return false;

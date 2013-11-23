@@ -17,12 +17,14 @@ public class Entity extends Sprite{
 	protected int timeout = 0;
 	public static Map map = new Map();
 	public boolean canDraw = false;
+	
+	public static Integer temp = 0;
 
 	public Entity(String filename, String type){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
 		name = new String("null");
 		this.type = type;
-		ID = UUID.randomUUID().toString();
+		ID = (++temp).toString()/*UUID.randomUUID().toString()*/;
 	}
 	
 	public void draw(SpriteBatch spriteBatch){

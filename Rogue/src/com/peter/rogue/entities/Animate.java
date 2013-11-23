@@ -1,23 +1,20 @@
 package com.peter.rogue.entities;
 
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.rogue.Global;
-import com.peter.rogue.inventory.Food;
-import com.peter.rogue.inventory.Item;
 
 public class Animate extends Entity{
 	protected Stats stats;
 	protected Responses response;
 	protected float oldX, oldY;
-	protected static Scanner in;
+	//protected static Scanner in;
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
-	protected float messageDelay = 0, statusDelay = 0, delay = 0;
+	protected float messageDelay = 0, statusDelay = 0, delay, time = 0;
 	public boolean messageFlag, statusFlag;
 	protected HostilityList list;
 	protected String message;
@@ -28,7 +25,7 @@ public class Animate extends Entity{
 	protected Sound death;
 	
 	static{
-		firstNames = new LinkedList<String>();
+		/*firstNames = new LinkedList<String>();
 		lastNames = new LinkedList<String>();
 		in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
 		while(in.hasNextLine())
@@ -37,7 +34,7 @@ public class Animate extends Entity{
 		in = new Scanner(Gdx.files.internal("data/lastName.txt").readString());
 		while(in.hasNextLine())
 			lastNames.add(new String(in.nextLine()));
-		in.close();
+		in.close();*/
 	}
 	
 	public Animate(String filename, String type) {
@@ -46,10 +43,10 @@ public class Animate extends Entity{
 		stats = new Stats();
 		response = new Responses(type);
 		message = new String("");
-		status = new Integer(0);
+		status = null;
 	}
 	public void update(float delta){
-		delay += Gdx.graphics.getDeltaTime();
+		time += Gdx.graphics.getDeltaTime();
 		
 		if(messageDelay > 2.0){
 			resetMessage();
@@ -62,13 +59,13 @@ public class Animate extends Entity{
 			messageDelay += Gdx.graphics.getDeltaTime();
 		}
 
-		if(statusDelay > 2.6f){
+		if(statusDelay > 1.6f){
 			resetStatus();
 			statusDelay = 0;
 			statusFlag = false;
 		}
 		
-		if(getStatus() != 0){
+		if(getStatus() != null){
 			statusFlag = true;
 			statusDelay += Gdx.graphics.getDeltaTime();
 		}
@@ -110,12 +107,21 @@ public class Animate extends Entity{
 			status = amount;
 	}
 	public void resetStatus() {
-		status = 0;
+		status = null;
 	}
 
 	protected void attack(Animate entity){
-		int amount = -this.getStats().getStrength();
+		int amount = 0;
+		if(this.getStats().getStrength() == 0)
+			amount = Global.rand(3, 0);
+		else
+			amount = Global.rand(this.getStats().getStrength(), 0);
+		amount -= entity.getStats().getDefense();
+		if(amount < 0)
+			amount = 0;
+		amount *= -1;
 		entity.getStats().mutateHitpoints(amount);
+		
 		if(this instanceof Player)
 			entity.attacker = this;
 		entity.setStatus(amount);
@@ -126,14 +132,13 @@ public class Animate extends Entity{
 			if(entity instanceof NPC){
 				map.npcs.remove(entity);
 				map.remove(entity.getID());
-				Entity.map.items.add(new Item(Item.GOLD));
+				Entity.map.items.add(((NPC) entity).getDrop());
 				Entity.map.items.get(Entity.map.items.size()-1).setPosition(entity.getX()/32, entity.getY()/32);
 			}
 			else if(entity instanceof Player){
 				Global.gameOver = true;
 				entity.death.play();
 			}
-			
 		}
 	}
 
