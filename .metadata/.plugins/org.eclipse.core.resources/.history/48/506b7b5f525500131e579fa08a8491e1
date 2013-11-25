@@ -1,0 +1,132 @@
+package com.peter.rogue.screens;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL10;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
+import com.peter.rogue.entities.Entity;
+import com.peter.rogue.entities.EntityManager;
+import com.peter.rogue.entities.Player;
+import com.peter.rogue.network.PacketMessage;
+
+public class Play extends Listener implements Screen{
+
+	//private Rogue game;
+	
+	private FPSLogger fps;
+	private Network network;
+	private static Client client;
+	private String ip = "localhost";
+	private static int udpPort = 23783, tcpPort = 23783;
+	private boolean messageReceived = false;
+    private static Player player;
+	
+    private EntityManager manager;
+    
+    static{
+		player = new Player("at.png");
+    }
+    
+	public Play(Rogue game){
+		fps = new FPSLogger();
+		fps.log();
+	}
+
+	public void received(Connection conection, Object obj){
+		if(obj instanceof PacketMessage){
+			PacketMessage packet = (PacketMessage) obj;
+			System.out.println("Reveived a message from the host: " + packet.message);
+			messageReceived = true;
+		}
+	}
+	@Override
+	public void render(float delta) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+	    //fps.log();
+	    
+		manager.draw(player);
+		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		Global.camera.viewportWidth = width;
+		Global.camera.viewportHeight = height;
+	}
+	
+	@Override
+	public void show() {
+		manager = new EntityManager();
+		manager.init(player);
+
+		Global.camera.setToOrtho(false);    
+		
+
+
+		System.out.println("Connecting to the server...");
+		//Create the client.
+		client = new Client();
+		
+		//Register the packet object.
+		client.getKryo().register(PacketMessage.class);
+
+		//Start the client
+		client.start();
+		//The client MUST be started before connecting can take place.
+		
+		//Connect to the server - wait 5000ms before failing.
+		try {
+			client.connect(5000, ip, tcpPort, udpPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//Add a listener
+		client.addListener(this);
+		
+		System.out.println("Connected! The client program is now waiting for a packet...\n");
+		
+		//This is here to stop the program from closing before we receive a message.
+		while(!messageReceived){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		client.sendTCP(player);
+	}
+	
+
+	@Override
+	public void hide() {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
+
+	@Override
+	public void dispose() {
+        Global.mapShapes.dispose();
+        Global.screenShapes.dispose();
+        Entity.map.getSpriteBatch().dispose();
+		manager.dispose();
+		client.close();
+	}
+
+}

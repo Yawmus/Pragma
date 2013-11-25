@@ -1,0 +1,37 @@
+package com.peter.packets;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+public class MPPlayer{
+	private float x, y;
+	private String ID, filename;
+	private static Integer count = 1000;
+	
+	public MPPlayer(String filename) {
+		this.filename = filename;
+		ID = (++count).toString();
+	}
+	
+	public float getX(){
+		return x;
+	}
+	public float getY(){
+		return y;
+	}
+	public void setX(float x){
+		this.x = x;
+	}
+	public void setY(float y){
+		this.y = y;
+	}
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
+
+	public String getID() {
+		// TODO Auto-generated method stub
+		return ID;
+	}
+}

@@ -1,0 +1,12 @@
+package com.peter.rogue.network;
+
+import com.peter.rogue.screens.Play;
+
+public class PacketHandler {
+	public Play play;
+	
+	public PacketHandler(Play play){
+		this.play = play;
+	}
+
+}

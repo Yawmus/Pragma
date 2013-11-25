@@ -2,6 +2,8 @@ package com.peter.rogue.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
+import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
 import com.peter.rogue.data.LevelData;
 import com.peter.rogue.entities.Animate;
@@ -34,12 +37,13 @@ public class Map implements MapRenderer{
 	public ArrayList<Item> items;
 	public ArrayList<Chest> chests;
 	public ArrayList<NPC> npcs;
+	public HashMap<Integer, MPPlayer> players = new HashMap<Integer, MPPlayer>();
+	public Queue<Integer> connections = new LinkedList<Integer>();
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
 		viewBounds = new Rectangle();
 		region = new TextureRegion();
-
 		tiles = new Tile[WIDTH][HEIGHT];
 		visible = new String[WIDTH][HEIGHT];
 		marker = new String[WIDTH][HEIGHT];
@@ -48,6 +52,7 @@ public class Map implements MapRenderer{
 		items = new ArrayList<Item>();
 		chests = new ArrayList<Chest>();
 		npcs = new ArrayList<NPC>();
+		players = new HashMap<Integer, MPPlayer>();
 		
 		baseFloor();
 		
@@ -270,6 +275,20 @@ public class Map implements MapRenderer{
 				npcs.get(i).update(Gdx.graphics.getDeltaTime());
 			else
 				npcs.get(i).draw(getSpriteBatch());
+
+		if(!connections.isEmpty()){
+			MPPlayer newPlayer = new MPPlayer("at.png", "Player", "Online guy");
+			newPlayer.setPosition(20, 7);
+			Entity.map.players.put(connections.remove(), newPlayer);
+		}
+		
+		for(MPPlayer mpPlayer : players.values()){
+			System.out.println(mpPlayer.canDraw);
+			if(!mpPlayer.canDraw)
+				mpPlayer.draw(getSpriteBatch());
+			else
+				mpPlayer.update(Gdx.graphics.getDeltaTime());
+		}
 	}
 	
 	// ------------- Getters -------------
@@ -303,7 +322,6 @@ public class Map implements MapRenderer{
 			return database.get(ID);
 		return null;
 	}
-	
 	public Entity get(float x, float y){
 		return database.get(getMark(x, y));
 	}

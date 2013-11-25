@@ -1,0 +1,14 @@
+package com.peter.packets;
+
+import com.peter.rogue.entities.Animate;
+
+
+public class MPPlayer extends Animate{
+	private static Integer count = 1000;
+	
+	
+	public MPPlayer(String filename, String type) {
+		super(filename, type);
+		ID = (++count).toString();
+	}
+}

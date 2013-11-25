@@ -1,0 +1,10 @@
+package Network;
+
+public class PacketHandler {
+	public Play play;
+	
+	public Packet(Play play){
+		this.play = play;
+	}
+
+}

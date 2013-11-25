@@ -14,10 +14,12 @@ i:img/$.png:362:image/png
 i:img/=.png:147:image/png
 i:img/adelaide.png:3285:image/png
 i:img/arms.png:299:image/png
+i:img/asterisk.png:220:image/png
 i:img/at.png:742:image/png
 i:img/backpack.png:1181:image/png
 i:img/body.png:277:image/png
 i:img/c1.png:475:image/png
+i:img/congruent.png:355:image/png
 i:img/cuthbert.png:10510:image/png
 i:img/c_.png:295:image/png
 i:img/f.png:189:image/png
@@ -29,6 +31,7 @@ i:img/G_.png:537:image/png
 i:img/hand.png:270:image/png
 i:img/head.png:295:image/png
 i:img/legs.png:297:image/png
+i:img/lowQuote.png:329:image/png
 i:img/model.png:6563:image/png
 i:img/ring.png:277:image/png
 i:img/skeleton.png:114321:image/png

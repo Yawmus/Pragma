@@ -1,0 +1,5 @@
+package NetworkManager;
+
+public class Client {
+
+}

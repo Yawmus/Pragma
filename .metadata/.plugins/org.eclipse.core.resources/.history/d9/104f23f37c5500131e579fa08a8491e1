@@ -1,0 +1,79 @@
+package com.peter.server;
+
+import java.util.Date;
+import java.util.HashMap;
+
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+import com.peter.packets.AddPlayerPacket;
+import com.peter.server.map.MapPacket;
+
+public class PragmaServer extends Listener {
+
+	//Server object
+	static Server server;
+	
+	//Ports to listen on
+	private static int udpPort = 23783, tcpPort = 23783;
+	public static MapPacket mapPacket = new MapPacket();
+	public HashMap<Integer, PlayerPacket> players = new HashMap<Integer, PlayerPacket>();
+	
+	public static void main(String[] args) throws Exception {
+		System.out.println("Creating the server...");
+		server = new Server();
+		server.getKryo().register(PlayerPacket.class);
+		server.getKryo().register(MapPacket.class);
+		server.getKryo().register(MessagePacket.class);
+		server.bind(tcpPort, udpPort);
+		server.start();
+		server.addListener(new PragmaServer());
+		
+		System.out.println("Server is operational!");
+	}
+	
+	//This is run when a connection is received!
+	public void connected(Connection c){
+		PlayerPacket packet = new PlayerPacket();
+		packet.x = 28*32;
+		packet.y = 7*32;
+		packet.connection = c;
+
+		System.out.println("Received a connection from " + c.getRemoteAddressTCP().getHostString());
+		AddPlayerPacket newPacket2 = new AddPlayerPacket();
+		newPacket2.ID = c.getID();
+		server.sendToAllExceptTCP(c.getID(), newPacket2);
+
+		for(PlayerPacket p : players.values()){
+			AddPlayerPacket newPacket = new AddPlayerPacket();
+			newPacket.ID = p.connection.getID();
+			c.sendTCP(newPacket);
+		}
+
+		players.put(c.getID(), packet);
+		MessagePacket packetMessage = new MessagePacket();
+		packetMessage.message = "Hello friend! The time is: " + new Date().toString();
+		c.sendTCP(packetMessage);
+		
+	}
+	
+	//This is run when we receive a packet.
+	public void received(Connection c, Object o){
+		if(o instanceof PlayerPacket){
+			PlayerPacket packet = (PlayerPacket) o;
+			players.get(c.getID()).sync(packet);
+			packet.ID = c.getID();
+			server.sendToAllExceptUDP(c.getID(), packet);
+			
+			System.out.println("received and sent an update player packet");
+		}
+		else
+			System.out.println("Oops, server couldn't receive!");
+	}
+	
+	public void disconnected(Connection c){
+		players.remove(c.getID());
+		server.sendToAllExceptUDP(c.getID(), c.getID());
+		System.out.println("A client disconnected!");
+	}
+}

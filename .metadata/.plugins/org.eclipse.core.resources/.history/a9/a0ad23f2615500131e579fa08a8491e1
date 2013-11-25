@@ -1,0 +1,52 @@
+package com.peter.server.entities;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.peter.server.Global;
+import com.peter.server.inventory.Food;
+import com.peter.server.inventory.Item;
+
+public class Shopkeep extends NPC{
+
+	public static Shopkeep Bartender = new Shopkeep("s_.png", "Bartender");
+	public static Shopkeep Shopkeep = new Shopkeep("s_.png", "Shopkeep");
+	
+	private ArrayList<Item> items;
+	
+	
+	public static final int HEIGHT = 300, WIDTH = 350;
+	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
+	
+	public Shopkeep(String filename, String type) {
+		super(filename, type);
+		
+		this.items = new ArrayList<Item>();
+		this.collisions = new ArrayList<Rectangle>();
+		stats.setLevel(1);
+		stats.setHitpoints(10);
+		stats.setDexterity(5);
+		stats.setStrength(1);
+		stats.setExperience(100);
+		
+		add(Food.MEAT);
+		add(Food.MEAT);
+		add(Food.BREAD);
+		add(Food.MEAT);
+		add(Food.MEAT);
+	}
+	
+	public void update(float delta){
+		super.update(delta);
+	}
+
+}

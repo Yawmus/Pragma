@@ -1,0 +1,15 @@
+package com.peter.rogue;
+
+import com.esotericsoftware.kryonet.Listener;
+
+public class NetworkListener extends Listener{
+	public void connected(Connection arg0){
+		
+	}
+	public void disconnected(Connection arg0){
+		
+	}
+	public void received(Connection arg0, Object arg1){
+		
+	}
+}

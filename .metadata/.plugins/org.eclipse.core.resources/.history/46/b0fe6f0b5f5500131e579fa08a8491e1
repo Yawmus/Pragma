@@ -1,0 +1,34 @@
+package com.peter.server.entities;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.esotericsoftware.kryonet.Connection;
+
+public class PlayerPacket extends Animate{
+	
+	private boolean hostile;
+	public Connection connection;
+	
+	public PlayerPacket(String filename){
+		super(filename, "Player");
+		messageFlag = false;
+		name = "Adelaide";
+		hostile = false;
+	}
+
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+		canDraw = true;
+	}
+	
+	
+	public boolean isHostile() {
+		return hostile;
+	}
+
+	public void setHostility(boolean hostile) {
+		this.hostile = hostile;
+	}
+	
+}

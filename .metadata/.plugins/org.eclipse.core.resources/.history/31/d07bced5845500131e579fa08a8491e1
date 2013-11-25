@@ -1,0 +1,6 @@
+package com.peter.server;
+
+public class RemovePlayerPacket{
+
+	public int id;
+}

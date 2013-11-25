@@ -1,0 +1,9 @@
+package com.peter.rogue.network;
+
+import java.util.ArrayList;
+
+import com.peter.server.PlayerPacket;
+
+public class MapPacket{
+	public ArrayList<PlayerPacket> players;
+}

@@ -7,15 +7,16 @@ import com.peter.rogue.screens.Death;
 import com.peter.rogue.screens.Play;
 import com.peter.rogue.screens.Splash;
 
-public class Rogue extends Game {
+public class Rogue extends Game{
 	
 	public static final String TITLE = "Rogue", VERSION = "0.2.5";
-	
+
 	Splash splash;
 	Play play;
 	
 	@Override
 	public void create() {
+		
 		splash = new Splash(this);
 		play = new Play(this);
 		setScreen(new Play(this));

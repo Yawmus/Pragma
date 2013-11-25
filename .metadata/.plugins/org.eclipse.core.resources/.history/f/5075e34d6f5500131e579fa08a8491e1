@@ -1,0 +1,5 @@
+package com.peter.server;
+
+public class PacketMessage {
+	public String message;
+}

@@ -1,0 +1,50 @@
+package com.peter.server.inventory;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.peter.server.PragmaServer;
+import com.peter.server.entities.Entity;
+
+public class Chest extends Entity {
+	
+	private ArrayList<Item> items;
+	private ArrayList<Rectangle> collisions;
+	public static final int HEIGHT = 300, WIDTH = 350;
+	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
+	
+	public Chest(){
+		super("c1.png", "Chest");
+		this.name = "Chest";
+		this.items = new ArrayList<Item>();
+		this.collisions = new ArrayList<Rectangle>();
+		
+		add(Food.MEAT);
+		add(Food.MEAT);
+		add(Food.BREAD);
+		add(Food.MEAT);
+		add(Food.MEAT);
+	}
+	
+	public void add(Item item){
+		items.add(item);
+		collisions.add(new Rectangle(0, 0, 150, 15));
+	}
+	public Item remove(int i){
+		collisions.remove(i);
+		return items.remove(i);
+	}
+	
+	public ArrayList<Item> getItems(){
+		return items;
+	}
+	
+	@Override
+	public void setPosition(float x, float y){
+		setX(x * tileWidth);
+		setY(y * tileHeight);
+
+		PragmaServer.map.put(ID, this);
+		PragmaServer.map.setMark(ID, getX(), getY());
+	}
+}

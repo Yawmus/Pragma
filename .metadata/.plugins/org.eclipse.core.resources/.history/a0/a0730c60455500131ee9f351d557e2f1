@@ -1,0 +1,8 @@
+package com.peter.rogue.network;
+
+public class Packet {
+	
+	public static class PacketLoginRequest{}
+	public static class PacketLoginResponse{ boolean accepted = false; }
+	public static class PacketMessage{ String message; }
+}

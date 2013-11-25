@@ -1,0 +1,41 @@
+package com.peter.server;
+
+
+import java.util.Date;
+
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+
+public class PragmaServer extends Listener{
+
+	private static Server server;
+	static int tcpPort = 23783;
+	
+	public static void main(String[] args) throws Exception	{
+		server = new Server();
+		
+		server.getKryo().register(PacketMessage.class);
+		server.bind(tcpPort);
+		
+		server.start();
+		
+		server.addListener(new PragmaServer());
+		
+		System.out.println("Server created!");
+	}
+	
+	public void connected(Connection connection){
+		System.out.println("Receiving a connection from " + connection.getRemoteAddressTCP().getHostString());
+		PacketMessage packetMessage = new PacketMessage();
+		packetMessage.message = "Hello friend! The time is: " + new Date().toString();
+		
+		connection.sendTCP(packetMessage);
+	}
+	public void received(Connection connection, Object obj){
+		
+	}
+	public void disconnected(Connection connection){
+		System.out.println("A client has disconnected!");
+	}
+}

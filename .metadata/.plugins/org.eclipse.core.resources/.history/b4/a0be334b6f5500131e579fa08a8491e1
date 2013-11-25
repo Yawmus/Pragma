@@ -1,0 +1,5 @@
+package com.peter.rogue.network;
+
+public class PacketMessage {
+	public String message;
+}

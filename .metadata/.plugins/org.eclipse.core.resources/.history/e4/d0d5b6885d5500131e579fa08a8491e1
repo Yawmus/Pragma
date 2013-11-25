@@ -1,0 +1,55 @@
+package com.peter.server.entities;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
+import com.esotericsoftware.kryonet.Connection;
+import com.peter.server.Global;
+import com.peter.server.PragmaServer;
+import com.peter.server.map.Tile;
+import com.peter.server.inventory.Chest;
+import com.peter.server.inventory.Inventory;
+import com.peter.server.inventory.Item;
+
+public class Player extends Animate{
+	
+	private boolean hostile;
+	public Connection connection;
+	
+	public Player(String filename){
+		super(filename, "Player");
+		messageFlag = false;
+		name = "Adelaide";
+		hostile = false;
+		stats.setDexterity(0);
+		stats.setMaxExperience(20);
+		stats.setExperience(0);
+		stats.setLevel(1);
+		stats.setStrength(0);
+		stats.setHitpoints(20);
+		stats.setMaxHitpoints(20);
+	}
+
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+		canDraw = true;
+	}
+	
+	
+	public boolean isHostile() {
+		return hostile;
+	}
+
+	public void setHostility(boolean hostile) {
+		this.hostile = hostile;
+	}
+	
+}

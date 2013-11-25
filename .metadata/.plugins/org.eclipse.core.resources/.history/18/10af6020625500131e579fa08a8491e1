@@ -1,0 +1,120 @@
+package com.peter.server.entities;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
+import com.peter.server.Global;
+import com.peter.server.PragmaServer;
+import com.peter.server.views.UI;
+import com.peter.server.inventory.Chest;
+import com.peter.server.inventory.Food;
+import com.peter.server.inventory.Wearable;
+
+public class EntityManager{
+	
+    private UI ui;
+	private Vector3 mapCoord;
+    private int randX, randY;
+    
+    
+    public EntityManager(){ 
+    }
+    
+	public void draw(PlayerPacket player){
+
+		PragmaServer.map.getSpriteBatch().begin();
+		PragmaServer.map.draw();
+		player.draw(PragmaServer.map.getSpriteBatch());
+		PragmaServer.map.getSpriteBatch().end();
+
+		// If near edge of map then don't update respective axis
+		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < PragmaServer.map.WIDTH*32 - 18*32)
+			Global.camera.position.x = player.getX() + player.getWidth() / 2;
+		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < PragmaServer.map.HEIGHT*32 - 9*32)
+			Global.camera.position.y = player.getY() + player.getHeight() / 2;
+		Global.camera.update();
+		Global.mapShapes.setProjectionMatrix(Global.camera.combined);
+		PragmaServer.map.getSpriteBatch().setProjectionMatrix(Global.camera.combined);
+		PragmaServer.map.setView(Global.camera);
+	    
+		player.light();
+		ui.draw(player, PragmaServer.map.npcs);
+		
+		mapCoord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Global.camera.unproject(mapCoord);
+		
+		if(!player.isMenuActive()){
+			player.setInformation(PragmaServer.map.cursor(PragmaServer.map.getMark(mapCoord.x, mapCoord.y), mapCoord.x, mapCoord.y));
+			Global.mapShapes.begin(ShapeType.Filled);
+			Global.mapShapes.setColor(0, 0, 0, 1f);
+			Global.mapShapes.rect(mapCoord.x, mapCoord.y, Global.font.getBounds(player.getInformation()).width, Global.font.getLineHeight());
+			Global.mapShapes.end();
+			PragmaServer.map.getSpriteBatch().begin();
+			Global.font.draw(PragmaServer.map.getSpriteBatch(), player.getInformation(), mapCoord.x, mapCoord.y + Global.font.getLineHeight() - 2);
+			PragmaServer.map.getSpriteBatch().end();
+		}
+		else
+			player.setInformation("");
+		
+
+		Global.screen.begin();
+		Global.font.draw(Global.screen, "v 0.4.1", 0, Global.SCREEN_HEIGHT);
+		Global.screen.end();
+    }
+    
+    public void init(PlayerPacket player){
+		ui = new UI(player);
+    	Global.multiplexer.addProcessor(player);
+		Gdx.input.setInputProcessor(Global.multiplexer);
+		
+		PragmaServer.map.chests.add(new Chest());
+		PragmaServer.map.chests.get(PragmaServer.map.chests.size()-1).setPosition(4, 4);
+
+		PragmaServer.map.chests.add(new Chest());
+		PragmaServer.map.chests.get(PragmaServer.map.chests.size()-1).setPosition(6, 4);
+
+		PragmaServer.map.items.add(new Food(Food.BREAD));
+		PragmaServer.map.items.get(PragmaServer.map.items.size()-1).setPosition(8, 32);
+		
+		PragmaServer.map.items.add(new Wearable(Wearable.HAT));
+		PragmaServer.map.items.get(PragmaServer.map.items.size()-1).setPosition(9, 32);
+		
+		PragmaServer.map.items.add(new Wearable(Wearable.HAT));
+		PragmaServer.map.items.get(PragmaServer.map.items.size()-1).setPosition(9, 31);
+		
+		PragmaServer.map.items.add(new Wearable(Wearable.RING));
+		PragmaServer.map.items.get(PragmaServer.map.items.size()-1).setPosition(9, 34);
+		
+		for(int i=0; i<PragmaServer.map.getData().getCitizens(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			PragmaServer.map.npcs.add(new Citizen("c_.png"));
+			PragmaServer.map.npcs.get(PragmaServer.map.npcs.size()-1).setPosition(randX, randY);
+		}
+		
+		randX = Global.rand(13, 3);
+		randY = Global.rand(7, 3);
+		PragmaServer.map.npcs.add(Shopkeep.Bartender);
+		PragmaServer.map.npcs.get(PragmaServer.map.npcs.size()-1).setPosition(randX, randY);
+		
+		randX = Global.rand(13, 3);
+		randY = Global.rand(7, 3);
+		PragmaServer.map.npcs.add(Shopkeep.Shopkeep);
+		PragmaServer.map.npcs.get(PragmaServer.map.npcs.size()-1).setPosition(randX, randY);
+			
+    	for(int i=0; i<PragmaServer.map.getData().getMonsters(); i++){
+			randX = Global.rand(13, 3);
+			randY = Global.rand(7, 3);
+			PragmaServer.map.npcs.add(new Worm("tilda.png"));
+			PragmaServer.map.npcs.get(PragmaServer.map.npcs.size()-1).setPosition(randX, randY);
+    	}
+	}
+    
+    public void dispose(){
+		ui.dispose();
+		Global.mapShapes.dispose();
+		Global.screenShapes.dispose();
+		Global.gothicFont.dispose();
+		Global.font.dispose();
+    }
+}

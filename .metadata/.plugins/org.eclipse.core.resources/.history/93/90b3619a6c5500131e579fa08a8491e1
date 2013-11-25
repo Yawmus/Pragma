@@ -1,0 +1,46 @@
+package com.peter.server.entities;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class Entity extends Sprite{
+	
+	protected String type = new String();
+	protected String name;
+	protected Integer ID;
+	protected float tileWidth = 32, tileHeight = 32;
+	protected int timeout = 0;
+	public boolean canDraw = false;
+	
+	public static Integer temp = 0;
+
+	public Entity(String filename, String type){
+		name = new String("null");
+		this.type = type;
+		ID = ++temp;
+	}
+	
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		canDraw = false;
+	}
+
+	public Integer getID() {
+		return ID;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setID(int ID){
+		this.ID = ID;
+	}
+}
+

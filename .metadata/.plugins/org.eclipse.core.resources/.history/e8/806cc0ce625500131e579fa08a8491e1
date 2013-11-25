@@ -1,0 +1,70 @@
+package com.peter.server.inventory;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.peter.server.Global;
+import com.peter.server.entities.Entity;
+import com.peter.server.entities.PlayerPacket;
+import com.peter.server.entities.Shopkeep;
+
+public class Inventory {
+	
+	
+	private Backpack backpack = new Backpack();
+	private ArrayList<Item> items;
+	private ArrayList<Rectangle> collisions;
+	private Rectangle[] pointCollisions;
+	private int weight;
+	private int wallet;
+	private Item hover;
+	private Rectangle hoverCollision;
+	public static final int BOX1_WIDTH = 150, BOX2_WIDTH = 165, HEIGHT = 300, WIDTH = 500;
+	public static final int ORIGIN_X = 670, ORIGIN_Y = 250, STATS = 5;
+	private Entity trade;
+	
+	public Inventory(){
+		backpack = Backpack.SMALL;
+		items = new ArrayList<Item>();
+		collisions = new ArrayList<Rectangle>();
+		pointCollisions = new Rectangle[STATS];
+		for(int i=0; i<STATS; i++){
+			pointCollisions[i] = new Rectangle();
+			pointCollisions[i].setSize(8);
+		}
+		wallet = 0;
+		add(new Wearable(Wearable.BREAST_PLATE));
+		add(new Wearable(Wearable.SHOES));
+		add(new Food(Food.BREAD));
+		add(new Food(Food.BREAD));
+		add(new Food(Food.MEAT));
+	}
+	
+	public boolean checkIsFull(Item item){
+		if(item.getWeight() + weight > backpack.getCapacity())
+			return true;
+		return false;
+	}
+	
+	public void add(Item item){
+		if(item.getName().equals("Gold"))
+			wallet += item.getValue();
+		else if(!checkIsFull(item)){
+			weight += item.getWeight();
+			collisions.add(new Rectangle());
+			collisions.get(collisions.size()-1).setSize(130, 14);
+			items.add(item);
+		}
+		else
+			System.out.println("Backpack full!");
+	}
+}

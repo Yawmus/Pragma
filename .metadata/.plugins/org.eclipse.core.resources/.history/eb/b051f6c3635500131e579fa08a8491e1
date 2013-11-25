@@ -1,0 +1,73 @@
+package com.peter.server.entities;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.peter.server.inventory.Food;
+import com.peter.server.inventory.Item;
+
+public class Shopkeep extends NPC{
+
+	public static Shopkeep Bartender = new Shopkeep("s_.png", "Bartender");
+	public static Shopkeep Shopkeep = new Shopkeep("s_.png", "Shopkeep");
+	
+	private ArrayList<Item> items;
+	private ArrayList<Rectangle> collisions;
+	private Item hover;
+	
+	public static final int HEIGHT = 300, WIDTH = 350;
+	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
+	
+	public Shopkeep(String filename, String type) {
+		super(filename, type);
+		
+		this.items = new ArrayList<Item>();
+		this.collisions = new ArrayList<Rectangle>();
+		stats.setLevel(1);
+		stats.setHitpoints(10);
+		stats.setDexterity(5);
+		stats.setStrength(1);
+		stats.setExperience(100);
+		
+		add(Food.MEAT);
+		add(Food.MEAT);
+		add(Food.BREAD);
+		add(Food.MEAT);
+		add(Food.MEAT);
+	}
+	
+	public void update(float delta){
+		super.update(delta);
+	}
+
+	public void add(Item item){
+		items.add(item);
+		collisions.add(new Rectangle(0, 0, 150, 15));
+	}
+	
+	public ArrayList<Rectangle> getCollision() {
+		return collisions;
+	}
+	public void setCollisions(ArrayList<Rectangle> collisions) {
+		this.collisions = collisions;
+	}
+	
+	public boolean isItem(){
+		if(hover == null)
+			return false;
+		return true;
+	}
+	public void setHover(Item hover, Rectangle collision){
+		this.hover = hover;
+		this.hoverCollision = collision;
+	}
+	
+	public ArrayList<Item> getItems(){
+		return items;
+	}
+	
+
+	public void setTrade(Entity trade) {
+		this.trade = trade;
+	}
+}

@@ -1,0 +1,9 @@
+package com.peter.packets;
+
+import java.util.ArrayList;
+
+import com.peter.packets.PlayerPacket;
+
+public class MapPacket{
+	public ArrayList<PlayerPacket> players;
+}

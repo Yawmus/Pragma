@@ -1,0 +1,15 @@
+package com.peter.rogue.network;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.peter.rogue.network.Packet.PacketLoginRequest;
+import com.peter.rogue.network.Packet.PacketLoginResponse;
+import com.peter.rogue.network.Packet.PacketMessage;
+
+public class NetworkManager {
+
+	public void register(Kryo kryo){
+		kryo.register(PacketLoginRequest.class);
+		kryo.register(PacketMessage.class);
+		kryo.register(PacketLoginResponse.class);
+	}
+}

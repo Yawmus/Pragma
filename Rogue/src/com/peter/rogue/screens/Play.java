@@ -4,24 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.esotericsoftware.kryonet.Listener;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.entities.Entity;
 import com.peter.rogue.entities.EntityManager;
+import com.peter.rogue.network.Network;
 
-public class Play implements Screen{
+public class Play extends Listener implements Screen{
 
 	//private Rogue game;
 	
 	private FPSLogger fps;
 	
     private EntityManager manager;
-	Table table2 = new Table();
     
     
 	public Play(Rogue game){
-	//	this.game = game;
 		fps = new FPSLogger();
 		fps.log();
 	}
@@ -31,11 +30,10 @@ public class Play implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-	    fps.log();
+	    //fps.log();
 	    
 		manager.draw();
 		
-		Gdx.gl.glDisable(GL10.GL_BLEND);
 	}
 
 	@Override
@@ -49,8 +47,11 @@ public class Play implements Screen{
 		manager = new EntityManager();
 		manager.init();
 
-		Global.camera.setToOrtho(false);        
+		Global.camera.setToOrtho(false);    
+		Global.network = new Network();
+		Global.network.connect();
 	}
+	
 
 	@Override
 	public void hide() {
@@ -70,6 +71,7 @@ public class Play implements Screen{
         Global.screenShapes.dispose();
         Entity.map.getSpriteBatch().dispose();
 		manager.dispose();
+		Global.network.client.close();
 	}
 
 }

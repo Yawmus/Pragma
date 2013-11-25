@@ -1,0 +1,20 @@
+package com.peter.rogue;
+
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
+
+public class NetworkListener extends Listener{
+	public void connect(Connection arg0){
+		Log.info("[SERVER] Connection in process.");
+	}
+	public void disconnect(Connection arg0){
+		Log.info("[SERVER] Disconnect in process.");
+		
+	}
+	public void received(Connection arg0, Object arg1){
+		if(arg0 instanceof argumentRequestPacket){
+			
+		}
+	}
+}

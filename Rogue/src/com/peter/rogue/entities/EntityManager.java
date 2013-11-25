@@ -11,17 +11,14 @@ import com.peter.rogue.views.UI;
 
 public class EntityManager{
 	
-    private Player player;
     private UI ui;
 	private Vector3 mapCoord;
     private int randX, randY;
+    private Player player;
     
     
     public EntityManager(){
-		player = new Player("at.png");
-		player.setPosition(28, 7);
-
-		ui = new UI(player);
+    	player = new Player("at.png");
     }
     
 	public void draw(){
@@ -66,7 +63,11 @@ public class EntityManager{
 		Global.screen.end();
     }
     
-    public void init(){    	
+    public void init(){
+
+		player.setPosition(28, 7);
+		
+		ui = new UI(player);
     	Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
 		
@@ -114,7 +115,6 @@ public class EntityManager{
 	}
     
     public void dispose(){
-		player.getTexture().dispose();
 		ui.dispose();
 		Global.mapShapes.dispose();
 		Global.screenShapes.dispose();

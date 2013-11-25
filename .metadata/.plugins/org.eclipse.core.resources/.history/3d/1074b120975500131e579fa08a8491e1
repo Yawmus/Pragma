@@ -1,0 +1,12 @@
+package com.peter.packets;
+
+import com.peter.rogue.entities.Animate;
+
+
+public class MPPlayer extends Animate{
+	public canDraw;
+	
+	public MPPlayer(String filename, String type) {
+		super(filename, type);
+	}
+}

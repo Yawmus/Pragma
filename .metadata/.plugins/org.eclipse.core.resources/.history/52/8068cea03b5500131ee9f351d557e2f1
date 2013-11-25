@@ -1,0 +1,17 @@
+package Network;
+
+import Network.Packet.PacketLoginRequest;
+import Network.Packet.PacketLoginResponse;
+import Network.Packet.PacketMessage;
+
+import com.esotericsoftware.kryo.Kryo;
+
+public class NetworkManager {
+
+	public void register(Kryo kryo){
+		Kryo kryo = server.getKryo();
+		kryo.register(PacketLoginRequest.class);
+		kryo.register(PacketMessage.class);
+		kryo.register(PacketLoginResponse.class);
+	}
+}

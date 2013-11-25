@@ -1,0 +1,32 @@
+package com.peter.server.map;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
+import com.peter.rogue.entities.Player;
+import com.peter.rogue.map.Map;
+import com.peter.rogue.map.Tile;
+import com.peter.server.Global;
+import com.peter.server.PlayerPacket;
+import com.peter.server.data.LevelData;
+import com.peter.server.entities.Animate;
+import com.peter.server.entities.Entity;
+import com.peter.server.entities.Monster;
+import com.peter.server.entities.NPC;
+import com.peter.server.inventory.Chest;
+import com.peter.server.inventory.Item;
+
+public class MapPacket{
+	public ArrayList<PlayerPacket> players;
+	
+	public MapPacket(){
+		players = new ArrayList<PlayerPacket>();
+	}
+}

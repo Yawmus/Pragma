@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.EntityManager"/>
-<fullyQualifiedTypeName name="java.util.Arrays"/>
-<fullyQualifiedTypeName name="com.peter.rogue.inventory.Food"/>
-<fullyQualifiedTypeName name="com.peter.rogue.map.Map"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
-<fullyQualifiedTypeName name="com.peter.rogue.screens.Death"/>
-<fullyQualifiedTypeName name="com.peter.rogue.Rogue"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="java.util.Queue"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.audio.Sound"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.Stage"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.Table"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.Skin"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Pixmap"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.BitmapFont"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle"/>
@@ -31,9 +17,7 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.Actor"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.utils.ClickListener"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.InputAdapter"/>
 <fullyQualifiedTypeName name="com.peter.rogue.views.UI"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Input.Buttons"/>
@@ -41,7 +25,6 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.math.Vector2"/>
 <fullyQualifiedTypeName name="com.peter.rogue.entities.Shopkeep"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.Player"/>
 <fullyQualifiedTypeName name="com.peter.rogue.data.LevelData"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.scenes.scene2d.ui.Stack"/>
 <fullyQualifiedTypeName name="java.util.Stack"/>
@@ -56,8 +39,25 @@
 <fullyQualifiedTypeName name="java.lang.reflect.Array"/>
 <fullyQualifiedTypeName name="java.util.UUID"/>
 <fullyQualifiedTypeName name="com.peter.rogue.data.ItemEntry"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
 <fullyQualifiedTypeName name="com.peter.rogue.inventory.Item"/>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.peter.rogue.map.Map"/>
+<fullyQualifiedTypeName name="com.peter.server.entities.Player"/>
+<fullyQualifiedTypeName name="com.esotericsoftware.kryonet.Connection"/>
+<fullyQualifiedTypeName name="com.peter.server.PragmaServer"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Player"/>
+<fullyQualifiedTypeName name="com.peter.server.map.MapPacket"/>
+<fullyQualifiedTypeName name="com.peter.packets.PacketAddPlayer"/>
+<fullyQualifiedTypeName name="com.peter.packets.AddPlayerPacket"/>
+<fullyQualifiedTypeName name="com.peter.packets.Player"/>
+<fullyQualifiedTypeName name="com.peter.packets.MessagePacket"/>
+<fullyQualifiedTypeName name="com.peter.packets.PlayerPacket"/>
+<fullyQualifiedTypeName name="com.peter.packets.MPPlayer"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Entity"/>
+<fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
+<fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
 </qualifiedTypeNameHistroy>

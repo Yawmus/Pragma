@@ -1,0 +1,10 @@
+package Network;
+
+import com.esotericsoftware.kryo.Kryo;
+
+public class NetworkManager {
+
+	public void register(Kryo kryo){
+		
+	}
+}
