@@ -8,6 +8,7 @@ public class PlayerPacket{
 	public Connection connection;
 	public String name = new String();
 	public int x, y;
+	public int oldX, oldY;
 	public Integer ID;
 	
 	public PlayerPacket(){

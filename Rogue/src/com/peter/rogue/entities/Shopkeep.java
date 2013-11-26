@@ -75,8 +75,8 @@ public class Shopkeep extends NPC{
 
 		map.setMark("", oldX, oldY);
 		map.setMark(ID, getX(), getY());
-		oldX = getX();
-		oldY = getY();
+		oldX = (int) getX();
+		oldY = (int) getY();
 	}
 
 	public void add(Item item){

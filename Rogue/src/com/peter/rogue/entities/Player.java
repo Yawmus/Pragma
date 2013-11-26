@@ -73,6 +73,8 @@ public class Player extends Animate implements InputProcessor {
 		super.update(delta);
 		hunger -= delta/8000;
 		if(time >= delay){
+			packet.oldX = (int) oldX;
+			packet.oldY = (int) oldY;
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
 				time = 0;
@@ -150,8 +152,8 @@ public class Player extends Animate implements InputProcessor {
 
 		map.setMark("", oldX, oldY);
 		map.setMark(ID, getX(), getY());
-		oldX = getX();
-		oldY = getY();
+		oldX = (int) getX();
+		oldY = (int) getY();
 	}
 	
     

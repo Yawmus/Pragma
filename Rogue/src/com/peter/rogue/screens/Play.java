@@ -1,5 +1,7 @@
 package com.peter.rogue.screens;
 
+import java.util.Scanner;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -18,6 +20,7 @@ public class Play extends Listener implements Screen{
 	private FPSLogger fps;
 	
     private EntityManager manager;
+    private Scanner in = new Scanner(System.in);
     
     
 	public Play(Rogue game){
@@ -49,6 +52,10 @@ public class Play extends Listener implements Screen{
 
 		Global.camera.setToOrtho(false);    
 		Global.network = new Network();
+		System.out.print("IP?: ");
+		String ip = in.nextLine();
+		if(!ip.equals(""))
+			Global.network.setIP(ip);
 		Global.network.connect();
 	}
 	

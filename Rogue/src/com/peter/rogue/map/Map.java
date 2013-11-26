@@ -284,10 +284,10 @@ public class Map implements MapRenderer{
 		
 		for(MPPlayer mpPlayer : players.values()){
 			System.out.println(mpPlayer.canDraw);
-			if(!mpPlayer.canDraw)
+			//if(!mpPlayer.canDraw)
 				mpPlayer.draw(getSpriteBatch());
-			else
-				mpPlayer.update(Gdx.graphics.getDeltaTime());
+			/*else
+				mpPlayer.update(Gdx.graphics.getDeltaTime());*/
 		}
 	}
 	

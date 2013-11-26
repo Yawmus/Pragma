@@ -10,7 +10,7 @@ import com.peter.rogue.Global;
 public class Animate extends Entity{
 	protected Stats stats;
 	protected Responses response;
-	protected float oldX, oldY;
+	protected int oldX, oldY;
 	//protected static Scanner in;
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
@@ -75,8 +75,8 @@ public class Animate extends Entity{
 		setX(x * tileWidth);
 		setY(y * tileHeight);
 
-		oldX = getX();
-		oldY = getY();
+		oldX = (int) getX();
+		oldY = (int) getY();
 		
 		map.put(ID, this);
 		map.setMark(ID, getX(), getY());
@@ -169,5 +169,13 @@ public class Animate extends Entity{
 		messageDelay = delay;
 		statusDelay = delay;
 		
+	}
+	
+	public void setOldX(int oldX){
+		this.oldX = oldX;
+	}
+	
+	public void setOldY(int oldY){
+		this.oldY = oldY;
 	}
 }
