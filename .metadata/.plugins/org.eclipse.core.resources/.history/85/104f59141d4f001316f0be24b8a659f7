@@ -1,9 +1,0 @@
-package com.peter.rogue.inventory;
-
-public class Equipable extends Item{
-
-	public Equipable(String name, int weight, int value, String filename) {
-		super(name, weight, value, filename);
-	}
-	
-}

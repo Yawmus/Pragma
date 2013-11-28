@@ -1,5 +1,0 @@
-package com.peter.map;
-
-public class Map {
-	private Tile[] map;
-}

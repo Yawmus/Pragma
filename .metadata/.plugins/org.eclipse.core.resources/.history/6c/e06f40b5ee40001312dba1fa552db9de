@@ -1,9 +1,0 @@
-package com.peter.rogue.entities;
-
-public class Citizen extends NPC{
-
-	public Citizen(String filename) {
-		super(filename, "");
-		this.type = "Citizen";
-	}
-}

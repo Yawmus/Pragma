@@ -1,7 +1,0 @@
-package com.peter.rogue.inventory;
-
-interface Equipable {
-	private String type;
-	private boolean on;
-	
-}

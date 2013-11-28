@@ -1,8 +1,0 @@
-package com.peter.rogue.data;
-
-public class FileReader {
-	static String read(String path, Charset encoding) throws IOException{
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-    }
-}

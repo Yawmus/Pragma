@@ -1,9 +1,0 @@
-package com.peter.rogue.entities;
-
-public class Shopkeep extends NPC{
-
-	public Shopkeep(String filename) {
-		super(filename, "");
-		this.type = "Shopkeep";
-	}
-}
