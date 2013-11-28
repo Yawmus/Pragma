@@ -1,0 +1,4 @@
+package com.peter.packets;
+
+public class TilePacket {
+}

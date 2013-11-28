@@ -1,0 +1,111 @@
+package com.peter.entities;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.peter.inventory.Item;
+import com.peter.rogue.Global;
+import com.peter.rogue.screens.Play;
+
+public class NPC extends Animate {
+
+	protected int move;
+	protected boolean canMove;
+	private Stack<Node> moves;
+	private Item drop;
+	
+	public NPC(String filename, String type) {
+		super(filename, type);
+		name = "Bob"/*firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0))*/;
+		delay -= Global.rand(100, 0) * .01f;
+		canMove = true;
+		moves = new Stack<Node>();
+		drop = Global.rand(2, 0) == 1 ? new Item(Item.GOLD) : new Item(Item.GEM);
+		delay = 2.6f;
+	}
+
+	public void draw(SpriteBatch spriteBatch){
+		super.draw(spriteBatch);
+		update(Gdx.graphics.getDeltaTime());
+	}
+	
+	public Item getDrop(){
+		return drop;
+	}
+	
+	public void update(float delta){
+		super.update(delta);
+		move = Global.rand(5, 0);
+		if(time >= delay && canMove){
+			if(attacker != null){
+				open.add(new Node(getX(), getY()));
+				findPath(new Node(attacker.getX(), attacker.getY()), new Node(getX(), getY()));
+				open.clear();
+				closed.clear();
+				if(!moves.empty()){
+					setX(moves.peek().x);
+					setY(moves.peek().y);
+					checkCollision();
+					moves.clear();
+					time = 1;
+				}
+				else
+					attacker = null;
+			}
+			
+			else{
+				switch(move){
+				case 0:
+					setY(getY() + 32);
+					time = 0;
+					checkCollision();
+					break;
+				case 1:
+					setY(getY() - 32);
+					time = 0;
+					checkCollision();
+					break;
+				case 2:
+					setX(getX() - 32);
+					time = 0;
+					checkCollision();
+					break;
+				case 3:
+					setX(getX() + 32);
+					time = 0;
+					checkCollision();
+					break;
+				case 4:
+					time = 0;
+				}
+			}
+		}
+	}
+	
+	public void checkCollision(){
+		/*if(map.getTile(getX(), getY()).isBlocked()){
+			setX(oldX);
+			setY(oldY);
+		}
+		if(!(map.getMark(getX(), getY()).equals("") || map.getMark(getX(), getY()).equals(ID))){
+			if(map.get(getX(), getY()).getType().equals("Item") || map.get(getX(), getY()).getType().equals("Chest"))
+				bump();
+			else
+				if(list.check((Animate)map.get(getX(), getY())))
+					if(map.get(getX(), getY()) instanceof Player)
+						attack((Player) map.get(getX(), getY()));
+					else
+						attack((NPC) map.get(getX(), getY()));
+				else
+					bump((Animate) map.get(getX(), getY()));
+		}
+		
+
+		map.setMark("", oldX, oldY);
+		map.setMark(ID, getX(), getY());
+		oldX = (int) getX();
+		oldY = (int) getY();*/
+	}
+}

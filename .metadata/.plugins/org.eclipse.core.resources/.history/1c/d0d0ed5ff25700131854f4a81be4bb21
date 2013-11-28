@@ -1,0 +1,25 @@
+package com.peter.packets;
+
+public class ItemPacket implements Comparable<ItemPacket>{
+	public String name;
+	public int x, y;
+	public Integer ID;
+	public ItemPacket(){}
+	public ItemPacket(String name, int x, int y, int ID){
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.ID = ID;
+	}
+	public ItemPacket(String name){
+		this.name = name;
+		x = y = ID = 0;
+	}
+	
+	@Override
+	public int compareTo(ItemPacket item) {
+		if(item.name.equals(name) && item.x == x && item.y == y && item.ID == ID)
+			return 1;
+		return 0;
+	}
+}

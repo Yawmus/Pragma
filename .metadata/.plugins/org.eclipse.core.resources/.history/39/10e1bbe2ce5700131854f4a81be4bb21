@@ -1,0 +1,33 @@
+package com.peter.entities;
+
+import com.peter.inventory.Food;
+import com.peter.inventory.Item;
+import com.peter.inventory.Wearable;
+import com.peter.packets.ItemPacket;
+
+public class PacketToObject{
+	private Item temp;
+	public Item itemConvert(ItemPacket item){
+		switch(item.name){
+		case "Gold":
+			return new Item(Item.GOLD);
+		case "Gem":
+			return new Item(Item.GEM);
+		case "Breast Plate":
+			return new Item(Wearable.BREAST_PLATE);
+		case "Hat":
+			return new Item(Wearable.HAT);
+		case "Ring":
+			return new Item(Wearable.RING);
+		case "Shoes":
+			return new Item(Wearable.SHOES);
+		case "Helmet":
+			return new Item(Wearable.HELMET);
+		case "Bread":
+			return new Item(Food.BREAD);
+		case "Meat":
+			return new Item(Food.MEAT);
+		}
+		return null;
+	}
+}

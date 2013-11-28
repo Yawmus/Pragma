@@ -1,0 +1,7 @@
+package com.peter.packets;
+
+public class AddTradeItemPacket {
+	public Integer ID;
+	public int index;
+	public int x, y;
+}

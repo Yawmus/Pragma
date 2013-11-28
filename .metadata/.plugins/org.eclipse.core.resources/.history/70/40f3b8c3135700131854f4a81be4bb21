@@ -1,0 +1,9 @@
+package com.peter.packets;
+
+import java.util.ArrayList;
+
+import com.peter.rogue.inventory.Item;
+
+public class ChestPacket {
+	private ArrayList<Item> items;
+}

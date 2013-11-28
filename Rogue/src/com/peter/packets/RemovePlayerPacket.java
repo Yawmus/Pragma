@@ -1,5 +1,6 @@
 package com.peter.packets;
 
 public class RemovePlayerPacket{
-	public int id;
+	public int ID;
+	public int x, y;
 }

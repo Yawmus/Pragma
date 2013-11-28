@@ -1,0 +1,7 @@
+package com.peter.packets;
+
+public class RemoveTradeItemPacket {
+	public Integer ID;
+	public ItemPacket item;
+	publci int x, y;
+}

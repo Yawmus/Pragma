@@ -1,0 +1,38 @@
+package com.peter.rogue.network;
+
+import java.io.IOException;
+
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Listener.ThreadedListener;
+import com.peter.packets.*;
+
+public class ClientWrapper {
+
+	public Client client;
+	private String ip = "localhost";
+	private static int udpPort = 23989, tcpPort = 23989;
+	
+	public ClientWrapper(){
+		System.out.println("Connecting to the server...");
+		client = new Client();
+		new Thread(client);
+		client.getKryo().register(PlayerPacket.class);
+		client.getKryo().register(MessagePacket.class);
+		client.getKryo().register(AddPlayerPacket.class);
+		client.getKryo().register(RemovePlayerPacket.class);
+		client.getKryo().register(CollisionPacket.class);
+		
+		client.addListener(new ThreadedListener(new Network()));
+		client.start();
+		try {
+			client.connect(5000, ip, udpPort, tcpPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Connected! The client program is now waiting for a packet...\n");
+	}
+	
+	public void setIP(String ip){
+		this.ip = ip;
+	}
+}

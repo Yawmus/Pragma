@@ -1,0 +1,5 @@
+package com.peter.packets;
+
+public class TilePacket {
+	public enum Tile{BLANK, GROUND, WALL, DOOR, WATER, DOWN, UP};
+}

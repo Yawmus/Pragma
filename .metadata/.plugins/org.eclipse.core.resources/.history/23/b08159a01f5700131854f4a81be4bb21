@@ -1,0 +1,26 @@
+package com.peter.server;
+
+import com.badlogic.gdx.math.Vector2;
+
+public class Marks{
+
+	public final int HEIGHT = 40, WIDTH = 80;
+	private String[][] marker = new String[WIDTH][HEIGHT];
+	
+	public Marks(){
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				marker[i][j] = "";
+	}
+	
+	public Integer get(Vector2 pos){
+		if(pos.y < 0 || pos.x < 0 || pos.y/32 >= HEIGHT || pos.x/32 >= WIDTH)
+			return "";
+		else
+			return marker[(int)(pos.x/32)][(int)(pos.y/32)];
+	}
+	
+	public void put(Integer ID, Vector2 pos){
+		marker[(int)(pos.x/32)][(int)(pos.y/32)] = ID;
+	}
+}

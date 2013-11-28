@@ -1,0 +1,11 @@
+package com.peter.packets;
+
+public class CollisionPacket {
+	public boolean collision;
+	public int x, y;
+	
+	public CollisionPacket(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+}

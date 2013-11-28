@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Tiles" tilewidth="32" tileheight="32">
+  <image source="spriteSheet.png" width="96" height="128"/>
+  <tile id="1">
+   <properties>
+    <property name="blocked" value="0"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="blocked" value="1"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="blocked" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer -1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2EEOgyAQQFHiUu9/3666Ywi2lRntW7yN0QT8QcW9tXYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABS3BbLH9Y+ie69LXo9PepHTY/Yc9HgiPdbYJ22dY70emnzfI/qOHen1eDfJntOd6VGLHrX8sof3hx5P43lVix61XN1jtF9hXY+ze0mu73H2Wtb3sD7W9xi1yJ5vdbP/E3uiHtGa0KNO4+wxAcCdvAD2oqXi
+  </data>
+ </layer>
+ <layer name="Tile Layer 0" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2jEOAiEUQEFiYeHe/77GXpsNwludYioqeCHkJxxjjAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP7UY5Pd+656nc1tMT30uAo9WvRo0aNFjxY9WvRo0aPlU49Zc7gec3q4H3qgR40eLXq0zO5x1yPVw/1Y2+PMvKHHd3ucWdNDjyua+X7oocev0aPF+9GiR4v5o8V83qJHix4tK/6yv7N731VPjhiSKg==
+  </data>
+ </layer>
+</map>

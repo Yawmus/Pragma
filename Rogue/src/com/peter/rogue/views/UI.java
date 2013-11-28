@@ -10,13 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.peter.entities.Entity;
+import com.peter.entities.NPC;
+import com.peter.entities.Player;
+import com.peter.inventory.Chest;
+import com.peter.map.Map;
 import com.peter.rogue.Global;
-import com.peter.rogue.entities.Entity;
-import com.peter.rogue.entities.NPC;
-import com.peter.rogue.entities.Player;
-import com.peter.rogue.entities.Shopkeep;
-import com.peter.rogue.inventory.Chest;
-import com.peter.rogue.map.Map;
 
 public class UI{
     private Texture texture1 = new Texture(Gdx.files.internal("img/guiLeftTest.png"));
@@ -30,7 +29,7 @@ public class UI{
 	
 	public void draw(Player player, ArrayList<NPC> npcs){
 		// Draws the messages and statuses on top of everything
-		for(int i=0; i<npcs.size(); i++){
+		/*for(int i=0; i<npcs.size(); i++){
 			if(npcs.get(i).canDraw){
 				if(npcs.get(i).messageFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
@@ -62,9 +61,9 @@ public class UI{
 						Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(npcs.get(i).getStatus()))).toString(), npcs.get(i).getX() - 7, npcs.get(i).getY() + 26);
 				Entity.map.getSpriteBatch().end();
 			}
-		}
+		}*/
 		
-		if(player.messageFlag){
+		/*if(player.messageFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);
 			Global.mapShapes.rect(player.getX(), player.getY() - 17, Global.font.getBounds(player.getMessage()).width, Global.font.getLineHeight());
@@ -80,9 +79,9 @@ public class UI{
 				Global.mapShapes.setColor(0f, .4f, 0f, 1f);
 			Global.mapShapes.circle(player.getX(), player.getY() + 20, 13);
 			Global.mapShapes.end();
-		}		
+		}	*/	
 
-		Entity.map.getSpriteBatch().begin();
+		/*Entity.map.getSpriteBatch().begin();
 		Global.font.draw(Entity.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
 		if(player.getStatus() != null)
 			if(Math.abs(player.getStatus()) < 10)
@@ -90,7 +89,7 @@ public class UI{
 			else
 				Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 7, player.getY() + 26);
 		
-		Entity.map.getSpriteBatch().end();
+		Entity.map.getSpriteBatch().end();*/
 
 		Global.screenShapes.begin(ShapeType.Filled);
 		Global.screenShapes.setColor(0, 0, 0, 1f);
@@ -116,12 +115,12 @@ public class UI{
 				((Chest)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
 			}
 			
-			else if(player.getMenu().equals("Barter")){
+			/*else if(player.getMenu().equals("Barter")){
 				player.getInventory().setTrade(((Shopkeep)(player.getMenuObject())));
 				((Shopkeep)(player.getMenuObject())).setTrade(player);
 				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 				((Shopkeep)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
-			}
+			}*/
 		}
 		else
 			player.getInventory().setTrade(null);

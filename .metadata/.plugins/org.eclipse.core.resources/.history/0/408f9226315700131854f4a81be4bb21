@@ -1,0 +1,15 @@
+package com.peter.packets;
+
+import com.esotericsoftware.kryonet.Connection;
+
+public class CollisionPacket {
+	
+	public boolean collision;
+	public int x, y;
+	public Integer ID;
+	
+	public CollisionPacket(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+}

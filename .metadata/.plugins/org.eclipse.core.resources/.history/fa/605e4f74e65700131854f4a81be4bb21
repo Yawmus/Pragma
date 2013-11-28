@@ -1,0 +1,8 @@
+package com.peter.packets;
+
+import java.util.HashMap;
+
+public class MapPacket{
+	public HashMap<Integer, ItemPacket> items;
+	public HashMap<Integer, ChestPackets> chestss;
+}

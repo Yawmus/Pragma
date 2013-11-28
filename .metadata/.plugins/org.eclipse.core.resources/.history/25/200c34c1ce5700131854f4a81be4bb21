@@ -1,0 +1,17 @@
+package com.peter.entities;
+
+import com.peter.inventory.Item;
+import com.peter.packets.ItemPacket;
+
+public class PacketToObject {
+	public Item itemConvert(ItemPacket item){
+		switch(item.name){
+		case "Money":
+			break;
+		}
+		if(item.name.equals("Money"))
+		return null;
+		return null;
+		
+	}
+}

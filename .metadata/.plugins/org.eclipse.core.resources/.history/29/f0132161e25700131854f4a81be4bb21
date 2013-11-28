@@ -1,0 +1,58 @@
+package com.peter.map;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.peter.entities.Entity;
+import com.peter.inventory.Chest;
+import com.peter.packets.ItemPacket;
+import com.peter.packets.Player;
+
+public class Map{
+    public HashMap<Integer, Entity> database;
+	public final int HEIGHT = 40, WIDTH = 80;
+	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
+	protected static int floor;
+	public HashMap<Integer, ChestPacket> chests;
+	public HashMap<Integer, ItemPacket> items;
+	public HashMap<Integer, Player> players;
+	public Marks marks = new Marks();
+	
+	public Map(){
+		database = new HashMap<Integer, Entity>();
+		items = new HashMap<Integer, ItemPacket>();
+		chests = new ArrayList<Chest>();
+		players = new HashMap<Integer, Player>();
+	}
+	
+	// ------------- Getters -------------
+	/*public String getMark(float x, float y){
+		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
+			return "";
+		else
+			return marker[(int)(x/32)][(int)(y/32)];
+	}
+	
+	public Entity get(Integer ID){
+		if(ID != -1)
+			return database.get(ID);
+		return null;
+	}
+	public Entity get(float x, float y){
+		return database.get(getMark(x, y));
+	}
+	
+	public void put(String ID, Entity entity){
+		database.put(ID, entity);
+	}*/
+	
+	// ------------- Setters -------------
+	/*public void setMark(String ID, float x, float y){
+		marker[(int)(x/32)][(int)(y/32)] = ID;
+	}*/
+	
+	/*public void remove(Integer ID){
+		setMark(-1, (int)database.get(ID).getX()/32, (int)database.get(ID).getY()/32);
+		database.remove(ID);
+	}*/
+}

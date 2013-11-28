@@ -6,13 +6,11 @@ public class PlayerPacket{
 
 	private boolean hostile;
 	public Connection connection;
-	public String name = new String();
 	public int x, y;
 	public int oldX, oldY;
 	public Integer ID;
 	
 	public PlayerPacket(){
-		name = "Adelaide";
 		hostile = false;
 	}
 	

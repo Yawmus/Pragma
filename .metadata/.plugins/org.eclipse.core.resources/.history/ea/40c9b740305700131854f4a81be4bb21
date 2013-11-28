@@ -1,0 +1,17 @@
+package com.peter.packets;
+
+public class CollisionPacket {
+	
+	public boolean collision;
+	public int x, y;
+	public Integer ID;
+	
+	public CollisionPacket(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+	public CollisionPacket(float x, float y){
+		this.x = (int) x;
+		this.y = (int) y;
+	}
+}

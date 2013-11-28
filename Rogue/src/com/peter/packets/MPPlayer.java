@@ -1,7 +1,7 @@
 package com.peter.packets;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.peter.rogue.entities.Animate;
+import com.peter.entities.Animate;
 
 
 public class MPPlayer extends Animate{

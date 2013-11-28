@@ -3,10 +3,10 @@ package com.peter.rogue.data;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import com.peter.rogue.entities.NPC;
-import com.peter.rogue.inventory.Chest;
-import com.peter.rogue.inventory.Item;
-import com.peter.rogue.map.Tile;
+import com.peter.entities.NPC;
+import com.peter.inventory.Chest;
+import com.peter.inventory.Item;
+import com.peter.map.Tile;
 
 public class LevelData {
     private int citizens, shopkeeps, monsters;
@@ -49,7 +49,7 @@ public class LevelData {
 		return monsters + citizens + shopkeeps;
 	}
 
-	public void save(int WIDTH, int HEIGHT, Tile[][] tiles, String[][] visible, String[][] marker, ArrayList<Item> items, ArrayList<Chest> chests, ArrayList<NPC> npcs){
+	public void save(int WIDTH, int HEIGHT, Tile[][] tiles, String[][] visible, String[][] marker, ArrayList<Item> items, /*ArrayList<Chest> chests,*/ ArrayList<NPC> npcs){
 		Tile[][] temp1 = new Tile[WIDTH][HEIGHT];
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
@@ -73,10 +73,10 @@ public class LevelData {
 			temp3.add(items.get(i));
 		this.items.push(temp3);
 		
-		ArrayList<Chest> temp4 = new ArrayList<Chest>();
+		/*ArrayList<Chest> temp4 = new ArrayList<Chest>();
 		for(int i=0; i<chests.size(); i++)
 			temp4.add(chests.get(i));
-		this.chests.push(temp4);
+		this.chests.push(temp4);*/
 		
 		ArrayList<NPC> temp5 = new ArrayList<NPC>();
 		for(int i=0; i<npcs.size(); i++)

@@ -1,0 +1,14 @@
+package com.peter.packets;
+
+public class ItemPacket {
+	public String name;
+	int x, y;
+	Integer ID;
+	
+	public ItemPacket(String name, int x, int y, int ID){
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.ID = ID;
+	}
+}

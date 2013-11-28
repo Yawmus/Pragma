@@ -1,0 +1,12 @@
+package com.peter.entities;
+
+import com.peter.inventory.Item;
+import com.peter.packets.ItemPacket;
+
+public class PacketToObject {
+	public Item itemConvert(ItemPacket item){
+		if()
+		return null;
+		
+	}
+}

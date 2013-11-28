@@ -1,0 +1,5 @@
+package com.peter.packets;
+
+public class TilePacket {
+	public Tile[][] tiles;
+}

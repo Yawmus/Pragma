@@ -1,0 +1,25 @@
+package com.peter.server;
+
+import com.peter.entities.Entity;
+
+public class Marks {
+
+	public final int HEIGHT = 40, WIDTH = 80;
+	private String[][] marker = new String[WIDTH][HEIGHT];
+	
+	public Marks(){
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				marker[i][j] = "";
+	}
+	
+	public String getMark(float x, float y){
+		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
+			return "";
+		else
+			return marker[(int)(x/32)][(int)(y/32)];
+	}
+	public void put(String ID, float x, float y){
+		marker[(int)(x/32)][(int)(y/32)] = ID;
+	}
+}

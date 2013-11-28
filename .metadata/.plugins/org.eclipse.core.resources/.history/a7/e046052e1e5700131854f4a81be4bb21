@@ -1,0 +1,6 @@
+package com.peter.server;
+
+public class Marks {
+
+	private String[][] marker = new String[WIDTH][HEIGHT];
+}

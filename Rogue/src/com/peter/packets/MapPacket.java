@@ -1,7 +1,10 @@
 package com.peter.packets;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MapPacket{
-	public ArrayList<PlayerPacket> players;
+	public HashMap<Integer, ItemPacket> items;
+	public HashMap<Integer, ChestPacket> chests;
+	public HashMap<Integer, AddNPCPacket> npcs;
+	public byte[][] tiles;
 }

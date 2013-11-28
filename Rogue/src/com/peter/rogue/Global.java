@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.peter.rogue.network.Network;
 
 public class Global {
 	
@@ -24,13 +22,8 @@ public class Global {
     public static BitmapFont font = new BitmapFont();
     public static BitmapFont gothicFont = new BitmapFont(Gdx.files.internal("fonts/Cardinal.fnt"), Gdx.files.internal("fonts/Cardinal.png"), false);
 	public static InputMultiplexer multiplexer = new InputMultiplexer();
-    public static Stage stage = new Stage();
-	public static Network network;
+    public static String IP = "localhost";
     
-    static{
-    	multiplexer.addProcessor(stage);
-    }
-	
     private static Random generator = new Random();
     
     public static int rand(int range, int origin) {

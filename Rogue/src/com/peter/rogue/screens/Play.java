@@ -7,11 +7,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
+import com.peter.entities.EntityManager;
+import com.peter.map.Map;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
-import com.peter.rogue.entities.Entity;
-import com.peter.rogue.entities.EntityManager;
-import com.peter.rogue.network.Network;
+import com.peter.rogue.network.ClientWrapper;
 
 public class Play extends Listener implements Screen{
 
@@ -21,6 +22,8 @@ public class Play extends Listener implements Screen{
 	
     private EntityManager manager;
     private Scanner in = new Scanner(System.in);
+	public static Map map;
+	public static ClientWrapper clientWrapper;
     
     
 	public Play(Rogue game){
@@ -34,9 +37,9 @@ public class Play extends Listener implements Screen{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 	    //fps.log();
-	    
-		manager.draw();
-		
+
+		manager.draw(map.getSpriteBatch());
+
 	}
 
 	@Override
@@ -47,16 +50,20 @@ public class Play extends Listener implements Screen{
 	
 	@Override
 	public void show() {
-		manager = new EntityManager();
-		manager.init();
-
-		Global.camera.setToOrtho(false);    
-		Global.network = new Network();
+		manager = new EntityManager(this);
+		
+		/*Global.camera.setToOrtho(false);    
 		System.out.print("IP?: ");
 		String ip = in.nextLine();
 		if(!ip.equals(""))
-			Global.network.setIP(ip);
-		Global.network.connect();
+			Global.IP = ip;*/
+
+		map = new Map();
+		clientWrapper = new ClientWrapper();
+		manager.init();
+
+		
+		Log.set(Log.LEVEL_DEBUG);
 	}
 	
 
@@ -76,9 +83,8 @@ public class Play extends Listener implements Screen{
 	public void dispose() {
         Global.mapShapes.dispose();
         Global.screenShapes.dispose();
-        Entity.map.getSpriteBatch().dispose();
+        map.getSpriteBatch().dispose();
 		manager.dispose();
-		Global.network.client.close();
 	}
 
 }
