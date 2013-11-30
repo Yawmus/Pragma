@@ -21,4 +21,5 @@ public class NPC extends Animate {
 		super.draw(spriteBatch);
 		super.update(Gdx.graphics.getDeltaTime());
 	}
+	
 }

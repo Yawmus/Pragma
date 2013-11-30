@@ -31,7 +31,6 @@ public class Rogue extends Game{
 	public void render() {
 		super.render();
 		
-		
 		if(Global.gameOver){
 			setScreen(new Death(this));
 		    if(Gdx.input.isKeyPressed(Keys.ENTER)){

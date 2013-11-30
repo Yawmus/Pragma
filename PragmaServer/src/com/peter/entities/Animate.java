@@ -16,7 +16,7 @@ public class Animate extends Entity{
 	protected static LinkedList<String> lastNames;
 	protected float messageDelay = 0, statusDelay = 0, delay, time = 0;
 	public boolean messageFlag, statusFlag;
-	//protected HostilityList list;
+	protected HostilityList list;
 	protected String message;
 	protected Integer status;
 	protected String target;
@@ -99,37 +99,7 @@ public class Animate extends Entity{
 		status = null;
 	}
 
-	protected void attack(Animate entity){
-		/*int amount = 0;
-		if(this.getStats().getStrength() == 0)
-			amount = Global.rand(3, 0);
-		else
-			amount = Global.rand(this.getStats().getStrength(), 0);
-		amount -= entity.getStats().getDefense();
-		if(amount < 0)
-			amount = 0;
-		amount *= -1;
-		entity.getStats().mutateHitpoints(amount);
-		
-		if(this instanceof Player)
-			entity.attacker = this;
-		entity.setStatus(amount);
-		bump(entity);
-		if(entity.getStats().getHitpoints() <= 0){
-			Entity.map.setMark("", entity.getX(), entity.getY());
-			stats.addExperience(entity.type);
-			if(entity instanceof NPC){
-				Play.map.npcs.remove(entity);
-				Play.map.remove(entity.getID());
-				Play.map.items.add(((NPC) entity).getDrop());
-				Play.map.items.get(Play.map.items.size()-1).setPosition(entity.getX()/32, entity.getY()/32);
-			}
-			else if(entity instanceof Player){
-				Global.gameOver = true;
-				entity.death.play();
-			}
-		}*/
-	}
+	
 	
 	public void setMessage(NPC npc){
 		/*if(npc instanceof NPC && ((Player)(entity)).isHostile() && !list.check(entity))

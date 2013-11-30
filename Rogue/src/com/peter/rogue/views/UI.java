@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -69,7 +70,6 @@ public class UI{
 			//System.out.println(npc.ID);
 			if(mpPlayer.canDraw){
 				if(mpPlayer.statusFlag){
-					System.out.println("Here!!!!");
 					Global.mapShapes.begin(ShapeType.Filled);
 					if(mpPlayer.getStatus() == 0)
 						Global.mapShapes.setColor(0f, 0f, .6f, 1f);
@@ -95,12 +95,12 @@ public class UI{
 			}
 		}
 		
-		/*if(player.messageFlag){
+		if(player.messageFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);
 			Global.mapShapes.rect(player.getX(), player.getY() - 17, Global.font.getBounds(player.getMessage()).width, Global.font.getLineHeight());
 			Global.mapShapes.end();
-		}*/
+		}
 		if(player.statusFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			if(player.getStatus() == 0)
@@ -152,6 +152,25 @@ public class UI{
 				((Shopkeep)(player.getMenuObject())).setTrade(player);
 				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 				((Shopkeep)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
+			}
+			else if(player.getMenu().equals("Chat")){
+				Gdx.gl.glEnable(GL10.GL_BLEND);
+			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+				Global.screenShapes.begin(ShapeType.Filled);
+				Global.screenShapes.setColor(.1f, .1f, .1f, .9f);
+				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, 50);
+				Global.screenShapes.end();
+				Global.screenShapes.begin(ShapeType.Line);
+				Global.screenShapes.setColor(0.25f, 0.25f, 0.25f, 1);
+				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, 50);
+				Global.screenShapes.end();
+				Gdx.gl.glDisable(GL10.GL_BLEND);
+				
+				Global.screen.begin();
+				Global.gothicFont.setScale(1.1f);
+				Global.gothicFont.draw(Global.screen, player.getMessageBuffer(), (Global.SCREEN_WIDTH/2) - Global.font.getBounds(player.getMessageBuffer()).width/1.3f, 208);
+				Global.gothicFont.setScale(1f);
+				Global.screen.end();
 			}
 		}
 		else

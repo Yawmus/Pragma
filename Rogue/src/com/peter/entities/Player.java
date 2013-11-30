@@ -16,6 +16,7 @@ import com.peter.inventory.Item;
 import com.peter.map.Tile;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.MPPlayer;
+import com.peter.packets.MessagePacket;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
 import com.peter.rogue.Global;
@@ -25,7 +26,7 @@ public class Player extends Animate implements InputProcessor {
 	
 	private Texture picture;
 	private String info;
-	private String menu = "null";
+	private String menu = "";
 	private boolean menuActive = false;
 	private Inventory inventory = new Inventory();
 	private ArrayList<Ray> rays = new ArrayList<Ray>();
@@ -34,12 +35,14 @@ public class Player extends Animate implements InputProcessor {
 	private boolean hostile;
 	private float hunger;
 	public PlayerPacket packet;
+	private String messageBuffer;
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
 	
 	public Player(String filename){
 		super(filename, "Player");
 		messageFlag = false;
 		name = "Adelaide";
+		messageBuffer = new String();
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
 		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		packet = new PlayerPacket();
@@ -75,9 +78,33 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void update(float delta){
-		super.update(delta);
+		time += delta;
+		
+		if(messageDelay > 2.0){
+			resetMessage();
+			messageDelay = 0;
+			messageFlag = false;
+		}
+		
+		if(getMessage() != ""){
+			messageFlag = true;
+			messageDelay += delta;
+		}
+
+		if(statusDelay > 1.6f){
+			resetStatus();
+			statusDelay = 0;
+			statusFlag = false;
+		}
+		
+		if(getStatus() != null){
+			statusFlag = true;
+			statusDelay += delta;
+		}
+		
 		hunger -= delta/8000;
-		if(time >= delay){
+		
+		if(time >= delay && !getMenu().equals("Chat")){
 			if(Gdx.input.isKeyPressed(Keys.A)){
 				setX(getX() - 32);
 				time = 0;
@@ -102,8 +129,6 @@ public class Player extends Animate implements InputProcessor {
 				setMenuActive(false);
 				checkCollision();
 			}
-
-			
 		}
 	}
 	
@@ -124,6 +149,7 @@ public class Player extends Animate implements InputProcessor {
 						setMenu("Barter");
 						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 					}
+				setMessage((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 				collision = true;
 			}
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof MPPlayer){
@@ -191,7 +217,7 @@ public class Player extends Animate implements InputProcessor {
 		if(entity.getStats().getHitpoints() <= 0)
 			stats.addExperience(entity.type);
 	}
-    
+	
     public void light(){
 		//Global.mapShapes.begin(ShapeType.Line);
 		//Global.mapShapes.setColor(Color.YELLOW);
@@ -232,31 +258,48 @@ public class Player extends Animate implements InputProcessor {
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		switch(keycode){
-		case Keys.G:
-			setMenu("Inventory");
-			break;
-		case Keys.F:
-			hostile = !hostile;
-			break;
-		case Keys.TAB:
-			Global.camera.zoom += .4;
-			break;
-		case Keys.ESCAPE:
-			System.exit(0);
-			break;
-		case Keys.SHIFT_LEFT:
-		case Keys.SHIFT_RIGHT:
-			delay = .5f;
-			break;
+		if(!getMenu().equals("Chat"))
+			switch(keycode){
+			case Keys.G:
+				setMenu("Inventory");
+				break;
+			case Keys.F:
+				hostile = !hostile;
+				break;
+			case Keys.TAB:
+				Global.camera.zoom += .4;
+				break;
+			case Keys.ESCAPE:
+				System.exit(0);
+				break;
+			case Keys.SHIFT_LEFT:
+			case Keys.SHIFT_RIGHT:
+				delay = .5f;
+				break;
+			}
+		if(keycode == Keys.ENTER){
+			setMenu("Chat");
+			if(!messageBuffer.isEmpty()){
+				message = messageBuffer;
+				MessagePacket packet = new MessagePacket();
+				packet.message = message;
+				packet.ID = ID;
+				Play.clientWrapper.client.sendUDP(packet);
+			}
+			messageBuffer = new String();
 		}
-		
 		return true;
 	}
 
-
 	@Override
 	public boolean keyTyped(char character) {
+		if(getMenu().equals("Chat") && character != 13){
+			if(character != 8)
+				messageBuffer += character;
+			else
+				if(!messageBuffer.isEmpty())
+					messageBuffer = messageBuffer.substring(0, messageBuffer.length() - 1);
+		}
 		return false;
 	}
 	
@@ -264,6 +307,15 @@ public class Player extends Animate implements InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return true;
+	}
+	
+	public void setMessage(String message){
+		if(!messageFlag)
+			this.message = message;
+	}
+	
+	public String getMessageBuffer(){
+		return messageBuffer;
 	}
 	
 	public void setInformation(String info){
@@ -275,7 +327,10 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void setMenu(String request){
-		menu = request;
+		if(menu.isEmpty())
+			menu = request;
+		else
+			menu = "";
 		menuObject = null;
 		menuActive = !menuActive;
 	}

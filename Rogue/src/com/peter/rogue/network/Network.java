@@ -11,6 +11,7 @@ import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
+import com.peter.packets.MessagePacket;
 import com.peter.packets.NPCPacket;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
@@ -24,7 +25,11 @@ public class Network extends Listener {
 		EntityManager.player.setID(c.getID());
 	}
 	public void received(Connection c, Object o){
-		if(o instanceof RemoveItemPacket){
+		if(o instanceof MessagePacket){
+			MessagePacket packet = (MessagePacket) o;
+			Play.map.players.get(packet.ID).setMessage(packet.message);
+		}
+		else if(o instanceof RemoveItemPacket){
 			RemoveItemPacket packet = (RemoveItemPacket) o;
 			Play.map.marks.put(-1, packet.x, packet.y);
 			Play.map.database.remove(packet.ID);
@@ -97,8 +102,18 @@ public class Network extends Listener {
 		}
 		else if(o instanceof AttackPacket){
 			AttackPacket packet = (AttackPacket) o;
-			EntityManager.player.getStats().mutateHitpoints(packet.amount);
-			EntityManager.player.setStatus(packet.amount);
+			if(Play.map.npcs.containsKey(packet.receiverID)){
+				Play.map.npcs.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+				Play.map.npcs.get(packet.receiverID).setStatus(packet.amount);
+			}
+			else if(Play.map.players.containsKey(packet.receiverID)){
+				Play.map.players.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+				Play.map.players.get(packet.receiverID).setStatus(packet.amount);
+			}
+			else{
+				EntityManager.player.getStats().mutateHitpoints(packet.amount);
+				EntityManager.player.setStatus(packet.amount);
+			}
 		}
 	}
 	public void disconnected (Connection connection) {

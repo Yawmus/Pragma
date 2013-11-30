@@ -15,6 +15,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MPPlayer;
+import com.peter.packets.PlayerPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
@@ -151,6 +152,17 @@ public class EntityManager{
 		Global.screen.begin();
 		Global.font.draw(Global.screen, Rogue.VERSION, 0, Global.SCREEN_HEIGHT);
 		Global.screen.end();
+		
+		if(player.stats.getHitpoints() <= 0){
+			Global.gameOver = true;
+			PlayerPacket packet = new PlayerPacket();
+			packet.x = 0;
+			packet.y = 0;
+			packet.oldX = 0;
+			packet.oldY = 0;
+			Play.clientWrapper.client.sendUDP(packet);
+			player.death.play();
+		}
     }
     
     public void init(){

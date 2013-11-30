@@ -152,7 +152,8 @@ public class PragmaServer{
 			public void received(Connection c, Object o){
 				if(o instanceof MessagePacket){
 					MessagePacket packet = (MessagePacket) o;
-					System.out.println(packet.message);
+					System.out.println("[" + map.players.get(packet.ID).getName() + "] " + packet.message);
+					server.sendToAllExceptUDP(c.getID(), packet);
 				}
 				else if(o instanceof PlayerPacket){
 					PlayerPacket packet = (PlayerPacket) o;
@@ -181,15 +182,16 @@ public class PragmaServer{
 				else if(o instanceof AttackPacket){
 					AttackPacket packet = (AttackPacket) o;
 					if(map.npcs.containsKey(packet.receiverID)){
-						((Animate) map.npcs.get(packet.receiverID)).attacker 
-						= map.npcs.containsKey(packet.attackerID) ? map.npcs.get(packet.attackerID) : map.players.get(packet.attackerID);
+						((Animate) map.npcs.get(packet.receiverID)).attacker = map.npcs.containsKey(packet.attackerID) ? 
+								map.npcs.get(packet.attackerID) : map.players.get(packet.attackerID);
 						map.npcs.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+						server.sendToAllUDP(packet);
 						if(map.npcs.get(packet.receiverID).getStats().getHitpoints() <= 0)
 							removeID = map.npcs.get(packet.receiverID).ID;
 					}
 					else if(map.players.containsKey(packet.receiverID)){
 						map.players.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
-						server.sendToUDP(packet.receiverID, packet);
+						server.sendToAllUDP(packet);
 					}
 					else
 						System.out.println("[SERVER] failed to attack something!");
@@ -218,8 +220,6 @@ public class PragmaServer{
 						server.sendToAllExceptUDP(c.getID(), packet);
 					}
 				}
-				else
-					System.out.println("Missed!");
 			}
 			
 			public void disconnected(Connection c){

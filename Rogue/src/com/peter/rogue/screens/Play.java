@@ -21,7 +21,7 @@ public class Play extends Listener implements Screen{
 	private FPSLogger fps;
 	
     private EntityManager manager;
-    private Scanner in = new Scanner(System.in);
+    public static Scanner in;
 	public static Map map;
 	public static ClientWrapper clientWrapper;
     
@@ -29,6 +29,7 @@ public class Play extends Listener implements Screen{
 	public Play(Rogue game){
 		fps = new FPSLogger();
 		fps.log();
+		in = new Scanner(System.in);
 	}
 	
 	@Override
@@ -52,11 +53,11 @@ public class Play extends Listener implements Screen{
 	public void show() {
 		manager = new EntityManager(this);
 		
-		/*Global.camera.setToOrtho(false);    
+		Global.camera.setToOrtho(false);    
 		System.out.print("IP?: ");
 		String ip = in.nextLine();
 		if(!ip.equals(""))
-			Global.IP = ip;*/
+			Global.IP = ip;
 
 		map = new Map();
 		clientWrapper = new ClientWrapper();

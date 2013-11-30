@@ -3,6 +3,7 @@ package com.peter.entities;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import com.peter.packets.AttackPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.NPCPacket;
 import com.peter.server.Global;
@@ -82,20 +83,16 @@ public class NPC extends Animate {
 		collision = false;
 		if(PragmaServer.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
-		
 		if(PragmaServer.map.marks.get(getX(), getY()) != -1){
-			if(PragmaServer.map.items.get(PragmaServer.map.marks.get(getX(), getY())) != null || PragmaServer.map.chests.get(PragmaServer.map.marks.get(getX(), getY())) != null)
+			if(PragmaServer.map.items.containsKey(PragmaServer.map.marks.get(getX(), getY())) || PragmaServer.map.chests.containsKey(PragmaServer.map.marks.get(getX(), getY()))){
+				System.out.println("hi");
 				collision = true;
-			else
+			}
+			else{
+				if(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())) != null)
+					attack(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())));
 				collision = true;
-			/*else
-				if(list.check((Animate)map.get(getX(), getY())))
-					if(map.get(getX(), getY()) instanceof Player)
-						attack((Player) map.get(getX(), getY()));
-					else
-						attack((NPC) map.get(getX(), getY()));
-				else
-					bump((Animate) map.get(getX(), getY()));*/
+			}
 		}
 		
 		if(collision){
@@ -112,6 +109,25 @@ public class NPC extends Animate {
 		}
 		oldX = getX();
 		oldY = getY();
+	}
+	
+	protected void attack(Animate entity){
+		int amount = 0;
+		if(this.getStats().getStrength() == 0)
+			amount = Global.rand(3, 0);
+		else
+			amount = Global.rand(this.getStats().getStrength(), 0);
+		amount -= entity.getStats().getDefense();
+		if(amount < 0)
+			amount = 0;
+		amount *= -1;
+		AttackPacket packet = new AttackPacket();
+		packet.attackerID = ID;
+		packet.receiverID = entity.ID;
+		packet.amount = amount;
+		PragmaServer.server.sendToAllUDP(packet);
+		entity.getStats().mutateHitpoints(amount);
+		entity.setStatus(amount);
 	}
 	
 	private ArrayList<Node> open = new ArrayList<Node>();

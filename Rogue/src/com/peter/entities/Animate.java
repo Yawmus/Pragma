@@ -103,43 +103,6 @@ public class Animate extends Entity{
 	public void resetStatus() {
 		status = null;
 	}
-
-	/*protected void attack(Animate entity){
-		int amount = 0;
-		if(this.getStats().getStrength() == 0)
-			amount = Global.rand(3, 0);
-		else
-			amount = Global.rand(this.getStats().getStrength(), 0);
-		amount -= entity.getStats().getDefense();
-		if(amount < 0)
-			amount = 0;
-		amount *= -1;
-		entity.getStats().mutateHitpoints(amount);
-		
-		if(this instanceof Player)
-			entity.attacker = this;
-		entity.setStatus(amount);
-		bump(entity);
-		if(entity.getStats().getHitpoints() <= 0){
-			Entity.map.setMark("", entity.getX(), entity.getY());
-			stats.addExperience(entity.type);
-			if(entity instanceof NPC){
-				Play.map.npcs.remove(entity);
-				Play.map.remove(entity.getID());
-				Play.map.items.add(((NPC) entity).getDrop());
-				Play.map.items.get(Play.map.items.size()-1).setPosition(entity.getX()/32, entity.getY()/32);
-			}
-			else if(entity instanceof Player){
-				Global.gameOver = true;
-				entity.death.play();
-			}
-		}
-	}*/
-
-	protected void bump(Animate entity){
-		entity.setMessage(this);
-		collision = true;
-	}
 	
 	public void setMessage(Animate entity){
 		if(entity instanceof Player && ((Player)(entity)).isHostile() && !list.check(entity))
