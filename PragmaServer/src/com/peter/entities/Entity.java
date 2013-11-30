@@ -9,7 +9,7 @@ public class Entity{
 	protected float tileWidth = 32, tileHeight = 32;
 	protected int timeout = 0;
 	public boolean canDraw = false;
-	private int x, y;
+	protected int x, y;
 	
 
 	public Entity(String type){

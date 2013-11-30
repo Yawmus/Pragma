@@ -2,10 +2,9 @@ package com.peter.entities;
 
 import java.util.LinkedList;
 
-import javax.xml.ws.soap.AddressingFeature.Responses;
-
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
+import com.peter.server.PragmaServer;
 
 public class Animate extends Entity{
 	protected Stats stats;
@@ -45,6 +44,7 @@ public class Animate extends Entity{
 		//response = new Responses(type);
 		message = new String("");
 		status = null;
+		response = new Responses(getType());
 	}
 	public void update(double delta){
 		time += delta;
@@ -101,14 +101,12 @@ public class Animate extends Entity{
 
 	
 	
-	public void setMessage(NPC npc){
-		/*if(npc instanceof NPC && ((Player)(entity)).isHostile() && !list.check(entity))
-			list.addID(entity.getID());*/
-		if(!messageFlag)
-			/*// Uncomment for player responses
-			if(type.equals("Player"))
-				message = response.call(entity, entity.list.check(this));*/
-				message = /*response.call(npc, list.check(npc))*/ "Hello";
+	public String getMessage(Integer callerID){
+		if(PragmaServer.map.npcs.containsKey(callerID))
+			return response.call((Animate) PragmaServer.map.npcs.get(callerID), false);
+		else if(PragmaServer.map.players.containsKey(callerID))
+			return response.call((Animate) PragmaServer.map.players.get(callerID), false);
+		return null;
 	}
 	
 
@@ -118,7 +116,13 @@ public class Animate extends Entity{
 		statusDelay = delay;
 		
 	}
-	
+
+	public void setPosition(int x, int y){
+		this.x = x*32;
+		this.y = y*32;
+		oldX = this.x;
+		oldY = this.y;
+	}
 	public void setOldX(int oldX){
 		this.oldX = oldX;
 	}

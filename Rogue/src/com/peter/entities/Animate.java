@@ -4,10 +4,11 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
+import com.peter.packets.MessagePacket;
+import com.peter.rogue.screens.Play;
 
 public class Animate extends Entity{
 	protected Stats stats;
-	protected Responses response;
 	protected int oldX, oldY;
 	public boolean collision;
 	protected static LinkedList<String> firstNames;
@@ -39,7 +40,6 @@ public class Animate extends Entity{
 		super(filename, type);
 		list = new HostilityList();
 		stats = new Stats();
-		response = new Responses(type);
 		message = new String("");
 		status = null;
 	}
@@ -104,15 +104,19 @@ public class Animate extends Entity{
 		status = null;
 	}
 	
-	public void setMessage(Animate entity){
-		if(entity instanceof Player && ((Player)(entity)).isHostile() && !list.check(entity))
-			list.addID(entity.getID());
-		if(!messageFlag)
-			// Uncomment for player responses
-			/*if(type.equals("Player"))
-				message = response.call(entity, entity.list.check(this));
-			else*/
-				message = response.call(entity, list.check(entity));
+	public void setMessage(String message){
+		if(!messageFlag){
+			this.message = message;
+		}
+	}
+	
+	public void requestMessage(NPC npc){
+		if(!messageFlag){
+			MessagePacket packet = new MessagePacket();
+			packet.callerID = ID;
+			packet.receiverID = npc.ID;
+			Play.clientWrapper.client.sendUDP(packet);
+		}
 	}
 	
 

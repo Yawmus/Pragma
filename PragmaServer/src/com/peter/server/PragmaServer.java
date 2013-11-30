@@ -9,6 +9,7 @@ import com.peter.entities.Animate;
 import com.peter.entities.Citizen;
 import com.peter.entities.NPC;
 import com.peter.entities.Shopkeep;
+import com.peter.map.Data;
 import com.peter.map.Map;
 import com.peter.packets.AddNPCPacket;
 import com.peter.packets.AddPlayerPacket;
@@ -35,6 +36,7 @@ public class PragmaServer{
 	public final int HEIGHT = 40, WIDTH = 80;
 	public static int count = 1000;
 	public static Map map = new Map();
+	public static Data data = new Data();
 	private static Integer removeID = 0;
 	
 	public static void main(String[] args) throws Exception {
@@ -44,30 +46,32 @@ public class PragmaServer{
 		
 		map.items.put(++count, new ItemPacket("Ring", 30, 8, count));
 		temp = map.items.get(count);
-		map.marks.put(temp.ID, temp.x, temp.y);
+		map.marks.put(temp.ID, temp.x * 32, temp.y * 32);
 
 		map.items.put(++count, new ItemPacket("Hat", 32, 8, count));
 		temp = map.items.get(count);
-		map.marks.put(temp.ID, temp.x, temp.y);
+		map.marks.put(temp.ID, temp.x * 32, temp.y * 32);
 
 		map.chests.put(++count, new ChestPacket("Chest", 32, 7, count));
 		temp2 = map.chests.get(count);
-		map.marks.put(temp2.ID, temp2.x, temp2.y);
+		map.marks.put(temp2.ID, temp2.x * 32, temp2.y * 32);
 
 		temp2.items.add(new ItemPacket("Breast Plate"));
 		
 		//map.npcs.put(++count, new NPC())
-		for(int i=0; i<3; i++){
+		for(int i=0; i<data.getCitizens(); i++){
 			temp3 = new Citizen(/*"c_.png"*/);
-			map.npcs.put(++count, temp3);
+			++count;
+			map.npcs.put(count, temp3);
 			temp3.ID = count;
 			temp3 = map.npcs.get(count);
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
 			map.marks.put(temp3.ID, temp3.getX(), temp3.getY());
 		}
-		for(int i=0; i<1; i++){
+		for(int i=0; i<data.getShopkeeps(); i++){
 			temp3 = new Shopkeep(/*"s_.png", "Shopkeep"*/);
-			map.npcs.put(++count, temp3);
+			++count;
+			map.npcs.put(count, temp3);
 			temp3.ID = count;
 			temp3 = map.npcs.get(count);
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
@@ -152,8 +156,16 @@ public class PragmaServer{
 			public void received(Connection c, Object o){
 				if(o instanceof MessagePacket){
 					MessagePacket packet = (MessagePacket) o;
-					System.out.println("[" + map.players.get(packet.ID).getName() + "] " + packet.message);
-					server.sendToAllExceptUDP(c.getID(), packet);
+					if(map.players.containsKey(packet.receiverID)){
+						System.out.println("[" + map.players.get(packet.receiverID).getName() + "] " + packet.message);
+						server.sendToAllExceptUDP(c.getID(), packet);
+					}
+					else if(map.npcs.containsKey(packet.receiverID)){
+						packet.message = map.npcs.get(packet.receiverID).getMessage(packet.callerID);
+						server.sendToAllTCP(packet);
+					}
+					else
+						System.out.println("[SERVER] failed to message something!");
 				}
 				else if(o instanceof PlayerPacket){
 					PlayerPacket packet = (PlayerPacket) o;
