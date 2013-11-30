@@ -38,6 +38,8 @@ public class Stats{
 			mutateExperience(1);
 		else if(type == "Shopkeep")
 			mutateExperience(1);
+		else if(type == "Player")
+			mutateExperience(10);
 	}
 	
 	public void mutateExperience(int experience){

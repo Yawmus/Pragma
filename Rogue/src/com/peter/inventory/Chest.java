@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.entities.Entity;
 import com.peter.entities.Player;
-import com.peter.packets.ItemPacket;
 import com.peter.packets.RemoveTradeItemPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.screens.Play;

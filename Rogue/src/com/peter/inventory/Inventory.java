@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.entities.Entity;
 import com.peter.entities.Player;
+import com.peter.entities.Shopkeep;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.rogue.Global;
@@ -217,7 +218,7 @@ public class Inventory {
 						gear.wear((Wearable) move(i), player);
 				}
 				if(trade != null){
-					/*if(trade instanceof Shopkeep){
+					if(trade instanceof Shopkeep){
 						Global.mapShapes.begin(ShapeType.Filled);
 						Global.mapShapes.setColor(0f, 0, 0, 1f);
 						Global.mapShapes.rect(coord.x - Global.font.getBounds("sell").width - 2, coord.y, Global.font.getBounds("sell").width, Global.font.getLineHeight());
@@ -227,7 +228,7 @@ public class Inventory {
 						Global.font.draw(Play.map.getSpriteBatch(), "sell", coord.x - Global.font.getBounds("sell").width - 2, coord.y + Global.font.getLineHeight() - 2);
 						Play.map.getSpriteBatch().end();
 					}
-					else */if(trade instanceof Chest){
+					else if(trade instanceof Chest){
 						Global.mapShapes.begin(ShapeType.Filled);
 						Global.mapShapes.setColor(0f, 0, 0, 1f);
 						Global.mapShapes.rect(coord.x - Global.font.getBounds("move").width - 2, coord.y, Global.font.getBounds("move").width, Global.font.getLineHeight());
@@ -250,12 +251,17 @@ public class Inventory {
 				}
 				if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
 					// In essence -> sells the item, then adds it to shopkeep's inventory
-					/*if(trade instanceof Shopkeep){
+					if(trade instanceof Shopkeep){
+						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
+						System.out.println(trade.ID);
+						tradeItem.ID = trade.getID();
+						tradeItem.item = new ItemPacket(items.get(i).getName());
+						Play.clientWrapper.client.sendUDP(tradeItem);
 						wallet += getItems().get(i).getValue();
 						((Shopkeep) trade).add(remove(i));
 					}
 					// In essence -> adds item to chest and removes from inventory
-					else */if(trade instanceof Chest){
+					else if(trade instanceof Chest){
 						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 						tradeItem.ID = trade.getID();
 						tradeItem.item = new ItemPacket(items.get(i).getName());

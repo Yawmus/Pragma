@@ -2,13 +2,14 @@ package com.peter.entities;
 
 import java.util.LinkedList;
 
-import com.badlogic.gdx.Gdx;
+import javax.xml.ws.soap.AddressingFeature.Responses;
+
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 
 public class Animate extends Entity{
 	protected Stats stats;
-	//protected Responses response;
+	protected Responses response;
 	protected int oldX, oldY;
 	public boolean collision;
 	protected static LinkedList<String> firstNames;
@@ -20,7 +21,7 @@ public class Animate extends Entity{
 	protected Integer status;
 	protected String target;
 	public static Vector3 pos = new Vector3();
-	protected Animate attacker;
+	public Animate attacker;
 	protected Sound death;
 	//private static Scanner in;
 	
@@ -37,16 +38,16 @@ public class Animate extends Entity{
 		in.close();*/
 	}
 	
-	public Animate(String filename, String type) {
-		super(filename, type);
+	public Animate(String type) {
+		super(type);
 		//list = new HostilityList();
 		stats = new Stats();
 		//response = new Responses(type);
 		message = new String("");
 		status = null;
 	}
-	public void update(float delta){
-		time += Gdx.graphics.getDeltaTime();
+	public void update(double delta){
+		time += delta;
 		
 		if(messageDelay > 2.0){
 			resetMessage();
@@ -56,7 +57,7 @@ public class Animate extends Entity{
 		
 		if(getMessage() != ""){
 			messageFlag = true;
-			messageDelay += Gdx.graphics.getDeltaTime();
+			messageDelay += delta;
 		}
 
 		if(statusDelay > 1.6f){
@@ -67,7 +68,7 @@ public class Animate extends Entity{
 		
 		if(getStatus() != null){
 			statusFlag = true;
-			statusDelay += Gdx.graphics.getDeltaTime();
+			statusDelay += delta;
 		}
 	}
 
@@ -129,22 +130,16 @@ public class Animate extends Entity{
 			}
 		}*/
 	}
-
-	/*protected void bump(Animate entity){
-		entity.setMessage(this);
-		collision = true;
-	}*/
 	
-	/*public void setMessage(Animate entity){
-		if(entity instanceof Player && ((Player)(entity)).isHostile() && !list.check(entity))
-			list.addID(entity.getID());
+	public void setMessage(NPC npc){
+		/*if(npc instanceof NPC && ((Player)(entity)).isHostile() && !list.check(entity))
+			list.addID(entity.getID());*/
 		if(!messageFlag)
-			// Uncomment for player responses
+			/*// Uncomment for player responses
 			if(type.equals("Player"))
-				message = response.call(entity, entity.list.check(this));
-			else
-				message = response.call(entity, list.check(entity));
-	}*/
+				message = response.call(entity, entity.list.check(this));*/
+				message = /*response.call(npc, list.check(npc))*/ "Hello";
+	}
 	
 
 	public void setDelays(int delay) {

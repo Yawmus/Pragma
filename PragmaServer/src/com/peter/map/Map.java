@@ -32,8 +32,18 @@ public class Map{
 
 		tiles = new Tile[WIDTH][HEIGHT];
 		baseFloor();
-	}
-	
+	}/*
+	public Entity get(Integer ID){
+		if(players.get(ID) != null)
+			return players.get(ID);
+		else if(npcs.get(ID) != null)
+			return npcs.get(ID);
+		else if(chests.get(ID) != null)
+			return chests.get(ID);
+		else if(items.get(ID) != null)
+			return items.get(ID);
+		return null;
+	}*/
 	// ------------- Getters -------------
 	/*public String getMark(float x, float y){
 		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
@@ -122,7 +132,7 @@ public class Map{
 		}
 	}
 	
-	private boolean generateFloor(int x, int y){
+	/*private boolean generateFloor(int x, int y){
 		generateRoom(x, y);
 		return false;
 	}
@@ -212,6 +222,6 @@ public class Map{
 				tiles[x][++y] = Tile.WALL;
 		}
 		return flag;
-	}
+	}*/
 	
 }

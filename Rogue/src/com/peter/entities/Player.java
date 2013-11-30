@@ -14,6 +14,8 @@ import com.peter.inventory.Chest;
 import com.peter.inventory.Inventory;
 import com.peter.inventory.Item;
 import com.peter.map.Tile;
+import com.peter.packets.AttackPacket;
+import com.peter.packets.MPPlayer;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
 import com.peter.rogue.Global;
@@ -112,22 +114,24 @@ public class Player extends Animate implements InputProcessor {
 		else if(Play.map.getTile(getX(), getY()).hasStairs() && !Play.map.getTile(oldX, oldY).hasStairs()){
 			if(Play.map.getTile(getX(), getY()).direction()){
 			}
-		}/*
-		if(isHostile())
-			attack((Animate) map.get(getX(), getY()));
-		else{
-			if(map.get(getX(), getY()) instanceof Shopkeep){
-				setMenu("Barter");
-				setMenuObject((Shopkeep)map.get(getX(), getY()));
-			}
-			bump((Animate) map.get(getX(), getY()));
 		}
-		}*/
 		if(!(Play.map.marks.get((int)getX(), (int)getY()) == -1 || Play.map.marks.get((int)getX(), (int)getY()) == ID)){
-			if(Play.map.npcs.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
+			if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
+				if(isHostile())
+					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+				else
+					if(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())) instanceof Shopkeep){
+						setMenu("Barter");
+						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+					}
 				collision = true;
 			}
-			else if(Play.map.items.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Item){
+			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof MPPlayer){
+				if(isHostile())
+					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+				collision = true;
+			}
+			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Item){
 				Item temp = Play.map.items.get(Play.map.marks.get((int)getX(), (int)getY()));
 				if(!inventory.checkIsFull(temp)){
 					Play.map.items.remove(temp.ID);
@@ -142,7 +146,7 @@ public class Player extends Animate implements InputProcessor {
 				else
 					collision = true;
 			}
-			else if(Play.map.chests.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
+			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
 				setMenu("Chest");
 				setMenuObject((Chest) Play.map.chests.get(Play.map.marks.get((int)getX(), (int)getY())));
 				collision = true;
@@ -167,6 +171,26 @@ public class Player extends Animate implements InputProcessor {
 		oldY = (int) getY();
 	}
 	
+	protected void attack(Animate entity){
+		int amount = 0;
+		if(this.getStats().getStrength() == 0)
+			amount = Global.rand(3, 0);
+		else
+			amount = Global.rand(this.getStats().getStrength(), 0);
+		amount -= entity.getStats().getDefense();
+		if(amount < 0)
+			amount = 0;
+		amount *= -1;
+		AttackPacket packet = new AttackPacket();
+		packet.attackerID = ID;
+		packet.receiverID = entity.ID;
+		packet.amount = amount;
+		Play.clientWrapper.client.sendUDP(packet);
+		entity.getStats().mutateHitpoints(amount);
+		entity.setStatus(amount);
+		if(entity.getStats().getHitpoints() <= 0)
+			stats.addExperience(entity.type);
+	}
     
     public void light(){
 		//Global.mapShapes.begin(ShapeType.Line);
@@ -198,8 +222,9 @@ public class Player extends Animate implements InputProcessor {
 	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
 	    	}
 	    	// Render entities when in sight
-	    	/*else if(!(Play.map.getMark(x, y).equals(ID) || Play.map.getMark(x, y).equals("")))
-	    		Play.map.get(x, y).canDraw = true;*/
+	    	else if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y).equals("")))
+	    		if(Play.map.get(Play.map.marks.get((int) x, (int) y)) != null)
+	    			Play.map.get(Play.map.marks.get((int) x, (int) y)).canDraw = true;
     	}
     	return ray.direction;
     }

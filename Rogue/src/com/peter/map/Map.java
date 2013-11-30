@@ -9,19 +9,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
+import com.peter.entities.Animate;
+import com.peter.entities.Entity;
+import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.entities.PacketToObject;
 import com.peter.inventory.Chest;
 import com.peter.inventory.Item;
 import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
-import com.peter.rogue.data.LevelData;
 
 public class Map implements MapRenderer{
 	public Tile[][] tiles;
 	public byte[][] init;
 	protected String[][] visible;
-	private LevelData data;
+	//private LevelData data;
 	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
@@ -35,6 +37,7 @@ public class Map implements MapRenderer{
 	public HashMap<Integer, NPC> npcs;
 	public HashMap<Integer, Item> items;
 	public HashMap<Integer, Chest> chests;
+	public HashMap<Integer, Entity> database;
 	
 	public Map(){
 		spriteBatch = new SpriteBatch();
@@ -43,11 +46,12 @@ public class Map implements MapRenderer{
 		tiles = new Tile[WIDTH][HEIGHT];
 		init = new byte[WIDTH][HEIGHT];
 		visible = new String[WIDTH][HEIGHT];
-		data = new LevelData();
+		//data = new LevelData();
 		players = new HashMap<Integer, MPPlayer>();
 		npcs = new HashMap<Integer, NPC>();
 		items = new HashMap<Integer, Item>();
 		chests = new HashMap<Integer, Chest>();
+		database = new HashMap<Integer, Entity>();
 		
 		marks = new Marks();
 		
@@ -69,7 +73,12 @@ public class Map implements MapRenderer{
 		chests.clear();
 		npcs.clear();*/
 	}
-	
+	public Entity get(Integer ID){
+		if(database.containsKey(ID))
+			return database.get(ID);
+		return null;
+	}
+	/*
 	private void baseFloor(){
 		int seaX = WIDTH-9, seaY = 1;
 		for(int x=0; x<WIDTH; x++)
@@ -99,6 +108,8 @@ public class Map implements MapRenderer{
 		tiles[24][10] = Tile.DOWN;
 	}
 	
+	
+	
 	private void createRoom(int x, int y, int dx, int dy, Tile type){
 		for(int i=x; i<=dx; i++)
 			for(int j=y; j<=dy; j++)
@@ -120,7 +131,7 @@ public class Map implements MapRenderer{
 			tiles[(x + dx)/2][y + (dy - y)] = type;
 			break;
 		}
-	}
+	}*/
 	
 	public void draw(){
 		if(!initialize){
@@ -177,19 +188,18 @@ public class Map implements MapRenderer{
 		viewBounds.set(x, y, width, height);
 	}
 	
-	/*public String cursor(String ID, float x, float y){
-		if(!ID.equals("") && get(x, y).canDraw)
-			if(database.get(ID) instanceof Monster)
-				return database.get(ID).getName() + ", level " + ((Animate) (database.get(ID))).getStats().getLevel();
-			else if(database.get(ID) instanceof NPC)
-				return database.get(ID).getName() + ", " + ((Animate) (database.get(ID))).getType();
+	public String cursor(Integer ID, int x, int y){
+		if(get(ID) != null && get(ID).canDraw)
+			if(get(ID) instanceof Monster)
+				return get(ID).getName() + ", level " + ((Animate) get(ID)).getStats().getLevel();
+			else if(get(ID) instanceof NPC)
+				return get(ID).getName() + ", " + ((Animate) get(ID)).getType();
 			else
-				return database.get(ID).getName();
-		else if(getTile(x, y) != null){
+				return get(ID).getName();
+		else if(getTile(x, y) != null)
 			return getTile(x, y).getName();
-		}
 		return "";
-	}*/
+	}
 	
 	@Override
 	public void render() {
@@ -205,17 +215,5 @@ public class Map implements MapRenderer{
 
 	public void setVisible(float x, float y, String visible) {
 		this.visible[(int)(x/32)][(int)(y/32)] = visible;
-	}
-
-	public void purge(String id) {
-		
-	}
-
-	public LevelData getData() {
-		return data;
-	}
-
-	public void setData(LevelData data) {
-		this.data = data;
 	}
 }

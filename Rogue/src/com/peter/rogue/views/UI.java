@@ -1,6 +1,5 @@
 package com.peter.rogue.views;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -13,9 +12,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.peter.entities.Entity;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
+import com.peter.entities.Shopkeep;
 import com.peter.inventory.Chest;
 import com.peter.map.Map;
+import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
+import com.peter.rogue.screens.Play;
 
 public class UI{
     private Texture texture1 = new Texture(Gdx.files.internal("img/guiLeftTest.png"));
@@ -27,48 +29,78 @@ public class UI{
 		screenMarks = new HashMap<Vector3, Entity>();
 	}
 	
-	public void draw(Player player, ArrayList<NPC> npcs){
+	public void draw(Player player){
 		// Draws the messages and statuses on top of everything
-		/*for(int i=0; i<npcs.size(); i++){
-			if(npcs.get(i).canDraw){
-				if(npcs.get(i).messageFlag){
+		for(NPC npc : Play.map.npcs.values()){
+			if(npc.canDraw){
+				if(npc.messageFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(0, 0f, 0, 1f);
-					Global.mapShapes.rect(npcs.get(i).getX(), npcs.get(i).getY() - 17, Global.font.getBounds(npcs.get(i).getMessage()).width, Global.font.getLineHeight());
+					Global.mapShapes.rect(npc.getX(), npc.getY() - 17, Global.font.getBounds(npc.getMessage()).width, Global.font.getLineHeight());
 					Global.mapShapes.end();
 				}
-				if(npcs.get(i).statusFlag){
+				if(npc.statusFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
-					if(npcs.get(i).getStatus() == 0)
+					if(npc.getStatus() == 0)
 						Global.mapShapes.setColor(0f, 0f, .6f, 1f);
-					else if(npcs.get(i).getStatus() < 0)
+					else if(npc.getStatus() < 0)
 						Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
-					else if(npcs.get(i).getStatus() > 0)
+					else if(npc.getStatus() > 0)
 						Global.mapShapes.setColor(0f, .4f, 0f, 1f);
-					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, 13);
+					Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
 					Global.mapShapes.end();
 					Global.mapShapes.begin(ShapeType.Line);
 					Global.mapShapes.setColor(0f, 0f, 0f, 1f);
-					Global.mapShapes.circle(npcs.get(i).getX(), npcs.get(i).getY() + 20, 13);
+					Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
 					Global.mapShapes.end();
 				}
-				Entity.map.getSpriteBatch().begin();
-				Global.font.draw(Entity.map.getSpriteBatch(), npcs.get(i).getMessage(), npcs.get(i).getX(), npcs.get(i).getY());
-				if(npcs.get(i).getStatus() != null)
-					if(Math.abs(npcs.get(i).getStatus()) < 10)
-						Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(npcs.get(i).getStatus()))).toString(), npcs.get(i).getX() - 4, npcs.get(i).getY() + 26);
+				Play.map.getSpriteBatch().begin();
+				Global.font.draw(Play.map.getSpriteBatch(), npc.getMessage(), npc.getX(), npc.getY());
+				if(npc.getStatus() != null)
+					if(Math.abs(npc.getStatus()) < 10)
+						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 4, npc.getY() + 26);
 					else
-						Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(npcs.get(i).getStatus()))).toString(), npcs.get(i).getX() - 7, npcs.get(i).getY() + 26);
-				Entity.map.getSpriteBatch().end();
+						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 7, npc.getY() + 26);
+				Play.map.getSpriteBatch().end();
 			}
-		}*/
+		}
+		
+		for(MPPlayer mpPlayer : Play.map.players.values()){
+			//System.out.println(npc.ID);
+			if(mpPlayer.canDraw){
+				if(mpPlayer.statusFlag){
+					System.out.println("Here!!!!");
+					Global.mapShapes.begin(ShapeType.Filled);
+					if(mpPlayer.getStatus() == 0)
+						Global.mapShapes.setColor(0f, 0f, .6f, 1f);
+					else if(mpPlayer.getStatus() < 0)
+						Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
+					else if(mpPlayer.getStatus() > 0)
+						Global.mapShapes.setColor(0f, .4f, 0f, 1f);
+					Global.mapShapes.circle(mpPlayer.getX(), mpPlayer.getY() + 20, 13);
+					Global.mapShapes.end();
+					Global.mapShapes.begin(ShapeType.Line);
+					Global.mapShapes.setColor(0f, 0f, 0f, 1f);
+					Global.mapShapes.circle(mpPlayer.getX(), mpPlayer.getY() + 20, 13);
+					Global.mapShapes.end();
+				}
+				Play.map.getSpriteBatch().begin();
+				Global.font.draw(Play.map.getSpriteBatch(), mpPlayer.getMessage(), mpPlayer.getX(), mpPlayer.getY());
+				if(mpPlayer.getStatus() != null)
+					if(Math.abs(mpPlayer.getStatus()) < 10)
+						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(mpPlayer.getStatus()))).toString(), mpPlayer.getX() - 4, mpPlayer.getY() + 26);
+					else
+						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(mpPlayer.getStatus()))).toString(), mpPlayer.getX() - 7, mpPlayer.getY() + 26);
+				Play.map.getSpriteBatch().end();
+			}
+		}
 		
 		/*if(player.messageFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);
 			Global.mapShapes.rect(player.getX(), player.getY() - 17, Global.font.getBounds(player.getMessage()).width, Global.font.getLineHeight());
 			Global.mapShapes.end();
-		}
+		}*/
 		if(player.statusFlag){
 			Global.mapShapes.begin(ShapeType.Filled);
 			if(player.getStatus() == 0)
@@ -79,17 +111,17 @@ public class UI{
 				Global.mapShapes.setColor(0f, .4f, 0f, 1f);
 			Global.mapShapes.circle(player.getX(), player.getY() + 20, 13);
 			Global.mapShapes.end();
-		}	*/	
+		}
 
-		/*Entity.map.getSpriteBatch().begin();
-		Global.font.draw(Entity.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
+		Play.map.getSpriteBatch().begin();
+		Global.font.draw(Play.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
 		if(player.getStatus() != null)
 			if(Math.abs(player.getStatus()) < 10)
-				Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 4, player.getY() + 26);
+				Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 4, player.getY() + 26);
 			else
-				Global.font.draw(Entity.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 7, player.getY() + 26);
+				Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 7, player.getY() + 26);
 		
-		Entity.map.getSpriteBatch().end();*/
+		Play.map.getSpriteBatch().end();
 
 		Global.screenShapes.begin(ShapeType.Filled);
 		Global.screenShapes.setColor(0, 0, 0, 1f);
@@ -115,12 +147,12 @@ public class UI{
 				((Chest)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
 			}
 			
-			/*else if(player.getMenu().equals("Barter")){
+			else if(player.getMenu().equals("Barter")){
 				player.getInventory().setTrade(((Shopkeep)(player.getMenuObject())));
 				((Shopkeep)(player.getMenuObject())).setTrade(player);
 				player.getInventory().display(Global.screen, Global.font, screenCoord, player);
 				((Shopkeep)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
-			}*/
+			}
 		}
 		else
 			player.getInventory().setTrade(null);

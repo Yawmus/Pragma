@@ -2,8 +2,8 @@ package com.peter.entities;
 
 public class Citizen extends NPC{
 
-        public Citizen(String filename) {
-                super(filename, "Citizen");
+        public Citizen() {
+        	super("Citizen");
                 //list = new HostilityList();
                 
                 

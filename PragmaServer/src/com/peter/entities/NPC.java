@@ -3,7 +3,7 @@ package com.peter.entities;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import com.peter.inventory.Item;
+import com.peter.packets.ItemPacket;
 import com.peter.packets.NPCPacket;
 import com.peter.server.Global;
 import com.peter.server.PragmaServer;
@@ -13,23 +13,23 @@ public class NPC extends Animate {
 	protected int move;
 	protected boolean canMove;
 	private Stack<Node> moves;
-	private Item drop;
+	private ItemPacket drop;
 	
-	public NPC(String filename, String type) {
-		super(filename, type);
+	public NPC(String type){
+		super(type);
 		name = "Bob"/*firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0))*/;
-		delay -= Global.rand(100, 0) * .01f;
+		delay -= Global.rand(100, 0) * .001f;
 		canMove = true;
 		moves = new Stack<Node>();
-		drop = Global.rand(2, 0) == 1 ? new Item(Item.GOLD) : new Item(Item.GEM);
+		drop = Global.rand(2, 0) == 1 ? new ItemPacket("Gold") : new ItemPacket("Gem");
 		delay = 2.6f;
 	}
 	
-	public Item getDrop(){
+	public ItemPacket getDrop(){
 		return drop;
 	}
 	
-	public void update(float delta){
+	public void update(double delta){
 		super.update(delta);
 		move = Global.rand(5, 0);
 		if(time >= delay && canMove){
@@ -83,8 +83,10 @@ public class NPC extends Animate {
 		if(PragmaServer.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
 		
-		if(PragmaServer.map.marks.get(getX(), getY()) != -1 && !PragmaServer.map.marks.get(getX(), getY()).equals(ID)){
+		if(PragmaServer.map.marks.get(getX(), getY()) != -1){
 			if(PragmaServer.map.items.get(PragmaServer.map.marks.get(getX(), getY())) != null || PragmaServer.map.chests.get(PragmaServer.map.marks.get(getX(), getY())) != null)
+				collision = true;
+			else
 				collision = true;
 			/*else
 				if(list.check((Animate)map.get(getX(), getY())))
@@ -94,7 +96,6 @@ public class NPC extends Animate {
 						attack((NPC) map.get(getX(), getY()));
 				else
 					bump((Animate) map.get(getX(), getY()));*/
-			collision = true;
 		}
 		
 		if(collision){
@@ -103,12 +104,14 @@ public class NPC extends Animate {
 		}
 		else{
 			NPCPacket packet = new NPCPacket(getX(), getY(), ID);
+			packet.oldX = oldX;
+			packet.oldY = oldY;
 			PragmaServer.map.marks.put(-1, oldX, oldY);
 			PragmaServer.map.marks.put(ID, (int)getX(), (int)getY());
 			PragmaServer.server.sendToAllExceptUDP(ID, packet);
 		}
-		oldX = (int) getX();
-		oldY = (int) getY();
+		oldX = getX();
+		oldY = getY();
 	}
 	
 	private ArrayList<Node> open = new ArrayList<Node>();

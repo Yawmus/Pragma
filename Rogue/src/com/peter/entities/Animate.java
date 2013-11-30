@@ -2,7 +2,6 @@ package com.peter.entities;
 
 import java.util.LinkedList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 
@@ -45,7 +44,7 @@ public class Animate extends Entity{
 		status = null;
 	}
 	public void update(float delta){
-		time += Gdx.graphics.getDeltaTime();
+		time += delta;
 		
 		if(messageDelay > 2.0){
 			resetMessage();
@@ -55,7 +54,7 @@ public class Animate extends Entity{
 		
 		if(getMessage() != ""){
 			messageFlag = true;
-			messageDelay += Gdx.graphics.getDeltaTime();
+			messageDelay += delta;
 		}
 
 		if(statusDelay > 1.6f){
@@ -66,7 +65,7 @@ public class Animate extends Entity{
 		
 		if(getStatus() != null){
 			statusFlag = true;
-			statusDelay += Gdx.graphics.getDeltaTime();
+			statusDelay += delta;
 		}
 	}
 	@Override
@@ -105,8 +104,8 @@ public class Animate extends Entity{
 		status = null;
 	}
 
-	protected void attack(Animate entity){
-		/*int amount = 0;
+	/*protected void attack(Animate entity){
+		int amount = 0;
 		if(this.getStats().getStrength() == 0)
 			amount = Global.rand(3, 0);
 		else
@@ -134,8 +133,8 @@ public class Animate extends Entity{
 				Global.gameOver = true;
 				entity.death.play();
 			}
-		}*/
-	}
+		}
+	}*/
 
 	protected void bump(Animate entity){
 		entity.setMessage(this);

@@ -1,10 +1,12 @@
 package com.peter.packets;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.peter.entities.Animate;
 
-public class Player {
+public class Player extends Animate{
 
-	public float x, y;
-	public int oldX, oldY;
+	public Player(){
+		super("Player");
+	}
 	public Connection c;
 }

@@ -3,20 +3,18 @@ package com.peter.entities;
 
 public class Entity{
 	
-	protected String type = new String();
+	protected String type;
 	protected String name;
 	public Integer ID;
-	private static int count = 100;
 	protected float tileWidth = 32, tileHeight = 32;
 	protected int timeout = 0;
 	public boolean canDraw = false;
 	private int x, y;
 	
 
-	public Entity(String filename, String type){
+	public Entity(String type){
 		name = new String("null");
 		this.type = type;
-		ID = ++count;
 	}
 
 	public String getName(){
