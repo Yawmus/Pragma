@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ItemPacket;
+import com.peter.packets.MessagePacket;
 import com.peter.packets.NPCPacket;
 import com.peter.server.Global;
 import com.peter.server.PragmaServer;
@@ -19,11 +20,12 @@ public class NPC extends Animate {
 	public NPC(String type){
 		super(type);
 		name = "Bob"/*firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0))*/;
-		delay -= Global.rand(100, 0) * .001f;
+		//time -= Global.rand(15, 0) * .8f;
+		System.out.println(time);
 		canMove = true;
 		moves = new Stack<Node>();
 		drop = Global.rand(2, 0) == 1 ? new ItemPacket("Gold") : new ItemPacket("Gem");
-		delay = 2.6f;
+		delay = 2.6f + Global.rand(100, 0) * .005f;
 	}
 	
 	public ItemPacket getDrop(){
@@ -83,16 +85,22 @@ public class NPC extends Animate {
 		collision = false;
 		if(PragmaServer.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
-		if(PragmaServer.map.marks.get(getX(), getY()) != -1){
+		if(PragmaServer.map.marks.get(getX(), getY()) != -1 && PragmaServer.map.marks.get(getX(), getY()) != ID){
 			if(PragmaServer.map.items.containsKey(PragmaServer.map.marks.get(getX(), getY())) || PragmaServer.map.chests.containsKey(PragmaServer.map.marks.get(getX(), getY()))){
-				System.out.println("hi");
-				collision = true;
+			}
+			else if(PragmaServer.map.npcs.containsKey(PragmaServer.map.marks.get(getX(), getY()))){
+					System.out.println("hit another npc!");
+					MessagePacket packet = new MessagePacket();
+					packet.callerID = ID;
+					packet.receiverID = PragmaServer.map.npcs.get(PragmaServer.map.marks.get(getX(),  getY())).ID;
+					packet.message = PragmaServer.map.npcs.get(PragmaServer.map.marks.get(getX(),  getY())).getMessage(packet.callerID);
+					PragmaServer.server.sendToAllTCP(packet);
 			}
 			else{
 				if(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())) != null)
 					attack(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())));
-				collision = true;
 			}
+			collision = true;
 		}
 		
 		if(collision){
@@ -193,7 +201,9 @@ public class NPC extends Animate {
 		// Gets the first square and all of the options around it that arn't blocked or already in open
 		for(int i=parent.x-32; i<=parent.x+32; i+=32)
 			for(int j=parent.y-32; j<=parent.y+32; j+=32)
-				if(!(PragmaServer.map.getTile(i, j).isBlocked() || PragmaServer.map.npcs.get(PragmaServer.map.marks.get(i, j)) instanceof NPC || (i == parent.x && j == parent.y))){
+				if(!(PragmaServer.map.getTile(i, j).isBlocked() ||  PragmaServer.map.chests.containsKey(PragmaServer.map.marks.get(i, j))
+						|| PragmaServer.map.items.containsKey(PragmaServer.map.marks.get(i, j))
+						|| PragmaServer.map.npcs.containsKey(PragmaServer.map.marks.get(i, j)) || (i == parent.x && j == parent.y))){
 					flag = false;
 					for(int q=0; q<closed.size(); q++)
 						if(closed.get(q).x == i && closed.get(q).y == j){

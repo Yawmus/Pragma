@@ -53,11 +53,11 @@ public class Play extends Listener implements Screen{
 	public void show() {
 		manager = new EntityManager(this);
 		
-		Global.camera.setToOrtho(false);    
+		/*Global.camera.setToOrtho(false);    
 		System.out.print("IP?: ");
 		String ip = in.nextLine();
 		if(!ip.equals(""))
-			Global.IP = ip;
+			Global.IP = ip;*/
 
 		map = new Map();
 		clientWrapper = new ClientWrapper();

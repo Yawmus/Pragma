@@ -27,7 +27,10 @@ public class Network extends Listener {
 	public void received(Connection c, Object o){
 		if(o instanceof MessagePacket){
 			MessagePacket packet = (MessagePacket) o;
-			Play.map.players.get(packet.ID).setMessage(packet.message);
+			if(Play.map.players.containsKey(packet.receiverID))
+				Play.map.players.get(packet.receiverID).setMessage(packet.message);
+			else if(Play.map.npcs.containsKey(packet.receiverID))
+				Play.map.npcs.get(packet.receiverID).setMessage(packet.message);
 		}
 		else if(o instanceof RemoveItemPacket){
 			RemoveItemPacket packet = (RemoveItemPacket) o;

@@ -8873,3 +8873,6 @@ org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 122; Content is not 
 	at org.eclipse.core.internal.jobs.JobManager.endJob(JobManager.java:647)
 	at org.eclipse.core.internal.jobs.WorkerPool.endJob(WorkerPool.java:105)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:70)
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2013-11-30 10:50:44.623
+!MESSAGE com.android.ide.eclipse.adt

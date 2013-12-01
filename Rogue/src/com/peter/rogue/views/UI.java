@@ -67,7 +67,6 @@ public class UI{
 		}
 		
 		for(MPPlayer mpPlayer : Play.map.players.values()){
-			//System.out.println(npc.ID);
 			if(mpPlayer.canDraw){
 				if(mpPlayer.statusFlag){
 					Global.mapShapes.begin(ShapeType.Filled);

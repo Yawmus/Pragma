@@ -144,12 +144,13 @@ public class Player extends Animate implements InputProcessor {
 			if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
 				if(isHostile())
 					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
-				else
+				else{
 					if(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())) instanceof Shopkeep){
 						setMenu("Barter");
 						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 					}
-				setMessage((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+					requestMessage(Play.map.npcs.get(Play.map.marks.get((int) getX(), (int) getY())));
+				}
 				collision = true;
 			}
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof MPPlayer){
@@ -283,7 +284,7 @@ public class Player extends Animate implements InputProcessor {
 				message = messageBuffer;
 				MessagePacket packet = new MessagePacket();
 				packet.message = message;
-				packet.ID = ID;
+				packet.receiverID = ID;
 				Play.clientWrapper.client.sendUDP(packet);
 			}
 			messageBuffer = new String();
@@ -307,11 +308,6 @@ public class Player extends Animate implements InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return true;
-	}
-	
-	public void setMessage(String message){
-		if(!messageFlag)
-			this.message = message;
 	}
 	
 	public String getMessageBuffer(){

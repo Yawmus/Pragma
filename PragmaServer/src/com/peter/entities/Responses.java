@@ -1,6 +1,6 @@
 package com.peter.entities;
 
-import com.peter.rogue.Global;
+import com.peter.server.Global;
 
 public class Responses{
 	
