@@ -1,9 +1,0 @@
-package com.peter.packets;
-
-import java.util.ArrayList;
-
-import com.peter.inventory.Item;
-
-public class MapPacket{
-	public ArrayList<Item> items;
-}

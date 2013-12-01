@@ -1,7 +1,0 @@
-package com.peter.rogue;
-
-public class Packet {
-	public static class PacketLoginRequest{}
-	public static class PacketLoginAccepted{}
-	public static class PacketMessage{}
-}

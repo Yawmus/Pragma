@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;jacoProj10.JavaAplication8p&apos; to &apos;jacoProj10&apos;&#x0D;&#x0A;- Original project: &apos;jacoProj10&apos;&#x0D;&#x0A;- Original element: &apos;jacoProj10.JavaAplication8p&apos;&#x0D;&#x0A;- Renamed element: &apos;jacoProj10.jacoProj10&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;JavaAplication8p&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;jacoProj10{JavaAplication8p.java[JavaAplication8p" matchStrategy="1" name="jacoProj10" qualified="false" references="true" similarDeclarations="false" stamp="1384756701994" textual="false" version="1.0"/>
-</session>

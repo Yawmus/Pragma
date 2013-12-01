@@ -1,6 +1,0 @@
-package com.peter.packets;
-
-public class ItemPacket {
-	public String name;
-	public int x, y;
-}

@@ -1,7 +1,0 @@
-package com.peter.packets;
-
-public class Snippet {
-	
-	public Connection connection;
-}
-

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move element &apos;1.png&apos; to &apos;Rogue-desktop/assets/maps&apos;&#x0D;&#x0A;- Original project: &apos;Rogue-desktop&apos;&#x0D;&#x0A;- Destination element: &apos;Rogue-desktop/assets/maps&apos;&#x0D;&#x0A;- Original element: &apos;1.png&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move file" destination="/assets&lt;maps" element1="assets/img/1.png" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1384973604808" units="0" version="1.0"/>
-</session>
