@@ -1,7 +1,0 @@
-package com.peter.packets;
-
-import com.peter.inventory.Item;
-
-public class ItemPacket {
-	public static Item GEM = new Item("Gem", 0, 10, "asterisk.png");
-}

@@ -1,9 +1,0 @@
-package com.peter.entities;
-
-import com.peter.inventory.Item;
-
-public class PacketToObject {
-	public Item itemConvert(){
-		
-	}
-}
