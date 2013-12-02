@@ -4,6 +4,7 @@ public class ItemPacket implements Comparable<ItemPacket>{
 	public String name;
 	public int x, y;
 	public Integer ID;
+	public int floor;
 	public ItemPacket(){}
 	public ItemPacket(String name, int x, int y, int ID){
 		this.name = name;

@@ -1,14 +1,22 @@
 package com.peter.rogue.network;
 
+import java.util.HashMap;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.peter.entities.Entity;
 import com.peter.entities.EntityManager;
+import com.peter.entities.NPC;
 import com.peter.entities.Shopkeep;
+import com.peter.inventory.Chest;
+import com.peter.inventory.Item;
+import com.peter.map.Marks;
 import com.peter.packets.AddNPCPacket;
 import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
+import com.peter.packets.ExperiencePacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -44,6 +52,7 @@ public class Network extends Listener {
 		}
 		else if(o instanceof RemovePlayerPacket){
 			RemovePlayerPacket packet = (RemovePlayerPacket) o;
+			Play.map.marks.find(packet.ID, -1);
 			Play.map.database.remove(packet.ID);
 			Play.map.players.remove(packet.ID);
 		}
@@ -76,6 +85,15 @@ public class Network extends Listener {
 			Play.map.npcs.remove(packet.ID);
 		}
 		else if(o instanceof MapPacket){
+			Play.map.chests = new HashMap<Integer, Chest>();
+			Play.map.items = new HashMap<Integer, Item>();
+			Play.map.npcs = new HashMap<Integer, NPC>();
+			Play.map.database = new HashMap<Integer, Entity>();
+			Play.map.database.put(c.getID(), EntityManager.player);
+			
+			Play.map.marks = new Marks();
+			Play.map.marks.put(c.getID(), (int) EntityManager.player.getX(), (int) EntityManager.player.getY());
+			
 			MapPacket packet = (MapPacket) o;
 			for(ItemPacket item : packet.items.values())
 				EntityManager.itemQueue.add(item);
@@ -87,6 +105,7 @@ public class Network extends Listener {
 			for(int x=0; x<Play.map.WIDTH; x++)
 				for(int y=0; y<Play.map.HEIGHT; y++)
 					Play.map.init[x][y] = packet.tiles[x][y];
+			Play.map.initialize = true;
 		}
 		else if(o instanceof RemoveTradeItemPacket){
 			RemoveTradeItemPacket packet = (RemoveTradeItemPacket) o;
@@ -102,6 +121,11 @@ public class Network extends Listener {
 		else if(o instanceof ItemPacket){
 			ItemPacket packet = (ItemPacket) o;
 			EntityManager.itemQueue.add(packet);
+		}
+		else if(o instanceof ExperiencePacket){
+			ExperiencePacket packet = (ExperiencePacket) o;
+			EntityManager.player.getStats().mutateExperience(packet.amount);
+			EntityManager.player.setAlert("You killed " + packet.name + "!", false);
 		}
 		else if(o instanceof AttackPacket){
 			AttackPacket packet = (AttackPacket) o;

@@ -1,6 +1,10 @@
 package com.peter.entities;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
 import java.util.Stack;
 
 import com.peter.packets.AttackPacket;
@@ -16,16 +20,43 @@ public class NPC extends Animate {
 	protected boolean canMove;
 	private Stack<Node> moves;
 	private ItemPacket drop;
+	public Animate attacker;
+
+	protected static LinkedList<String> firstNames;
+	protected static LinkedList<String> lastNames;
+	private static Scanner in;
+	
+	static{
+		firstNames = new LinkedList<String>();
+		lastNames = new LinkedList<String>();
+		
+		try {
+			in = new Scanner(new File("C:/Users/Yawmus/Desktop/pragmaFiles/firstName.txt"));
+			while(in.hasNextLine())
+				firstNames.add(new String(in.nextLine()));
+			in.close();
+			in = new Scanner(new File("C:/Users/Yawmus/Desktop/pragmaFiles/lastName.txt"));
+			
+			while(in.hasNextLine())
+				lastNames.add(new String(in.nextLine()));
+			in.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public NPC(String type){
 		super(type);
-		name = "Bob"/*firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0))*/;
+		name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));
 		//time -= Global.rand(15, 0) * .8f;
-		System.out.println(time);
 		canMove = true;
 		moves = new Stack<Node>();
 		drop = Global.rand(2, 0) == 1 ? new ItemPacket("Gold") : new ItemPacket("Gem");
 		delay = 2.6f + Global.rand(100, 0) * .005f;
+
+        stats.setExperience(1);
+        stats.setMaxHitpoints(10);
+        stats.setHitpoints(10);
 	}
 	
 	public ItemPacket getDrop(){
@@ -86,14 +117,14 @@ public class NPC extends Animate {
 		if(PragmaServer.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
 		if(PragmaServer.map.marks.get(getX(), getY()) != -1 && PragmaServer.map.marks.get(getX(), getY()) != ID){
-			if(PragmaServer.map.items.containsKey(PragmaServer.map.marks.get(getX(), getY())) || PragmaServer.map.chests.containsKey(PragmaServer.map.marks.get(getX(), getY()))){
+			if(PragmaServer.map.itemSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY())) || PragmaServer.map.chestSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY()))){
 			}
-			else if(PragmaServer.map.npcs.containsKey(PragmaServer.map.marks.get(getX(), getY()))){
-					System.out.println("hit another npc!");
+			else if(PragmaServer.map.npcSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY()))){
 					MessagePacket packet = new MessagePacket();
 					packet.callerID = ID;
-					packet.receiverID = PragmaServer.map.npcs.get(PragmaServer.map.marks.get(getX(),  getY())).ID;
-					packet.message = PragmaServer.map.npcs.get(PragmaServer.map.marks.get(getX(),  getY())).getMessage(packet.callerID);
+					packet.floor = floor;
+					packet.receiverID = PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(),  getY())).ID;
+					packet.message = PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(),  getY())).getMessage(packet.callerID);
 					PragmaServer.server.sendToAllTCP(packet);
 			}
 			else{
@@ -132,6 +163,7 @@ public class NPC extends Animate {
 		AttackPacket packet = new AttackPacket();
 		packet.attackerID = ID;
 		packet.receiverID = entity.ID;
+		packet.floor = floor;
 		packet.amount = amount;
 		PragmaServer.server.sendToAllUDP(packet);
 		entity.getStats().mutateHitpoints(amount);
@@ -201,9 +233,9 @@ public class NPC extends Animate {
 		// Gets the first square and all of the options around it that arn't blocked or already in open
 		for(int i=parent.x-32; i<=parent.x+32; i+=32)
 			for(int j=parent.y-32; j<=parent.y+32; j+=32)
-				if(!(PragmaServer.map.getTile(i, j).isBlocked() ||  PragmaServer.map.chests.containsKey(PragmaServer.map.marks.get(i, j))
-						|| PragmaServer.map.items.containsKey(PragmaServer.map.marks.get(i, j))
-						|| PragmaServer.map.npcs.containsKey(PragmaServer.map.marks.get(i, j)) || (i == parent.x && j == parent.y))){
+				if(!(PragmaServer.map.getTile(i, j).isBlocked() ||  PragmaServer.map.chestSets.get(floor).containsKey(PragmaServer.map.marks.get(i, j))
+						|| PragmaServer.map.itemSets.get(floor).containsKey(PragmaServer.map.marks.get(i, j))
+						|| PragmaServer.map.npcSets.get(floor).containsKey(PragmaServer.map.marks.get(i, j)) || (i == parent.x && j == parent.y))){
 					flag = false;
 					for(int q=0; q<closed.size(); q++)
 						if(closed.get(q).x == i && closed.get(q).y == j){

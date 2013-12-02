@@ -16,6 +16,7 @@ import com.peter.entities.Entity;
 import com.peter.entities.Player;
 import com.peter.packets.RemoveTradeItemPacket;
 import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 
 public class Chest extends Entity {
@@ -115,12 +116,12 @@ public class Chest extends Entity {
 						// In essence -> removes item from chest and gives to player
 						if(trade instanceof Player){
 							if(((Player) trade).getInventory().checkIsFull(getItems().get(i)))
-								System.out.println("Backpack is full!");
+								((Player) trade).setAlert("Backpack is full!", true);
 							else{
 								RemoveTradeItemPacket tradeItem = new RemoveTradeItemPacket();
 								tradeItem.ID = ID;
 								tradeItem.index = i;
-								Play.clientWrapper.client.sendUDP(tradeItem);
+								Rogue.clientWrapper.client.sendUDP(tradeItem);
 								((Player) trade).getInventory().add(remove(i));
 							}
 						}

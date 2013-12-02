@@ -1,5 +1,6 @@
 package com.peter.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -22,16 +23,17 @@ import com.peter.rogue.Global;
 public class Map implements MapRenderer{
 	public Tile[][] tiles;
 	public byte[][] init;
-	protected String[][] visible;
+	//protected String[][] visible;
 	//private LevelData data;
 	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
 	protected Rectangle viewBounds;
 	protected TextureRegion region;
-	protected static int floor;
+	protected int floor;
 	public Marks marks;
-	private static boolean initialize = false;
+	public ArrayList<String[][]> visibleSets;
+	public boolean initialize = true;
 
 	public HashMap<Integer, MPPlayer> players;
 	public HashMap<Integer, NPC> npcs;
@@ -45,114 +47,69 @@ public class Map implements MapRenderer{
 		region = new TextureRegion();
 		tiles = new Tile[WIDTH][HEIGHT];
 		init = new byte[WIDTH][HEIGHT];
-		visible = new String[WIDTH][HEIGHT];
-		//data = new LevelData();
+		//visible = new String[WIDTH][HEIGHT];
 		players = new HashMap<Integer, MPPlayer>();
 		npcs = new HashMap<Integer, NPC>();
 		items = new HashMap<Integer, Item>();
 		chests = new HashMap<Integer, Chest>();
 		database = new HashMap<Integer, Entity>();
 		
+		visibleSets = new ArrayList<String[][]>();
+		visibleSets.add(new String[WIDTH][HEIGHT]);
+		
 		marks = new Marks();
 		
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
-				visible[x][y] = "notVisited";
+				visibleSets.get(0)[x][y] = "notVisited";
 		
 		floor = 0;
-	}
-	
-	public void clean(){
-		for(int i=0; i<WIDTH; i++)
-			for(int j=0; j<HEIGHT; j++)
-				tiles[i][j] = Tile.BLANK;
-		for(int i=0; i<WIDTH; i++)
-			for(int j=0; j<HEIGHT; j++)
-				visible[i][j] = "notVisited";
-		/*items.clear();
-		chests.clear();
-		npcs.clear();*/
 	}
 	public Entity get(Integer ID){
 		if(database.containsKey(ID))
 			return database.get(ID);
 		return null;
 	}
-	/*
-	private void baseFloor(){
-		int seaX = WIDTH-9, seaY = 1;
-		for(int x=0; x<WIDTH; x++)
-			for(int y=0; y<HEIGHT; y++)
-				if(y == 0 || y == HEIGHT-1 || x == 0 || x == WIDTH-1)
-					tiles[x][y] = Tile.WALL;
-				else
-					tiles[x][y] = Tile.GROUND;
-		
-		createRoom(seaX-11, HEIGHT-12, seaX-3, HEIGHT-3, Tile.ONE);
-		createRoom(seaX-11, 4, seaX-3, 12, Tile.DOOR);
-		createRoom(12, 9, 20, 14, Tile.DOOR);
 
-
-		for(int x=WIDTH/2-1; x<=WIDTH/2+1; x++)
-			for(int y=HEIGHT/2-1; y<=HEIGHT/2+1; y++)
-				tiles[x][y] = Tile.WATER;
-		
-		for(int x=seaX; x<WIDTH-1; x++)
-			for(int y=seaY; y<HEIGHT-1; y++)
-				tiles[x][y] = Tile.WATER;
-		
-		for(int y=0; y<HEIGHT-1; y++)
-			tiles[WIDTH-1][y] = Tile.BLANK;
-		
-		
-		tiles[24][10] = Tile.DOWN;
-	}
-	
-	
-	
-	private void createRoom(int x, int y, int dx, int dy, Tile type){
-		for(int i=x; i<=dx; i++)
-			for(int j=y; j<=dy; j++)
-				if(j == y || j == dy || i == x || i == dx)
-					tiles[i][j] = Tile.WALL;
-				else
-					tiles[i][j] = Tile.GROUND;
-		switch(Global.rand(4, 0)){
-		case 0:
-			tiles[x][(y + dy)/2] = type;
-			break;
-		case 1:
-			tiles[x + (dx - x)][(y + dy)/2] = type;
-			break;
-		case 2:
-			tiles[(x + dx)/2][y] = type;
-			break;
-		case 3:
-			tiles[(x + dx)/2][y + (dy - y)] = type;
-			break;
-		}
-	}*/
-	
 	public void draw(){
-		if(!initialize){
+		if(initialize){
 			for(int x=0; x<WIDTH; x++)
 				for(int y=0; y<HEIGHT; y++)
 					tiles[x][y] = PacketToObject.tileConverter(init[x][y]);
-			initialize = true;
+			initialize = false;
 		}
 		for(int x=(int) (Global.camera.position.x/32 -  Gdx.graphics.getWidth()/64) > 0 ? (int) (Global.camera.position.x/32 - Gdx.graphics.getWidth()/64) : 0;
 		        x<WIDTH && x<(int) (Global.camera.position.x/32 + Gdx.graphics.getWidth()/64) +1; x++)
 			for(int y=(int) (Global.camera.position.y/32 -  Gdx.graphics.getHeight()/64) + 2 > 0 ? (int) (Global.camera.position.y/32 - Gdx.graphics.getHeight()/64) + 2 : 0;
 			        y<HEIGHT && y<(int) (Global.camera.position.y/32 + Gdx.graphics.getHeight()/64) + 1; y++){
-				if(visible[x][y].equals("visited")){
+				if(visibleSets.get(floor)[x][y].equals("visited")){
 					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
-					visible[x][y] = "hasVisited";
+					visibleSets.get(floor)[x][y] = "hasVisited";
 				}
-				else if(visible[x][y].equals("hasVisited"))
+				else if(visibleSets.get(floor)[x][y].equals("hasVisited"))
 					spriteBatch.draw(tiles[x][y].getVisiedTexture(), 32 * x, 32 * y);
 				else
 					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y);
 			}
+
+		
+		for(Item item : items.values())
+			if(item.canDraw)
+				item.draw(spriteBatch);
+		for(NPC npc : npcs.values())
+			if(npc.canDraw)
+				npc.draw(spriteBatch);
+			else
+				npc.update(Gdx.graphics.getDeltaTime());
+		for(Chest chest : chests.values())
+			if(chest.canDraw)
+				chest.draw(spriteBatch);
+		for(MPPlayer mpPlayer : players.values())
+			if(mpPlayer.canDraw)
+				mpPlayer.draw(spriteBatch);
+			else
+				mpPlayer.update(Gdx.graphics.getDeltaTime());
+		
 	}
 	
 	// ------------- Getters -------------
@@ -166,8 +123,19 @@ public class Map implements MapRenderer{
 		return viewBounds;
 	}
 	
-	public static int getFloor(){
+	public int getFloor(){
 		return floor;
+	}
+	
+	public void mutateFloor(int amount){
+		floor += amount;
+		if(floor >= visibleSets.size()){
+			System.out.println("hi");
+			visibleSets.add(new String[WIDTH][HEIGHT]);
+			for(int x=0; x<WIDTH; x++)
+				for(int y=0; y<HEIGHT; y++)
+					visibleSets.get(floor)[x][y] = "notVisited";
+		}
 	}
 	
 	public SpriteBatch getSpriteBatch () {
@@ -198,7 +166,7 @@ public class Map implements MapRenderer{
 				return get(ID).getName();
 		else if(getTile(x, y) != null)
 			return getTile(x, y).getName();
-		return "";
+		return "a";
 	}
 	
 	@Override
@@ -214,6 +182,6 @@ public class Map implements MapRenderer{
 	}
 
 	public void setVisible(float x, float y, String visible) {
-		this.visible[(int)(x/32)][(int)(y/32)] = visible;
+		this.visibleSets.get(floor)[(int)(x/32)][(int)(y/32)] = visible;
 	}
 }

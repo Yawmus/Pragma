@@ -15,7 +15,6 @@ import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
 import com.peter.inventory.Chest;
-import com.peter.map.Map;
 import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
 import com.peter.rogue.screens.Play;
@@ -58,7 +57,7 @@ public class UI{
 				Play.map.getSpriteBatch().begin();
 				Global.font.draw(Play.map.getSpriteBatch(), npc.getMessage(), npc.getX(), npc.getY());
 				if(npc.getStatus() != null)
-					if(Math.abs(npc.getStatus()) < 10)
+					if(npc.getStatus() < 10)
 						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 4, npc.getY() + 26);
 					else
 						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 7, npc.getY() + 26);
@@ -86,7 +85,7 @@ public class UI{
 				Play.map.getSpriteBatch().begin();
 				Global.font.draw(Play.map.getSpriteBatch(), mpPlayer.getMessage(), mpPlayer.getX(), mpPlayer.getY());
 				if(mpPlayer.getStatus() != null)
-					if(Math.abs(mpPlayer.getStatus()) < 10)
+					if(mpPlayer.getStatus() < 10)
 						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(mpPlayer.getStatus()))).toString(), mpPlayer.getX() - 4, mpPlayer.getY() + 26);
 					else
 						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(mpPlayer.getStatus()))).toString(), mpPlayer.getX() - 7, mpPlayer.getY() + 26);
@@ -115,7 +114,7 @@ public class UI{
 		Play.map.getSpriteBatch().begin();
 		Global.font.draw(Play.map.getSpriteBatch(), player.getMessage(), player.getX(), player.getY());
 		if(player.getStatus() != null)
-			if(Math.abs(player.getStatus()) < 10)
+			if(player.getStatus() < 10)
 				Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 4, player.getY() + 26);
 			else
 				Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(player.getStatus()))).toString(), player.getX() - 7, player.getY() + 26);
@@ -167,18 +166,61 @@ public class UI{
 				
 				Global.screen.begin();
 				Global.gothicFont.setScale(1.1f);
-				Global.gothicFont.draw(Global.screen, player.getMessageBuffer(), (Global.SCREEN_WIDTH/2) - Global.font.getBounds(player.getMessageBuffer()).width/1.3f, 208);
+				Global.gothicFont.draw(Global.screen, player.getMessageBuffer(), (Global.SCREEN_WIDTH/2) -420, 207);
 				Global.gothicFont.setScale(1f);
 				Global.screen.end();
+			}
+			else if(player.getMenu().equals("MainMenu")){
+				Gdx.gl.glEnable(GL10.GL_BLEND);
+			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+				Global.screenShapes.begin(ShapeType.Filled);
+				Global.screenShapes.setColor(.1f, .1f, .1f, .9f);
+				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, Global.SCREEN_HEIGHT-300);
+				Global.screenShapes.end();
+				Global.screenShapes.begin(ShapeType.Line);
+				Global.screenShapes.setColor(0.25f, 0.25f, 0.25f, 1);
+				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-600, Global.SCREEN_HEIGHT-300);
+				Global.screenShapes.end();
+				Gdx.gl.glDisable(GL10.GL_BLEND);
 			}
 		}
 		else
 			player.getInventory().setTrade(null);
 		
+		if(player.hasAlert()){
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			Global.screenShapes.begin(ShapeType.Filled);
+			Global.screenShapes.setColor(0, 0, 0, .9f);
+			Global.screenShapes.rect((Global.SCREEN_WIDTH/2) - Global.gothicFont.getBounds(player.getAlertMessage()).width, 165, 
+					Global.gothicFont.getBounds(player.getAlertMessage()).width * 2, 45);
+			Global.screenShapes.end();
+			Global.screenShapes.begin(ShapeType.Line);
+			Global.screenShapes.setColor(0.25f, 0.25f, 0.25f, 1);
+			Global.screenShapes.rect((Global.SCREEN_WIDTH/2) - Global.gothicFont.getBounds(player.getAlertMessage()).width, 165, 
+					Global.gothicFont.getBounds(player.getAlertMessage()).width * 2, 45);
+			Global.screenShapes.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			
+			Global.screen.begin();
+			if(player.isError())
+				Global.gothicFont.setColor(Color.RED);
+			else
+				Global.gothicFont.setColor(Color.GREEN);
+			Global.gothicFont.setScale(1.1f);
+			Global.gothicFont.draw(Global.screen, player.getAlertMessage(), 
+					(Global.SCREEN_WIDTH/2) - Global.gothicFont.getBounds(player.getAlertMessage()).width/2, 215);
+			Global.gothicFont.setScale(1f);
+			Global.gothicFont.setColor(Color.WHITE);
+			Global.screen.end();
+		}
+		
 		update(Gdx.graphics.getDeltaTime());
 	}
 	
 	public void update(float delta){
+
+		
 	}
 	
 	public void display(SpriteBatch spriteBatch, Player player){
@@ -205,7 +247,7 @@ public class UI{
 			Global.gothicFont.draw(spriteBatch, "Hostile", 755, 80);
 		else
 			Global.gothicFont.draw(spriteBatch, "Friendly", 755, 80);
-		Global.gothicFont.draw(spriteBatch, "Floor: " + Map.getFloor(), 670, 50);
+		Global.gothicFont.draw(spriteBatch, "Level: " + Play.map.getFloor(), 670, 50);
 		
 		spriteBatch.end();
 	}

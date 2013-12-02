@@ -19,7 +19,9 @@ import com.peter.packets.MPPlayer;
 import com.peter.packets.MessagePacket;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
+import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 
 public class Player extends Animate implements InputProcessor {
@@ -28,25 +30,26 @@ public class Player extends Animate implements InputProcessor {
 	private String info;
 	private String menu = "";
 	private boolean menuActive = false;
-	private Inventory inventory = new Inventory();
+	private Inventory inventory = new Inventory(this);
 	private ArrayList<Ray> rays = new ArrayList<Ray>();
 	private Entity menuObject;
 	private int viewDistance;
-	private boolean hostile;
+	private boolean hostile, error;
 	private float hunger;
 	public PlayerPacket packet;
 	private String messageBuffer;
+	private String alert;
+	private float alertDelay = 0;
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
 	
 	public Player(String filename){
 		super(filename, "Player");
 		messageFlag = false;
 		name = "Adelaide";
-		messageBuffer = new String();
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
 		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		packet = new PlayerPacket();
-		info = new String();
+		info = alert = messageBuffer = new String();
 		viewDistance = 7;
 		hostile = false;
 		stats.setDexterity(0);
@@ -102,6 +105,16 @@ public class Player extends Animate implements InputProcessor {
 			statusDelay += delta;
 		}
 		
+
+		if(alertDelay > 2){
+			setAlert("", true);
+			alertDelay = 0;
+		}
+		
+		if(getAlertMessage() != ""){
+			alertDelay += delta;
+		}
+		
 		hunger -= delta/8000;
 		
 		if(time >= delay && !getMenu().equals("Chat")){
@@ -134,11 +147,20 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void checkCollision(){
 		collision = false;
+		menuActive = false;
+		setMenu("");
 		if(Play.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
 		else if(Play.map.getTile(getX(), getY()).hasStairs() && !Play.map.getTile(oldX, oldY).hasStairs()){
-			if(Play.map.getTile(getX(), getY()).direction()){
-			}
+			if(Play.map.getTile(getX(), getY()).direction())
+				Play.map.mutateFloor(-1);
+			else
+				Play.map.mutateFloor(1);
+			RequestFloorPacket packet = new RequestFloorPacket();
+			packet.floor = Play.map.getFloor();
+			packet.x = (int) getX();
+			packet.y = (int) getY();
+			Rogue.clientWrapper.client.sendTCP(packet);
 		}
 		if(!(Play.map.marks.get((int)getX(), (int)getY()) == -1 || Play.map.marks.get((int)getX(), (int)getY()) == ID)){
 			if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
@@ -146,6 +168,7 @@ public class Player extends Animate implements InputProcessor {
 					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 				else{
 					if(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())) instanceof Shopkeep){
+						menuActive = !menuActive;
 						setMenu("Barter");
 						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 					}
@@ -167,13 +190,16 @@ public class Player extends Animate implements InputProcessor {
 					item.ID = temp.ID;
 					item.x = (int) temp.getX();
 					item.y = (int) temp.getY();
-					Play.clientWrapper.client.sendUDP(item);
+					Rogue.clientWrapper.client.sendUDP(item);
 					inventory.add(temp);
 				}
-				else
+				else{
+					setAlert("Backpack is full!", true);
 					collision = true;
+				}
 			}
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
+				menuActive = !menuActive;
 				setMenu("Chest");
 				setMenuObject((Chest) Play.map.chests.get(Play.map.marks.get((int)getX(), (int)getY())));
 				collision = true;
@@ -192,7 +218,7 @@ public class Player extends Animate implements InputProcessor {
 			packet.x = (int) getX();
 			packet.y = (int) getY();
 			Play.map.marks.put(ID, (int)getX(), (int)getY());
-			Play.clientWrapper.client.sendUDP(packet);
+			Rogue.clientWrapper.client.sendUDP(packet);
 		}
 		oldX = (int) getX();
 		oldY = (int) getY();
@@ -211,12 +237,9 @@ public class Player extends Animate implements InputProcessor {
 		AttackPacket packet = new AttackPacket();
 		packet.attackerID = ID;
 		packet.receiverID = entity.ID;
+		packet.floor = Play.map.getFloor();
 		packet.amount = amount;
-		Play.clientWrapper.client.sendUDP(packet);
-		entity.getStats().mutateHitpoints(amount);
-		entity.setStatus(amount);
-		if(entity.getStats().getHitpoints() <= 0)
-			stats.addExperience(entity.type);
+		Rogue.clientWrapper.client.sendUDP(packet);
 	}
 	
     public void light(){
@@ -259,16 +282,39 @@ public class Player extends Animate implements InputProcessor {
 	
 	@Override
 	public boolean keyDown(int keycode) {
+		switch(keycode){
+		case Keys.TAB:
+			Global.camera.zoom += .4;
+			break;
+		case Keys.F10:
+			if(getMenu().equals("MainMenu")){
+				setMenu("");
+				menuActive = false;
+			}
+			else{
+				menuActive = true;
+				setMenu("MainMenu");
+			}
+			break;
+		}
 		if(!getMenu().equals("Chat"))
 			switch(keycode){
 			case Keys.G:
-				setMenu("Inventory");
+				if(getMenu().equals("Chest")){
+					menuActive = true;
+					setMenu("Inventory");
+				}
+				else if(getMenu().equals("Inventory")){
+					setMenu("");
+					menuActive = false;
+				}
+				else{
+					menuActive = true;
+					setMenu("Inventory");
+				}
 				break;
 			case Keys.F:
 				hostile = !hostile;
-				break;
-			case Keys.TAB:
-				Global.camera.zoom += .4;
 				break;
 			case Keys.ESCAPE:
 				System.exit(0);
@@ -277,15 +323,21 @@ public class Player extends Animate implements InputProcessor {
 			case Keys.SHIFT_RIGHT:
 				delay = .5f;
 				break;
+			case Keys.ENTER:
+				setMenu("Chat");
+				menuActive = true;
 			}
-		if(keycode == Keys.ENTER){
+		else if(keycode == Keys.ENTER){
 			setMenu("Chat");
+			menuActive = !menuActive;
 			if(!messageBuffer.isEmpty()){
 				message = messageBuffer;
+				messageDelay = 0;
 				MessagePacket packet = new MessagePacket();
 				packet.message = message;
 				packet.receiverID = ID;
-				Play.clientWrapper.client.sendUDP(packet);
+				packet.floor = Play.map.getFloor();
+				Rogue.clientWrapper.client.sendUDP(packet);
 			}
 			messageBuffer = new String();
 		}
@@ -295,8 +347,10 @@ public class Player extends Animate implements InputProcessor {
 	@Override
 	public boolean keyTyped(char character) {
 		if(getMenu().equals("Chat") && character != 13){
-			if(character != 8)
-				messageBuffer += character;
+			if(character != 8){
+				if(Global.gothicFont.getBounds(messageBuffer).width < 750)
+					messageBuffer += character;
+			}
 			else
 				if(!messageBuffer.isEmpty())
 					messageBuffer = messageBuffer.substring(0, messageBuffer.length() - 1);
@@ -323,12 +377,11 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void setMenu(String request){
-		if(menu.isEmpty())
-			menu = request;
-		else
+		if(menu.equals("Chat"))
 			menu = "";
+		else
+			menu = request;
 		menuObject = null;
-		menuActive = !menuActive;
 	}
 	
 	public void setMenuActive(boolean menuActive){
@@ -413,5 +466,24 @@ public class Player extends Animate implements InputProcessor {
 			this.hunger = 1.01f;
 		else
 			this.hunger += amount;
+	}
+	
+	public boolean hasAlert(){
+		if(alert.isEmpty())
+			return false;
+		return true;
+	}
+	public String getAlertMessage(){
+		return alert;
+	}
+	public void setAlert(String alert, boolean error){
+		setError(error);
+		this.alert = alert;
+	}
+	private void setError(boolean error){
+		this.error = error;
+	}
+	public boolean isError(){
+		return error;
 	}
 }

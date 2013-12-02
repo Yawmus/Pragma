@@ -1,7 +1,5 @@
 package com.peter.rogue.screens;
 
-import java.util.Scanner;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -21,15 +19,12 @@ public class Play extends Listener implements Screen{
 	private FPSLogger fps;
 	
     private EntityManager manager;
-    public static Scanner in;
 	public static Map map;
-	public static ClientWrapper clientWrapper;
     
     
 	public Play(Rogue game){
 		fps = new FPSLogger();
 		fps.log();
-		in = new Scanner(System.in);
 	}
 	
 	@Override
@@ -52,17 +47,10 @@ public class Play extends Listener implements Screen{
 	@Override
 	public void show() {
 		manager = new EntityManager(this);
-		
-		/*Global.camera.setToOrtho(false);    
-		System.out.print("IP?: ");
-		String ip = in.nextLine();
-		if(!ip.equals(""))
-			Global.IP = ip;*/
 
 		map = new Map();
-		clientWrapper = new ClientWrapper();
+		Rogue.clientWrapper = new ClientWrapper();
 		manager.init();
-
 		
 		Log.set(Log.LEVEL_DEBUG);
 	}

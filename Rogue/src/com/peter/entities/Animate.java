@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.packets.MessagePacket;
-import com.peter.rogue.screens.Play;
+import com.peter.rogue.Rogue;
 
 public class Animate extends Entity{
 	protected Stats stats;
@@ -115,7 +115,7 @@ public class Animate extends Entity{
 			MessagePacket packet = new MessagePacket();
 			packet.callerID = ID;
 			packet.receiverID = npc.ID;
-			Play.clientWrapper.client.sendUDP(packet);
+			Rogue.clientWrapper.client.sendUDP(packet);
 		}
 	}
 	

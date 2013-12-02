@@ -15,7 +15,6 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MPPlayer;
-import com.peter.packets.PlayerPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
@@ -61,6 +60,7 @@ public class EntityManager{
 				for(int i=0; i<NPCQueue.peek().items.size(); i++)
 					((Shopkeep) newNPC).add(PacketToObject.itemConverter(NPCQueue.peek().items.get(i)));
 			}
+			newNPC.name = NPCQueue.peek().name;
 			newNPC.ID = NPCQueue.peek().ID;
 			newNPC.setPosition(NPCQueue.peek().x/32, NPCQueue.peek().y/32);
 			Play.map.npcs.put(NPCQueue.peek().ID, newNPC);
@@ -99,24 +99,6 @@ public class EntityManager{
 
 		Play.map.getSpriteBatch().begin();
 		Play.map.draw();
-		
-		for(Item item : Play.map.items.values())
-			if(item.canDraw)
-				item.draw(spriteBatch);
-		for(NPC npc : Play.map.npcs.values())
-			if(npc.canDraw)
-				npc.draw(spriteBatch);
-			else
-				npc.update(Gdx.graphics.getDeltaTime());
-		for(Chest chest : Play.map.chests.values())
-			if(chest.canDraw)
-				chest.draw(spriteBatch);
-		for(MPPlayer mpPlayer : Play.map.players.values())
-			if(mpPlayer.canDraw)
-				mpPlayer.draw(spriteBatch);
-			else
-				mpPlayer.update(Gdx.graphics.getDeltaTime());
-		
 		player.draw(spriteBatch);
 		Play.map.getSpriteBatch().end();
 
@@ -155,49 +137,21 @@ public class EntityManager{
 		
 		if(player.stats.getHitpoints() <= 0){
 			Global.gameOver = true;
-			PlayerPacket packet = new PlayerPacket();
-			packet.x = 0;
-			packet.y = 0;
-			packet.oldX = 0;
-			packet.oldY = 0;
-			Play.clientWrapper.client.sendUDP(packet);
-			player.death.play();
+			Rogue.clientWrapper.client.stop();
+			Rogue.clientWrapper.client.close();
+			//player.death.play();
 		}
     }
     
     public void init(){
 
 		player.setPosition(28, 7);
+		Play.map.marks.put(player.ID, (int) player.getX(), (int) player.getY());
 		Play.map.database.put(player.ID, player);
 		
 		ui = new UI(player);
     	Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
-		
-		/*
-		for(int i=0; i<Entity.map.getData().getCitizens(); i++){
-			randX = Global.rand(13, 3);
-			randY = Global.rand(7, 3);
-			Entity.map.npcs.add(new Citizen("c_.png"));
-			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-		}
-		
-		randX = Global.rand(13, 3);
-		randY = Global.rand(7, 3);
-		Entity.map.npcs.add(Shopkeep.Bartender);
-		Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-		
-		randX = Global.rand(13, 3);
-		randY = Global.rand(7, 3);
-		Entity.map.npcs.add(Shopkeep.Shopkeep);
-		Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-			
-    	for(int i=0; i<Entity.map.getData().getMonsters(); i++){
-			randX = Global.rand(13, 3);
-			randY = Global.rand(7, 3);
-			Entity.map.npcs.add(new Worm("tilda.png"));
-			Entity.map.npcs.get(Entity.map.npcs.size()-1).setPosition(randX, randY);
-    	}*/
 	}
     
     public void dispose(){

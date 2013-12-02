@@ -13,13 +13,6 @@ public class Stats{
 	
 	public Stats(){
 		setLevel(1);
-		setDexterity(5);
-		setExperience(0);
-		setStrength(5);
-		setHitpoints(10);
-		setMaxHitpoints(20);
-		setMaxExperience(100);
-		setDefense(0);
 		points = 0;
 	}
 

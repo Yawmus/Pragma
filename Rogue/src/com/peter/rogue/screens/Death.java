@@ -29,10 +29,10 @@ public class Death implements Screen{
 	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
    
 	    spriteBatch.begin();
-	    spriteBatch.draw(new Texture(Gdx.files.internal("img/skeleton.png")), 500, 0, 631, 670);
-	    gothicFont.setColor(Color.BLACK);
-	    gothicFont.draw(spriteBatch, "Dead", Global.SCREEN_WIDTH/4, Global.SCREEN_HEIGHT/2);
-	    gothicFont.draw(spriteBatch, "Press enter to continue", Global.SCREEN_WIDTH/4, Global.SCREEN_HEIGHT/2 - 40);
+	    spriteBatch.draw(new Texture(Gdx.files.internal("img/death.png")), 0, 0);
+	    gothicFont.setColor(Color.WHITE);
+	    gothicFont.draw(spriteBatch, "You died!", Global.SCREEN_WIDTH/2 - 40, Global.SCREEN_HEIGHT/2 + 40);
+	    gothicFont.draw(spriteBatch, "Press enter to respawn", Global.SCREEN_WIDTH/2 - 120, Global.SCREEN_HEIGHT/2);
 	    spriteBatch.end();
 	}
 

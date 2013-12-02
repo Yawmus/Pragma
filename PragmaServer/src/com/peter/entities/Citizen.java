@@ -4,13 +4,6 @@ public class Citizen extends NPC{
 
         public Citizen() {
         	super("Citizen");
-                //list = new HostilityList();
-                
-                
-                /*stats.setLevel(1);
-                stats.setHitpoints(10);
-                stats.setDexterity(5);
-                stats.setStrength(1);
-                stats.setExperience(100);*/
+            //list = new HostilityList();
         }
 }

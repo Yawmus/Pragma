@@ -18,6 +18,7 @@ import com.peter.entities.Shopkeep;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.rogue.Global;
+import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 
 public class Inventory {
@@ -35,8 +36,9 @@ public class Inventory {
 	public static final int BOX1_WIDTH = 150, BOX2_WIDTH = 165, HEIGHT = 300, WIDTH = 500;
 	public static final int ORIGIN_X = 670, ORIGIN_Y = 250, STATS = 5;
 	private Entity trade;
+	private Player player;
 	
-	public Inventory(){
+	public Inventory(Player player){
 		backpack = Backpack.SMALL;
 		items = new ArrayList<Item>();
 		collisions = new ArrayList<Rectangle>();
@@ -47,6 +49,7 @@ public class Inventory {
 			pointCollisions[i].setSize(8);
 		}
 		wallet = 0;
+		this.player = player;
 		add(new Wearable(Wearable.BREAST_PLATE));
 		add(new Wearable(Wearable.SHOES));
 		add(new Food(Food.BREAD));
@@ -69,7 +72,7 @@ public class Inventory {
 			items.add(item);
 		}
 		else
-			System.out.println("Backpack full!");
+			player.setAlert("Backpack full!", true);
 	}
 	public Item remove(int i){
 		weight -= items.get(i).getWeight();
@@ -253,10 +256,9 @@ public class Inventory {
 					// In essence -> sells the item, then adds it to shopkeep's inventory
 					if(trade instanceof Shopkeep){
 						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
-						System.out.println(trade.ID);
 						tradeItem.ID = trade.getID();
 						tradeItem.item = new ItemPacket(items.get(i).getName());
-						Play.clientWrapper.client.sendUDP(tradeItem);
+						Rogue.clientWrapper.client.sendUDP(tradeItem);
 						wallet += getItems().get(i).getValue();
 						((Shopkeep) trade).add(remove(i));
 					}
@@ -265,7 +267,7 @@ public class Inventory {
 						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 						tradeItem.ID = trade.getID();
 						tradeItem.item = new ItemPacket(items.get(i).getName());
-						Play.clientWrapper.client.sendUDP(tradeItem);
+						Rogue.clientWrapper.client.sendUDP(tradeItem);
 						((Chest) trade).add(remove(i));
 					}
 					else

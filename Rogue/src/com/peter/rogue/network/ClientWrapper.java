@@ -8,6 +8,7 @@ import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
+import com.peter.packets.ExperiencePacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -17,6 +18,7 @@ import com.peter.packets.RemoveItemPacket;
 import com.peter.packets.RemoveNPCPacket;
 import com.peter.packets.RemovePlayerPacket;
 import com.peter.packets.RemoveTradeItemPacket;
+import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.Global;
 
 public class ClientWrapper {
@@ -32,6 +34,7 @@ public class ClientWrapper {
 		network = new Network();
 		client.getKryo().register(PlayerPacket.class);
 		client.getKryo().register(NPCPacket.class);
+		client.getKryo().register(ExperiencePacket.class);
 		client.getKryo().register(AttackPacket.class);
 		client.getKryo().register(AddNPCPacket.class);
 		client.getKryo().register(RemoveNPCPacket.class);
@@ -39,6 +42,7 @@ public class ClientWrapper {
 		client.getKryo().register(AddPlayerPacket.class);
 		client.getKryo().register(RemovePlayerPacket.class);
 		client.getKryo().register(MapPacket.class);
+		client.getKryo().register(RequestFloorPacket.class);
 		client.getKryo().register(ItemPacket.class);
 		client.getKryo().register(ChestPacket.class);
 		client.getKryo().register(RemoveItemPacket.class);

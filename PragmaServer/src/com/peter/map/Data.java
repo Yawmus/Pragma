@@ -1,5 +1,6 @@
 package com.peter.map;
 
+
 public class Data {
     private int citizens, shopkeeps, monsters;
     

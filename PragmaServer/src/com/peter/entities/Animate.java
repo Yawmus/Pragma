@@ -1,8 +1,5 @@
 package com.peter.entities;
 
-import java.util.LinkedList;
-
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.server.PragmaServer;
 
@@ -11,8 +8,6 @@ public class Animate extends Entity{
 	protected Responses response;
 	protected int oldX, oldY;
 	public boolean collision;
-	protected static LinkedList<String> firstNames;
-	protected static LinkedList<String> lastNames;
 	protected float messageDelay = 0, statusDelay = 0, delay, time = 0;
 	public boolean messageFlag, statusFlag;
 	protected HostilityList list;
@@ -20,27 +15,11 @@ public class Animate extends Entity{
 	protected Integer status;
 	protected String target;
 	public static Vector3 pos = new Vector3();
-	public Animate attacker;
-	protected Sound death;
-	//private static Scanner in;
-	
-	static{
-		/*firstNames = new LinkedList<String>();
-		lastNames = new LinkedList<String>();
-		in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
-		while(in.hasNextLine())
-			firstNames.add(new String(in.nextLine()));
-		in.close();
-		in = new Scanner(Gdx.files.internal("data/lastName.txt").readString());
-		while(in.hasNextLine())
-			lastNames.add(new String(in.nextLine()));
-		in.close();*/
-	}
 	
 	public Animate(String type) {
 		super(type);
-		//list = new HostilityList();
 		stats = new Stats();
+		//list = new HostilityList();
 		//response = new Responses(type);
 		message = new String("");
 		status = null;
@@ -102,8 +81,8 @@ public class Animate extends Entity{
 	
 	
 	public String getMessage(Integer callerID){
-		if(PragmaServer.map.npcs.containsKey(callerID))
-			return response.call((Animate) PragmaServer.map.npcs.get(callerID), false);
+		if(PragmaServer.map.npcSets.get(floor).containsKey(callerID))
+			return response.call((Animate) PragmaServer.map.npcSets.get(floor).get(callerID), false);
 		else if(PragmaServer.map.players.containsKey(callerID))
 			return response.call((Animate) PragmaServer.map.players.get(callerID), false);
 		return null;

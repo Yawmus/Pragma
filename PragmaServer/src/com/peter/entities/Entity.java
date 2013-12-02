@@ -1,6 +1,5 @@
 package com.peter.entities;
 
-
 public class Entity{
 	
 	protected String type;
@@ -10,11 +9,13 @@ public class Entity{
 	protected int timeout = 0;
 	public boolean canDraw = false;
 	protected int x, y;
+	public int floor;
 	
 
 	public Entity(String type){
 		name = new String("null");
 		this.type = type;
+		floor = 0;
 	}
 
 	public String getName(){
@@ -40,6 +41,9 @@ public class Entity{
 	public void setPosition(int x, int y){
 		this.x = x*32;
 		this.y = y*32;
+	}
+	public void setName(String name){
+		this.name = name;
 	}
 }
 

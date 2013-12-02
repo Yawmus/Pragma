@@ -16,7 +16,6 @@ public class Entity extends Sprite{
 
 	public Entity(String filename, String type){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
-		name = new String("null");
 		this.type = type;
 	}
 	
@@ -42,5 +41,8 @@ public class Entity extends Sprite{
 		return type;
 	}
 
+	public void setName(String name){
+		this.name = name;
+	}
 }
 

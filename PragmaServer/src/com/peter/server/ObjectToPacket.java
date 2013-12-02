@@ -19,6 +19,6 @@ public class ObjectToPacket{
 			return 5;
 		else if(tile == Tile.UP)
 			return 6;
-		return 1;
+		return -1;
 	}
 }
