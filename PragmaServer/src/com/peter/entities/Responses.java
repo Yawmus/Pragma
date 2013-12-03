@@ -12,11 +12,9 @@ public class Responses{
 	}
 
 	public String call(Animate caller, boolean hostile){
-		if(receiver == "Player"){
-			return Player(caller, hostile);
-		}
-		if(receiver == "Shopkeep")
+		if(receiver == "Shopkeep"){
 			return Shopkeep(caller, hostile);
+		}
 		if(receiver == "Citizen")
 			return Citizen(caller, hostile);
 		
@@ -36,25 +34,12 @@ public class Responses{
 		
 		return "I don't have a response programmed";
 	}
-	
-	private String Player(Animate caller, boolean hostile){
-		dice = Global.rand(2, 0);
-		if(hostile)
-			switch(dice){
-			case 0:
-				return "Keep to yourself, bud.";
-			case 1:
-				return "You're going to regret that.";
-			}
-		return "";
-	}
-	
 	private String Shopkeep(Animate caller, boolean hostile){
 		dice = Global.rand(4, 0);
 		if(hostile)
 			switch(dice){
 			case 0:
-				return "Heavens!";
+				return "Leave me alone!";
 			case 1:
 				return "Help!";
 			case 2:

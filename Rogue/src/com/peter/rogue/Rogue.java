@@ -25,11 +25,11 @@ public class Rogue extends Game{
 		in = new Scanner(System.in);
 		splash = new Splash(this);
 
-		Global.camera.setToOrtho(false);    
+		/*Global.camera.setToOrtho(false);    
 		System.out.print("IP?: ");
 		String ip = in.nextLine();
 		if(!ip.equals(""))
-			Global.IP = ip;
+			Global.IP = ip;*/
 		
 		setScreen(new Play(this));
 

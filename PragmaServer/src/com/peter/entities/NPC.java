@@ -21,6 +21,8 @@ public class NPC extends Animate {
 	private Stack<Node> moves;
 	private ItemPacket drop;
 	public Animate attacker;
+	public HostilityList list;
+	protected Responses response;
 
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
@@ -53,6 +55,8 @@ public class NPC extends Animate {
 		moves = new Stack<Node>();
 		drop = Global.rand(2, 0) == 1 ? new ItemPacket("Gold") : new ItemPacket("Gem");
 		delay = 2.6f + Global.rand(100, 0) * .005f;
+		list = new HostilityList();
+		response = new Responses(getType());
 
         stats.setExperience(1);
         stats.setMaxHitpoints(10);
@@ -120,17 +124,22 @@ public class NPC extends Animate {
 			if(PragmaServer.map.itemSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY())) || PragmaServer.map.chestSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY()))){
 			}
 			else if(PragmaServer.map.npcSets.get(floor).containsKey(PragmaServer.map.marks.get(getX(), getY()))){
+				if(list.check(PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(), getY())))){
+					attack(PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(), getY())));
+				}
+				else{
 					MessagePacket packet = new MessagePacket();
 					packet.callerID = ID;
 					packet.floor = floor;
 					packet.receiverID = PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(),  getY())).ID;
 					packet.message = PragmaServer.map.npcSets.get(floor).get(PragmaServer.map.marks.get(getX(),  getY())).getMessage(packet.callerID);
 					PragmaServer.server.sendToAllTCP(packet);
+				}
 			}
-			else{
-				if(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())) != null)
+			else if(PragmaServer.map.players.containsKey(PragmaServer.map.marks.get(getX(), getY())))
+				if(list.check(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())))){
 					attack(PragmaServer.map.players.get(PragmaServer.map.marks.get(getX(), getY())));
-			}
+				}
 			collision = true;
 		}
 		
@@ -150,6 +159,14 @@ public class NPC extends Animate {
 		oldY = getY();
 	}
 	
+	public String getMessage(Integer callerID){
+		if(PragmaServer.map.npcSets.get(floor).containsKey(callerID))
+			return response.call((Animate) PragmaServer.map.npcSets.get(floor).get(callerID), list.check(PragmaServer.map.npcSets.get(floor).get(callerID)));
+		else if(PragmaServer.map.players.containsKey(callerID))
+			return response.call(PragmaServer.map.players.get(callerID), list.check(PragmaServer.map.players.get(callerID)));
+		return null;
+	}
+	
 	protected void attack(Animate entity){
 		int amount = 0;
 		if(this.getStats().getStrength() == 0)
@@ -160,12 +177,14 @@ public class NPC extends Animate {
 		if(amount < 0)
 			amount = 0;
 		amount *= -1;
-		AttackPacket packet = new AttackPacket();
-		packet.attackerID = ID;
-		packet.receiverID = entity.ID;
-		packet.floor = floor;
-		packet.amount = amount;
-		PragmaServer.server.sendToAllUDP(packet);
+		if(entity instanceof Player){
+			AttackPacket packet = new AttackPacket();
+			packet.attackerID = ID;
+			packet.receiverID = entity.ID;
+			packet.floor = floor;
+			packet.amount = amount;
+			PragmaServer.server.sendToAllUDP(packet);
+		}
 		entity.getStats().mutateHitpoints(amount);
 		entity.setStatus(amount);
 	}

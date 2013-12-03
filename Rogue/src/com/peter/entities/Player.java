@@ -283,9 +283,6 @@ public class Player extends Animate implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode){
-		case Keys.TAB:
-			Global.camera.zoom += .4;
-			break;
 		case Keys.F10:
 			if(getMenu().equals("MainMenu")){
 				setMenu("");
@@ -296,10 +293,31 @@ public class Player extends Animate implements InputProcessor {
 				setMenu("MainMenu");
 			}
 			break;
-		}
-		if(!getMenu().equals("Chat"))
-			switch(keycode){
-			case Keys.G:
+		case Keys.ENTER:
+			if(getMenu().equals("Chat")){
+				if(!messageBuffer.isEmpty()){
+					message = messageBuffer;
+					messageDelay = 0;
+					MessagePacket packet = new MessagePacket();
+					packet.message = message;
+					packet.receiverID = ID;
+					packet.floor = Play.map.getFloor();
+					Rogue.clientWrapper.client.sendUDP(packet);
+					setMenu("");
+					menuActive = false;
+					messageBuffer = new String();
+					return true;
+				}
+				menuActive = false;
+				setMenu("");
+			}
+			else{
+				setMenu("Chat");
+				menuActive = true;
+			}
+			break;
+		case Keys.G:
+			if(!getMenu().equals("Chat"))
 				if(getMenu().equals("Chest")){
 					menuActive = true;
 					setMenu("Inventory");
@@ -312,34 +330,22 @@ public class Player extends Animate implements InputProcessor {
 					menuActive = true;
 					setMenu("Inventory");
 				}
-				break;
-			case Keys.F:
+			break;
+		case Keys.F:
+			if(!getMenu().equals("Chat"))
 				hostile = !hostile;
-				break;
-			case Keys.ESCAPE:
-				System.exit(0);
-				break;
-			case Keys.SHIFT_LEFT:
-			case Keys.SHIFT_RIGHT:
+			break;
+		case Keys.ESCAPE:
+			System.exit(0);
+			break;
+		case Keys.SHIFT_LEFT:
+		case Keys.SHIFT_RIGHT:
+			if(!getMenu().equals("Chat"))
 				delay = .5f;
-				break;
-			case Keys.ENTER:
-				setMenu("Chat");
-				menuActive = true;
-			}
-		else if(keycode == Keys.ENTER){
-			setMenu("Chat");
-			menuActive = !menuActive;
-			if(!messageBuffer.isEmpty()){
-				message = messageBuffer;
-				messageDelay = 0;
-				MessagePacket packet = new MessagePacket();
-				packet.message = message;
-				packet.receiverID = ID;
-				packet.floor = Play.map.getFloor();
-				Rogue.clientWrapper.client.sendUDP(packet);
-			}
-			messageBuffer = new String();
+			break;
+		case Keys.TAB:
+			Global.camera.zoom += .4;
+			break;
 		}
 		return true;
 	}
@@ -377,9 +383,6 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void setMenu(String request){
-		if(menu.equals("Chat"))
-			menu = "";
-		else
 			menu = request;
 		menuObject = null;
 	}

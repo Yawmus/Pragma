@@ -4,6 +4,6 @@ public class Citizen extends NPC{
 
         public Citizen() {
         	super("Citizen");
-            //list = new HostilityList();
+        	list.addType("Worm");
         }
 }

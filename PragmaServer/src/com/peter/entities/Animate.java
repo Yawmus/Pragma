@@ -1,16 +1,13 @@
 package com.peter.entities;
 
 import com.badlogic.gdx.math.Vector3;
-import com.peter.server.PragmaServer;
 
 public class Animate extends Entity{
 	protected Stats stats;
-	protected Responses response;
 	protected int oldX, oldY;
 	public boolean collision;
 	protected float messageDelay = 0, statusDelay = 0, delay, time = 0;
 	public boolean messageFlag, statusFlag;
-	protected HostilityList list;
 	protected String message;
 	protected Integer status;
 	protected String target;
@@ -23,7 +20,6 @@ public class Animate extends Entity{
 		//response = new Responses(type);
 		message = new String("");
 		status = null;
-		response = new Responses(getType());
 	}
 	public void update(double delta){
 		time += delta;
@@ -76,16 +72,6 @@ public class Animate extends Entity{
 	}
 	public void resetStatus() {
 		status = null;
-	}
-
-	
-	
-	public String getMessage(Integer callerID){
-		if(PragmaServer.map.npcSets.get(floor).containsKey(callerID))
-			return response.call((Animate) PragmaServer.map.npcSets.get(floor).get(callerID), false);
-		else if(PragmaServer.map.players.containsKey(callerID))
-			return response.call((Animate) PragmaServer.map.players.get(callerID), false);
-		return null;
 	}
 	
 

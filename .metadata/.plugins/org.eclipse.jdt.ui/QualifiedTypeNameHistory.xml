@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.rogue.entities.Animate"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
-<fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
 <fullyQualifiedTypeName name="com.peter.map.Map"/>
 <fullyQualifiedTypeName name="com.peter.server.Global"/>
 <fullyQualifiedTypeName name="com.peter.packets.CollisionPacket"/>
@@ -50,7 +47,6 @@
 <fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
 <fullyQualifiedTypeName name="com.peter.server.PragmaServer"/>
 <fullyQualifiedTypeName name="com.peter.map.Data"/>
-<fullyQualifiedTypeName name="java.util.Scanner"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="java.nio.file.Files"/>
 <fullyQualifiedTypeName name="java.nio.ByteBuffer"/>
@@ -60,4 +56,8 @@
 <fullyQualifiedTypeName name="java.io.FileReader"/>
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.net.URL"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
+<fullyQualifiedTypeName name="com.peter.packets.PlayerInitPacket"/>
+<fullyQualifiedTypeName name="java.util.Scanner"/>
 </qualifiedTypeNameHistroy>

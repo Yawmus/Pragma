@@ -110,7 +110,7 @@ public class Chest extends Entity {
 				Play.map.getSpriteBatch().end();
 				
 				if(Gdx.input.isButtonPressed(Buttons.RIGHT))
-					System.out.println("Pressed right mouse button");
+					;// Stuff for right mouse button
 				else if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.justTouched()){
 					if(trade != null){
 						// In essence -> removes item from chest and gives to player

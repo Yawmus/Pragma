@@ -130,7 +130,6 @@ public class Map implements MapRenderer{
 	public void mutateFloor(int amount){
 		floor += amount;
 		if(floor >= visibleSets.size()){
-			System.out.println("hi");
 			visibleSets.add(new String[WIDTH][HEIGHT]);
 			for(int x=0; x<WIDTH; x++)
 				for(int y=0; y<HEIGHT; y++)

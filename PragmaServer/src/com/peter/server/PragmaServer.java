@@ -1,6 +1,7 @@
 package com.peter.server;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -42,6 +43,8 @@ public class PragmaServer{
 	private static Integer removeID = 0;
 	
 	public static void main(String[] args) throws Exception {
+		
+		
 		ItemPacket temp;
 		ChestPacket temp2;
 		NPC temp3;
@@ -108,6 +111,18 @@ public class PragmaServer{
 		server.getKryo().register(java.util.ArrayList.class);
 		server.getKryo().register(byte[][].class);
 		server.getKryo().register(byte[].class);
+		
+		/*boolean success = false;
+		int port;
+		while(!success) // While port is unavailable
+		try{
+			System.out.print("Please enter the port: ");
+			port = in.nextInt();
+			server.bind(port, port);
+			success = true;
+		} catch(Exception e){
+			System.out.println("Port is occupied, try a different port!");
+		}*/
 		server.bind(tcpPort, udpPort);
 		server.start();
 		server.addListener(new Listener(){
@@ -153,7 +168,7 @@ public class PragmaServer{
 				
 				server.sendToTCP(c.getID(), packet2);
 				
-				System.out.println("Connection received.");
+				System.out.println("[SERVER] connection received.");
 			}
 			
 			public void received(Connection c, Object o){
@@ -197,8 +212,6 @@ public class PragmaServer{
 				else if(o instanceof AttackPacket){
 					AttackPacket packet = (AttackPacket) o;
 					if(map.npcSets.get(packet.floor).containsKey(packet.receiverID)){
-						((NPC) map.npcSets.get(packet.floor).get(packet.receiverID)).attacker = map.npcSets.get(packet.floor).containsKey(packet.attackerID) ? 
-						map.npcSets.get(packet.floor).get(packet.attackerID) : map.players.get(packet.attackerID);
 						map.npcSets.get(packet.floor).get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
 						server.sendToAllUDP(packet);
 						if(map.npcSets.get(packet.floor).get(packet.receiverID).getStats().getHitpoints() <= 0){
@@ -208,9 +221,13 @@ public class PragmaServer{
 							server.sendToTCP(packet.attackerID, packet2);
 							removeID = map.npcSets.get(packet.floor).get(packet.receiverID).ID;
 						}
+						else{
+							map.npcSets.get(packet.floor).get(packet.receiverID).attacker = map.npcSets.get(packet.floor).containsKey(packet.attackerID) ? 
+									map.npcSets.get(packet.floor).get(packet.attackerID) : map.players.get(packet.attackerID);
+							map.npcSets.get(packet.floor).get(packet.receiverID).list.addID(packet.attackerID);
+						}
 					}
 					else if(map.players.containsKey(packet.receiverID)){
-						System.out.println(map.players.get(packet.receiverID).getStats().getHitpoints());
 						map.players.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
 						if(map.players.get(packet.receiverID).getStats().getHitpoints() <= 0){
 							ExperiencePacket packet2 = new ExperiencePacket();
@@ -248,12 +265,10 @@ public class PragmaServer{
 				}
 				else if(o instanceof RequestFloorPacket){
 					RequestFloorPacket packet = (RequestFloorPacket) o;
-					System.out.println("[SERVER] " + c.getID() + " requested new map packet!");
 					
 					// Removes the player from the players on the previous floor
 					RemovePlayerPacket packet2 = new RemovePlayerPacket();
 					packet2.ID = c.getID();
-					System.out.println(map.players.get(c.getID()).getX());
 					packet2.x = map.players.get(c.getID()).getX();
 					packet2.y = map.players.get(c.getID()).getY();
 					
@@ -329,33 +344,34 @@ public class PragmaServer{
 				server.sendToAllExceptTCP(c.getID(), packet);
 				System.out.println("Connection dropped.");
 			}
-		});
-		
-		System.out.println("Server is operational!");
-		double lastFrame = 0, currentFrame;
-		
-		while(true){
-			currentFrame = System.currentTimeMillis() - lastFrame;
-			lastFrame = System.currentTimeMillis();
-
-			if(removeID != 0){
-				RemoveNPCPacket packet = new RemoveNPCPacket();
-				packet.ID = map.npcSets.get(packet.floor).get(removeID).ID;
-				server.sendToAllTCP(packet);
-
-				ItemPacket packet2 = map.npcSets.get(packet.floor).get(removeID).getDrop();
-				packet2.x = map.npcSets.get(packet.floor).get(removeID).getX()/32;
-				packet2.y = map.npcSets.get(packet.floor).get(removeID).getY()/32;
-				packet2.ID = ++count;
-				map.itemSets.get(packet.floor).put(packet2.ID, packet2);
-				map.marks.put(packet2.ID, packet2.x, packet2.y);
-				server.sendToAllTCP(packet2);
-				map.npcSets.get(packet2.floor).remove(removeID);
-				removeID = 0;
+			});
+			
+			System.out.println("Server is operational!");
+			double lastFrame = 0, currentFrame;
+			
+			while(true){
+				currentFrame = System.currentTimeMillis() - lastFrame;
+				lastFrame = System.currentTimeMillis();
+	
+				if(removeID != 0){
+					RemoveNPCPacket packet = new RemoveNPCPacket();
+					packet.ID = map.npcSets.get(packet.floor).get(removeID).ID;
+					server.sendToAllTCP(packet);
+	
+					ItemPacket packet2 = map.npcSets.get(packet.floor).get(removeID).getDrop();
+					packet2.x = map.npcSets.get(packet.floor).get(removeID).getX()/32;
+					packet2.y = map.npcSets.get(packet.floor).get(removeID).getY()/32;
+					packet2.ID = ++count;
+					map.itemSets.get(packet.floor).put(packet2.ID, packet2);
+					map.marks.put(packet2.ID, packet2.x, packet2.y);
+					server.sendToAllTCP(packet2);
+					map.npcSets.get(packet2.floor).remove(removeID);
+					removeID = 0;
+				}
+				for(int i=0; i<map.npcSets.size(); i++)
+					for(NPC npc : map.npcSets.get(i).values())
+						npc.update(currentFrame/1000);
 			}
-			for(int i=0; i<map.npcSets.size(); i++)
-				for(NPC npc : map.npcSets.get(i).values())
-					npc.update(currentFrame/1000);
-		}
+
 	}
 }
