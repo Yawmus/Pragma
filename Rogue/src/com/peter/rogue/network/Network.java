@@ -48,7 +48,6 @@ public class Network extends Listener {
 			Play.map.items.remove(packet.ID);
 		}
 		else if(o instanceof AddPlayerPacket){
-			System.out.println("Got ya!  " + EntityManager.player.ID);
 			AddPlayerPacket packet = (AddPlayerPacket) o;
 			EntityManager.playerQueue.add(packet);
 		}
@@ -79,6 +78,10 @@ public class Network extends Listener {
 				Play.map.npcs.get(packet.ID).setOldY(packet.oldY);
 				Play.map.marks.put(-1, packet.oldX, packet.oldY);
 			}
+		}
+		else if(o instanceof AddNPCPacket){
+			AddNPCPacket packet = (AddNPCPacket) o;
+			EntityManager.NPCQueue.add(packet);
 		}
 		else if(o instanceof RemoveNPCPacket){
 			RemoveNPCPacket packet = (RemoveNPCPacket) o;
@@ -147,8 +150,6 @@ public class Network extends Listener {
 			IDPacket packet = (IDPacket) o;
 			EntityManager.player.ID = packet.ID;
 		}
-		else
-			System.out.println("Missed a goddamn packet!");
 	}
 	public void disconnected (Connection connection) {
 	}

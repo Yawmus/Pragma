@@ -31,38 +31,42 @@ public class UI{
 	
 	public void draw(Player player){
 		// Draws the messages and statuses on top of everything
-		for(NPC npc : Play.map.npcs.values()){
-			if(npc.canDraw){
-				if(npc.messageFlag){
-					Global.mapShapes.begin(ShapeType.Filled);
-					Global.mapShapes.setColor(0, 0f, 0, 1f);
-					Global.mapShapes.rect(npc.getX(), npc.getY() - 17, Global.font.getBounds(npc.getMessage()).width, Global.font.getLineHeight());
-					Global.mapShapes.end();
+		try{
+			for(NPC npc : Play.map.npcs.values()){
+				if(npc.canDraw){
+					if(npc.messageFlag){
+						Global.mapShapes.begin(ShapeType.Filled);
+						Global.mapShapes.setColor(0, 0f, 0, 1f);
+						Global.mapShapes.rect(npc.getX(), npc.getY() - 17, Global.font.getBounds(npc.getMessage()).width, Global.font.getLineHeight());
+						Global.mapShapes.end();
+					}
+					if(npc.statusFlag){
+						Global.mapShapes.begin(ShapeType.Filled);
+						if(npc.getStatus() == 0)
+							Global.mapShapes.setColor(0f, 0f, .6f, 1f);
+						else if(npc.getStatus() < 0)
+							Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
+						else if(npc.getStatus() > 0)
+							Global.mapShapes.setColor(0f, .4f, 0f, 1f);
+						Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
+						Global.mapShapes.end();
+						Global.mapShapes.begin(ShapeType.Line);
+						Global.mapShapes.setColor(0f, 0f, 0f, 1f);
+						Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
+						Global.mapShapes.end();
+					}
+					Play.map.getSpriteBatch().begin();
+					Global.font.draw(Play.map.getSpriteBatch(), npc.getMessage(), npc.getX(), npc.getY());
+					if(npc.getStatus() != null)
+						if(npc.getStatus() < 10)
+							Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 4, npc.getY() + 26);
+						else
+							Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 7, npc.getY() + 26);
+					Play.map.getSpriteBatch().end();
 				}
-				if(npc.statusFlag){
-					Global.mapShapes.begin(ShapeType.Filled);
-					if(npc.getStatus() == 0)
-						Global.mapShapes.setColor(0f, 0f, .6f, 1f);
-					else if(npc.getStatus() < 0)
-						Global.mapShapes.setColor(.4f, 0f, 0f, 1f);
-					else if(npc.getStatus() > 0)
-						Global.mapShapes.setColor(0f, .4f, 0f, 1f);
-					Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
-					Global.mapShapes.end();
-					Global.mapShapes.begin(ShapeType.Line);
-					Global.mapShapes.setColor(0f, 0f, 0f, 1f);
-					Global.mapShapes.circle(npc.getX(), npc.getY() + 20, 13);
-					Global.mapShapes.end();
-				}
-				Play.map.getSpriteBatch().begin();
-				Global.font.draw(Play.map.getSpriteBatch(), npc.getMessage(), npc.getX(), npc.getY());
-				if(npc.getStatus() != null)
-					if(npc.getStatus() < 10)
-						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 4, npc.getY() + 26);
-					else
-						Global.font.draw(Play.map.getSpriteBatch(), ((Integer)(Math.abs(npc.getStatus()))).toString(), npc.getX() - 7, npc.getY() + 26);
-				Play.map.getSpriteBatch().end();
 			}
+		} catch(Exception e){
+			System.out.println("Should be concurrent mod");
 		}
 		
 		for(MPPlayer mpPlayer : Play.map.players.values()){
@@ -242,11 +246,11 @@ public class UI{
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 			
 			Global.screen.begin();
+			Global.gothicFont.setScale(1.1f);
 			if(player.isError())
 				Global.gothicFont.setColor(Color.RED);
 			else
 				Global.gothicFont.setColor(Color.GREEN);
-			Global.gothicFont.setScale(1.1f);
 			Global.gothicFont.draw(Global.screen, player.getAlertMessage(), 
 					(Global.SCREEN_WIDTH/2) - Global.gothicFont.getBounds(player.getAlertMessage()).width/2, 215);
 			Global.gothicFont.setScale(1f);

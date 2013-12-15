@@ -2,7 +2,9 @@ package com.peter.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
+import com.badlogic.gdx.math.Vector2;
 import com.peter.entities.Citizen;
 import com.peter.entities.Entity;
 import com.peter.entities.NPC;
@@ -105,6 +107,8 @@ public class Map{
 			break;
 		}
 	}
+
+	private static Stack<Vector2> roomLocations = new Stack<Vector2>();
 	
 	public Tile[][] generateFloor(int floor, int x, int y){
 		if(tileSets.size() > floor)
@@ -121,7 +125,31 @@ public class Map{
 		Room room = new Room(x, y, 10, 6);
 		generateRoom(tileSet, floor, room);
 		tileSet[x][y] = Tile.UP;
+		
+		
+		
+		
+		
+		System.out.println(roomLocations.size());
+		Vector2 furthest = null;
+		double furthestValue = 0;
+		while(!roomLocations.isEmpty()){
+			double currentValue = Math.sqrt(Math.pow(x - roomLocations.peek().x, 2) + Math.pow(y - roomLocations.peek().y, 2));
+			if(currentValue > furthestValue){
+				furthest = roomLocations.pop();
+				furthestValue = Math.sqrt(Math.pow(x - furthest.x, 2) + Math.pow(y - furthest.y, 2));
+			}
+			else
+				roomLocations.pop();
+		}
+		tileSet[(int) furthest.x][(int) furthest.y] = Tile.DOWN;
+		
+		
+		
+		
+		
 		tileSets.add(tileSet);
+		
 		return tileSet;
 	}
 	
@@ -152,8 +180,10 @@ public class Map{
 				hall.dy = room.y + room.height/2 + Global.rand(5, 0);
 				room2.x = hall.dx + Global.rand(3, -1);
 				room2.y = hall.dy + room2.height/2;
-				if(generateRoom(tileSet, floor, room2))
+				if(generateRoom(tileSet, floor, room2)){
 					hall.write(tileSet, "up");
+					roomLocations.add(new Vector2(room2.x, room2.y));
+				}
 				break;
 			case 1: // down
 				hall.x = room.x + Global.rand(room.width-2, -(room.width/2-1));
@@ -162,8 +192,10 @@ public class Map{
 				hall.dy = room.y - room.height/2 + Global.rand(5, 0);
 				room2.x = hall.dx + Global.rand(3, -1);
 				room2.y = hall.dy - room2.height/2;
-				if(generateRoom(tileSet, floor, room2))
+				if(generateRoom(tileSet, floor, room2)){
 					hall.write(tileSet, "down");
+					roomLocations.add(new Vector2(room2.x, room2.y));
+				}
 				break;
 			case 2: // right
 				hall.x = room.x + room.width/2;
@@ -172,8 +204,10 @@ public class Map{
 				hall.dy = room.y + Global.rand(room.height-2, -(room.height/2-1));
 				room2.x = hall.dx + room2.width/2;
 				room2.y = hall.dy + Global.rand(3, -1);
-				if(generateRoom(tileSet, floor, room2))
+				if(generateRoom(tileSet, floor, room2)){
 					hall.write(tileSet, "right");
+					roomLocations.add(new Vector2(room2.x, room2.y));
+				}
 				break;
 			case 3: // left
 				hall.x = room.x - room.width/2;
@@ -182,8 +216,10 @@ public class Map{
 				hall.dy = room.y + Global.rand(room.height-2, -(room.height/2-1));
 				room2.x = hall.dx - room2.width/2;
 				room2.y = hall.dy + Global.rand(3, -1);
-				if(generateRoom(tileSet, floor, room2))
+				if(generateRoom(tileSet, floor, room2)){
 					hall.write(tileSet, "left");
+					roomLocations.add(new Vector2(room2.x, room2.y));
+				}
 				break;
 			}
 			times++;
@@ -191,7 +227,6 @@ public class Map{
 		return true;
 	}
 }
-
 
 class Room{
 	public int x, y, width, height;
@@ -228,12 +263,10 @@ class Room{
 						tileSet[i][j] = Tile.WALL;
 		if(Global.rand(3, 0) == 0){
 			NPC temp = new Citizen();
-			++Global.count;
-			Map.npcSets.get(floor).put(Global.count, temp);
-			temp.ID = Global.count;
+			temp.ID = ++Global.count;
 			temp.floor = floor;
-			System.out.println(temp.ID);
 			temp.setPosition(x, y);
+			Map.npcSets.get(floor).put(Global.count, temp);
 			Map.markSets.get(floor).put(temp.ID, temp.getX(), temp.getY());
 		}
 	}

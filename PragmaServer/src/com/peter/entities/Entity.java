@@ -17,6 +17,7 @@ public class Entity{
 		this.type = type;
 		floor = 0;
 	}
+	public Entity(){}
 
 	public String getName(){
 		return name;

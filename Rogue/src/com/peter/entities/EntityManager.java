@@ -55,11 +55,13 @@ public class EntityManager{
 			NPC newNPC;
 			if(NPCQueue.peek().type.equals("Citizen"))
 				newNPC = new Citizen("c_.png");
-			else{
+			else if(NPCQueue.peek().type.equals("Shopkeep")){
 				newNPC = new Shopkeep("s_.png", "Shopkeep");
 				for(int i=0; i<NPCQueue.peek().items.size(); i++)
 					((Shopkeep) newNPC).add(PacketToObject.itemConverter(NPCQueue.peek().items.get(i)));
 			}
+			else
+				newNPC = new Monster("tilda.png", "Worm");
 			newNPC.name = NPCQueue.peek().name;
 			newNPC.ID = NPCQueue.peek().ID;
 			newNPC.setPosition(NPCQueue.peek().x/32, NPCQueue.peek().y/32);
@@ -80,7 +82,6 @@ public class EntityManager{
 			chestQueue.remove();
 		}
 		while(!playerQueue.isEmpty()){
-			System.out.println("This should be said twice!");
 			MPPlayer newPlayer = new MPPlayer("at.png", "Player", "Online guy");
 			newPlayer.ID = playerQueue.peek().ID;
 			newPlayer.setX(playerQueue.peek().x);

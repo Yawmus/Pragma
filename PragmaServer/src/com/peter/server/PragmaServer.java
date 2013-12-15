@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.peter.entities.Citizen;
+import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
@@ -63,23 +64,27 @@ public class PragmaServer{
 		
 		//map.npcs.put(++count, new NPC())
 		for(int i=0; i<data.getCitizens(); i++){
-			temp3 = new Citizen(/*"c_.png"*/);
-			++Global.count;
-			Map.npcSets.get(0).put(Global.count, temp3);
-			temp3.ID = Global.count;
+			temp3 = new Citizen();
+			temp3.ID = ++Global.count;
 			temp3.floor = 0;
-			temp3 = Map.npcSets.get(0).get(Global.count);
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
+			Map.npcSets.get(0).put(Global.count, temp3);
+			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
+		}
+		for(int i=0; i<data.getMonsters(); i++){
+			temp3 = new Monster(/*Monster.WORM*/"Worm", true);
+			temp3.ID = ++Global.count;
+			temp3.floor = 0;
+			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
+			Map.npcSets.get(0).put(Global.count, temp3);
 			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
 		}
 		for(int i=0; i<data.getShopkeeps(); i++){
-			temp3 = new Shopkeep(/*"s_.png", "Shopkeep"*/);
-			++Global.count;
-			Map.npcSets.get(0).put(Global.count, temp3);
-			temp3.ID = Global.count;
+			temp3 = new Shopkeep();
+			temp3.ID = ++Global.count;
 			temp3.floor = 0;
-			temp3 = Map.npcSets.get(0).get(Global.count);
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
+			Map.npcSets.get(0).put(Global.count, temp3);
 			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
 			((Shopkeep) Map.npcSets.get(0).get(Global.count)).items.add(new ItemPacket("Breast Plate"));
 		}
@@ -165,7 +170,6 @@ public class PragmaServer{
 					}
 					else
 						System.out.println("[SERVER] failed to message something!");
-					System.out.println(packet.receiverID);
 				}
 				else if(o instanceof PlayerPacket){
 					PlayerPacket packet = (PlayerPacket) o;
@@ -258,7 +262,6 @@ public class PragmaServer{
 						packet.name = player.getName();
 						packet.picture = player.getPicture();
 						server.sendToTCP(c.getID(), packet);
-						System.out.println("Hey new guy!");
 					}
 					
 					AddPlayerPacket packet2 = (AddPlayerPacket) o;
@@ -269,7 +272,6 @@ public class PragmaServer{
 					newPlayer.setPicture(packet2.picture);
 					newPlayer.setName(packet2.name);
 					
-					System.out.println(packet2.ID);
 					map.players.put(packet2.ID, newPlayer);
 					server.sendToAllExceptTCP(packet2.ID, packet2);
 					
@@ -386,7 +388,7 @@ public class PragmaServer{
 						for(NPC npc : Map.npcSets.get(i).values())
 							npc.update(currentFrame/1000);
 				} catch(Exception e){
-					System.out.println("restarting loop");
+					System.out.println("Should only be displayed if new floor");
 				}
 			}
 	}

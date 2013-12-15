@@ -21,6 +21,8 @@ public class Animate extends Entity{
 		message = new String("");
 		status = null;
 	}
+	public Animate(){}
+	
 	public void update(double delta){
 		time += delta;
 		

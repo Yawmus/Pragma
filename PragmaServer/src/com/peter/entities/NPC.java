@@ -64,9 +64,12 @@ public class NPC extends Animate {
         stats.setHitpoints(10);
 	}
 	
+	public NPC(){}
+	
 	public ItemPacket getDrop(){
 		return drop;
 	}
+	
 	
 	public void update(double delta){
 		super.update(delta);
