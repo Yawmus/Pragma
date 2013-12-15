@@ -13,6 +13,7 @@ import com.peter.packets.AddNPCPacket;
 import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
+import com.peter.packets.InformationPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
@@ -34,7 +35,7 @@ public class EntityManager{
     
     public EntityManager(Play play){
     	player = new Player("at.png");
-
+    	
     	playerQueue = new LinkedList<AddPlayerPacket>();
     	NPCQueue = new LinkedList<AddNPCPacket>();
     	itemQueue = new LinkedList<ItemPacket>();
@@ -144,7 +145,6 @@ public class EntityManager{
     }
     
     public void init(){
-
 		player.setPosition(28, 7);
 		Play.map.marks.put(player.ID, (int) player.getX(), (int) player.getY());
 		Play.map.database.put(player.ID, player);
@@ -152,6 +152,13 @@ public class EntityManager{
 		ui = new UI(player);
     	Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
+		
+		InformationPacket packet = new InformationPacket();
+		packet.name = player.getName();
+		packet.picture = player.getPictureURL();
+		System.out.println(player.ID);
+		packet.ID = player.ID;
+		Rogue.clientWrapper.client.sendTCP(packet);
 	}
     
     public void dispose(){

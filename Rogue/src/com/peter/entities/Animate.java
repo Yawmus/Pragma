@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.packets.MessagePacket;
 import com.peter.rogue.Rogue;
+import com.peter.rogue.screens.Play;
 
 public class Animate extends Entity{
 	protected Stats stats;
@@ -115,6 +116,7 @@ public class Animate extends Entity{
 			MessagePacket packet = new MessagePacket();
 			packet.callerID = ID;
 			packet.receiverID = npc.ID;
+			packet.floor = Play.map.getFloor();
 			Rogue.clientWrapper.client.sendUDP(packet);
 		}
 	}

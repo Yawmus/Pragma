@@ -29,7 +29,7 @@ public class Entity extends Sprite{
 	}
 
 
-	public void setID(int ID) {
+	public void setID(Integer ID) {
 		this.ID = ID;
 	}
 	

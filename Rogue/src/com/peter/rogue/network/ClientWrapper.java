@@ -9,6 +9,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ExperiencePacket;
+import com.peter.packets.InformationPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -30,7 +31,7 @@ public class ClientWrapper {
 	public ClientWrapper(){
 		System.out.println("Connecting to the server...");
 		client = new Client();
-		client = new Client(8192, 4000);
+		client = new Client(16000, 11000);
 		network = new Network();
 		client.getKryo().register(PlayerPacket.class);
 		client.getKryo().register(NPCPacket.class);
@@ -48,8 +49,11 @@ public class ClientWrapper {
 		client.getKryo().register(RemoveItemPacket.class);
 		client.getKryo().register(RemoveTradeItemPacket.class);
 		client.getKryo().register(AddTradeItemPacket.class);
+		client.getKryo().register(InformationPacket.class);
 		client.getKryo().register(java.util.HashMap.class);
 		client.getKryo().register(java.util.ArrayList.class);
+		client.getKryo().register(short[][].class);
+		client.getKryo().register(short[].class);
 		client.getKryo().register(byte[][].class);
 		client.getKryo().register(byte[].class);
 		

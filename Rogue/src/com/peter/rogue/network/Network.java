@@ -17,6 +17,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ExperiencePacket;
+import com.peter.packets.InformationPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -88,20 +89,19 @@ public class Network extends Listener {
 			Play.map.chests = new HashMap<Integer, Chest>();
 			Play.map.items = new HashMap<Integer, Item>();
 			Play.map.npcs = new HashMap<Integer, NPC>();
+			Play.map.marks = new Marks();
 			Play.map.database = new HashMap<Integer, Entity>();
 			Play.map.database.put(c.getID(), EntityManager.player);
 			
-			Play.map.marks = new Marks();
-			Play.map.marks.put(c.getID(), (int) EntityManager.player.getX(), (int) EntityManager.player.getY());
-			
 			MapPacket packet = (MapPacket) o;
+			Play.map.marks.setMarker(packet.marks);
+			Play.map.marks.put(c.getID(), (int) EntityManager.player.getX(), (int) EntityManager.player.getY());
 			for(ItemPacket item : packet.items.values())
 				EntityManager.itemQueue.add(item);
 			for(ChestPacket chest : packet.chests.values())
 				EntityManager.chestQueue.add(chest);
 			for(AddNPCPacket npc : packet.npcs.values())
 				EntityManager.NPCQueue.add(npc);
-
 			for(int x=0; x<Play.map.WIDTH; x++)
 				for(int y=0; y<Play.map.HEIGHT; y++)
 					Play.map.init[x][y] = packet.tiles[x][y];
@@ -140,6 +140,13 @@ public class Network extends Listener {
 			else{
 				EntityManager.player.getStats().mutateHitpoints(packet.amount);
 				EntityManager.player.setStatus(packet.amount);
+			}
+		}
+		else if(o instanceof InformationPacket){
+			InformationPacket packet = (InformationPacket) o;
+			if(Play.map.players.containsKey(packet.ID)){
+				Play.map.players.get(packet.ID).setName(packet.name);
+				Play.map.players.get(packet.ID).setPictureURL(packet.picture);
 			}
 		}
 	}

@@ -35,9 +35,11 @@ public class Player extends Animate implements InputProcessor {
 	private Entity menuObject;
 	private int viewDistance;
 	private boolean hostile, error;
+	private String pictureURL;
 	private float hunger;
 	public PlayerPacket packet;
 	private String messageBuffer;
+	public boolean showPlayers = false;
 	private String alert;
 	private float alertDelay = 0;
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
@@ -46,6 +48,7 @@ public class Player extends Animate implements InputProcessor {
 		super(filename, "Player");
 		messageFlag = false;
 		name = "Adelaide";
+		pictureURL = "img/adelaide.png";
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
 		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		packet = new PlayerPacket();
@@ -61,6 +64,7 @@ public class Player extends Animate implements InputProcessor {
 		stats.setMaxHitpoints(20);
 		hunger = 1.01f;
 		delay = .2f;
+		
 		for(int i=0; i<100; i++){
 			rays.add(new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0)));
 		}
@@ -152,15 +156,25 @@ public class Player extends Animate implements InputProcessor {
 		if(Play.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
 		else if(Play.map.getTile(getX(), getY()).hasStairs() && !Play.map.getTile(oldX, oldY).hasStairs()){
+
+			packet.oldX = (int) oldX;
+			packet.oldY = (int) oldY;
+			Play.map.marks.put(-1, oldX, oldY);
+			packet.x = (int) oldX;
+			packet.y = (int) oldY;
+			packet.floor = Play.map.getFloor();
+			Rogue.clientWrapper.client.sendTCP(packet);
+			
 			if(Play.map.getTile(getX(), getY()).direction())
 				Play.map.mutateFloor(-1);
 			else
 				Play.map.mutateFloor(1);
-			RequestFloorPacket packet = new RequestFloorPacket();
-			packet.floor = Play.map.getFloor();
-			packet.x = (int) getX();
-			packet.y = (int) getY();
-			Rogue.clientWrapper.client.sendTCP(packet);
+			
+			RequestFloorPacket packet2 = new RequestFloorPacket();
+			packet2.floor = Play.map.getFloor();
+			packet2.x = (int) getX();
+			packet2.y = (int) getY();
+			Rogue.clientWrapper.client.sendTCP(packet2);
 		}
 		if(!(Play.map.marks.get((int)getX(), (int)getY()) == -1 || Play.map.marks.get((int)getX(), (int)getY()) == ID)){
 			if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
@@ -188,6 +202,7 @@ public class Player extends Animate implements InputProcessor {
 					Play.map.marks.put(-1, (int) temp.getX(), (int) temp.getY());
 					RemoveItemPacket item = new RemoveItemPacket();
 					item.ID = temp.ID;
+					item.floor = Play.map.getFloor();
 					item.x = (int) temp.getX();
 					item.y = (int) temp.getY();
 					Rogue.clientWrapper.client.sendUDP(item);
@@ -218,7 +233,8 @@ public class Player extends Animate implements InputProcessor {
 			packet.x = (int) getX();
 			packet.y = (int) getY();
 			Play.map.marks.put(ID, (int)getX(), (int)getY());
-			Rogue.clientWrapper.client.sendUDP(packet);
+			packet.floor = Play.map.getFloor();
+			Rogue.clientWrapper.client.sendTCP(packet);
 		}
 		oldX = (int) getX();
 		oldY = (int) getY();
@@ -292,6 +308,9 @@ public class Player extends Animate implements InputProcessor {
 				menuActive = true;
 				setMenu("MainMenu");
 			}
+			break;
+		case Keys.P:
+			showPlayers = true;
 			break;
 		case Keys.ENTER:
 			if(getMenu().equals("Chat")){
@@ -426,6 +445,9 @@ public class Player extends Animate implements InputProcessor {
 		case Keys.TAB:
 			Global.camera.zoom -= .4;
 			break;
+		case Keys.P:
+			showPlayers = false;
+			break;
 		case Keys.SHIFT_LEFT:
 		case Keys.SHIFT_RIGHT:
 			delay = .2f;
@@ -488,5 +510,9 @@ public class Player extends Animate implements InputProcessor {
 	}
 	public boolean isError(){
 		return error;
+	}
+
+	public String getPictureURL() {
+		return pictureURL;
 	}
 }

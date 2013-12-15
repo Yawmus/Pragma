@@ -14,12 +14,11 @@ public class Marks{
 	
 	public Integer get(int x, int y){
 		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
-			return null;
+			return -1;
 		else{
 			return marker[(int)(x/32)][(int)(y/32)];
 		}
 	}
-	
 	public void put(Integer ID, int x, int y){
 		marker[(int)(x/32)][(int)(y/32)] = ID;
 	}
@@ -31,5 +30,11 @@ public class Marks{
 					marker[i][j] = -1;
 					break;
 				}
+	}
+	
+	public void setMarker(short[][] marker){
+		for(int i=0; i<WIDTH; i++)
+			for(int j=0; j<HEIGHT; j++)
+				this.marker[i][j] = (int) marker[i][j];
 	}
 }

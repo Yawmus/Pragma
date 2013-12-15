@@ -1,7 +1,0 @@
-package com.peter.packets;
-
-public class RemoveTradeItemPacket {
-	public Integer ID;
-	public ItemPacket item;
-	public int x, y;
-}

@@ -23,8 +23,6 @@ import com.peter.rogue.Global;
 public class Map implements MapRenderer{
 	public Tile[][] tiles;
 	public byte[][] init;
-	//protected String[][] visible;
-	//private LevelData data;
 	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
@@ -115,7 +113,7 @@ public class Map implements MapRenderer{
 	// ------------- Getters -------------
 	public Tile getTile(float x, float y){
 		if(y < 0 || x < 0 || y/32 >= HEIGHT || x/32 >= WIDTH)
-			return Tile.BLANK;
+			return null;
 		return tiles[(int)(x/32)][(int)(y/32)];
 	}
 
@@ -163,9 +161,9 @@ public class Map implements MapRenderer{
 				return get(ID).getName() + ", " + ((Animate) get(ID)).getType();
 			else
 				return get(ID).getName();
-		else if(getTile(x, y) != null)
+		else if(getTile(x, y) != null && !visibleSets.get(floor)[(int)(x/32)][(int)(y/32)].equals("notVisited"))
 			return getTile(x, y).getName();
-		return "a";
+		return "";
 	}
 	
 	@Override

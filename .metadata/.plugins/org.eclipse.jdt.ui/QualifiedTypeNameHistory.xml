@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.util.Queue"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
 <fullyQualifiedTypeName name="com.peter.map.Map"/>
 <fullyQualifiedTypeName name="com.peter.server.Global"/>
 <fullyQualifiedTypeName name="com.peter.packets.CollisionPacket"/>
@@ -27,7 +24,6 @@
 <fullyQualifiedTypeName name="com.peter.rogue.Global"/>
 <fullyQualifiedTypeName name="com.peter.map.Map.Tile"/>
 <fullyQualifiedTypeName name="com.peter.packets.ObjectToPacket"/>
-<fullyQualifiedTypeName name="com.peter.map.Tile"/>
 <fullyQualifiedTypeName name="com.peter.entities.PacketToObject"/>
 <fullyQualifiedTypeName name="com.peter.entities.Citizen"/>
 <fullyQualifiedTypeName name="com.peter.entities.NPC"/>
@@ -38,7 +34,6 @@
 <fullyQualifiedTypeName name="com.peter.entities.Monster"/>
 <fullyQualifiedTypeName name="com.peter.entities.Player"/>
 <fullyQualifiedTypeName name="com.peter.packets.PlayerPacket"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="com.peter.packets.MPPlayer"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="com.peter.packets.Player"/>
@@ -57,7 +52,12 @@
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.net.URL"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
 <fullyQualifiedTypeName name="com.peter.packets.PlayerInitPacket"/>
 <fullyQualifiedTypeName name="java.util.Scanner"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
+<fullyQualifiedTypeName name="java.awt.Rectangle"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
+<fullyQualifiedTypeName name="com.peter.map.Tile"/>
 </qualifiedTypeNameHistroy>

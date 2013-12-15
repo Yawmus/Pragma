@@ -175,17 +175,56 @@ public class UI{
 			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 				Global.screenShapes.begin(ShapeType.Filled);
 				Global.screenShapes.setColor(.1f, .1f, .1f, .9f);
-				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, Global.SCREEN_HEIGHT-300);
+				Global.screenShapes.rect(500, 150, Global.SCREEN_WIDTH-1000, Global.SCREEN_HEIGHT-300);
 				Global.screenShapes.end();
 				Global.screenShapes.begin(ShapeType.Line);
-				Global.screenShapes.setColor(0.25f, 0.25f, 0.25f, 1);
-				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-600, Global.SCREEN_HEIGHT-300);
+				Global.screenShapes.setColor(0.4f, 0.4f, 0.4f, 1);
+				Global.screenShapes.rect(500, 150, Global.SCREEN_WIDTH-1000, Global.SCREEN_HEIGHT-300);
 				Global.screenShapes.end();
 				Gdx.gl.glDisable(GL10.GL_BLEND);
+				
+				Global.screen.begin();
+				Global.gothicFont.draw(Global.screen, "Resume", 
+						Global.SCREEN_WIDTH/2 - Global.gothicFont.getBounds("Resume").width/2, Global.SCREEN_HEIGHT/2 + 170);
+				Global.gothicFont.draw(Global.screen, "Help", 
+						Global.SCREEN_WIDTH/2 - Global.gothicFont.getBounds("Help").width/2, Global.SCREEN_HEIGHT/2 + 130);
+				Global.gothicFont.draw(Global.screen, "Save and Exit", 
+						Global.SCREEN_WIDTH/2 - Global.gothicFont.getBounds("Save and Exit").width/2, Global.SCREEN_HEIGHT/2 + 90);
+				Global.screen.end();
 			}
 		}
 		else
 			player.getInventory().setTrade(null);
+		if(player.showPlayers){
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			Global.screenShapes.begin(ShapeType.Filled);
+			Global.screenShapes.setColor(.1f, .1f, .1f, .9f);
+			Global.screenShapes.rect(Global.SCREEN_WIDTH-300, Global.SCREEN_HEIGHT-300, 250, 250);
+			Global.screenShapes.end();
+			Global.screenShapes.begin(ShapeType.Line);
+			Global.screenShapes.setColor(0.4f, 0.4f, 0.4f, 1);
+			Global.screenShapes.rect(Global.SCREEN_WIDTH-300, Global.SCREEN_HEIGHT-300, 250, 250);
+			Global.screenShapes.setColor(0.7f, 0.7f, 0.7f, 1);
+			Global.screenShapes.line(Global.SCREEN_WIDTH-290, Global.SCREEN_HEIGHT-100, Global.SCREEN_WIDTH-60, Global.SCREEN_HEIGHT-100);
+			Global.screenShapes.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+
+			Global.screen.begin();
+			Global.gothicFont.draw(Global.screen, "Players", Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-60);
+			Global.gothicFont.setScale(.6f);
+			int i=0;
+			for(MPPlayer mpPlayer : Play.map.players.values()){
+				if(mpPlayer.getName() != null && mpPlayer.getPictureURL() != null){
+					Global.gothicFont.draw(Global.screen, mpPlayer.getName(), Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-100 - i*30);
+					//Global.screen.draw(new Texture(Gdx.files.internal(mpPlayer.getPictureURL())), Global.SCREEN_WIDTH-100, Global.SCREEN_HEIGHT-100 - i*30);
+				}
+
+				i++;
+			}
+			Global.gothicFont.setScale(1f);
+			Global.screen.end();
+		}
 		
 		if(player.hasAlert()){
 			Gdx.gl.glEnable(GL10.GL_BLEND);
@@ -247,7 +286,7 @@ public class UI{
 			Global.gothicFont.draw(spriteBatch, "Hostile", 755, 80);
 		else
 			Global.gothicFont.draw(spriteBatch, "Friendly", 755, 80);
-		Global.gothicFont.draw(spriteBatch, "Level: " + Play.map.getFloor(), 670, 50);
+		Global.gothicFont.draw(spriteBatch, "Floor: " + Play.map.getFloor(), 670, 50);
 		
 		spriteBatch.end();
 	}

@@ -13,7 +13,7 @@ import com.peter.rogue.screens.Splash;
 
 public class Rogue extends Game{
 	
-	public static final String TITLE = "Rogue", VERSION = "0.5.6";
+	public static final String TITLE = "Rogue", VERSION = "0.5.8";
 
 	Splash splash;
 	Play play;
@@ -25,12 +25,12 @@ public class Rogue extends Game{
 		in = new Scanner(System.in);
 		splash = new Splash(this);
 
-		/*Global.camera.setToOrtho(false);    
-		System.out.print("IP?: ");
+		Global.camera.setToOrtho(false);    
+		/*System.out.print("IP?: ");
 		String ip = in.nextLine();
 		if(!ip.equals(""))
 			Global.IP = ip;*/
-		
+		Global.IP = "209.213.46.189";
 		setScreen(new Play(this));
 
 		
