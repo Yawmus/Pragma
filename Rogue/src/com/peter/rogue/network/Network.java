@@ -17,7 +17,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ExperiencePacket;
-import com.peter.packets.InformationPacket;
+import com.peter.packets.IDPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -48,6 +48,7 @@ public class Network extends Listener {
 			Play.map.items.remove(packet.ID);
 		}
 		else if(o instanceof AddPlayerPacket){
+			System.out.println("Got ya!  " + EntityManager.player.ID);
 			AddPlayerPacket packet = (AddPlayerPacket) o;
 			EntityManager.playerQueue.add(packet);
 		}
@@ -142,13 +143,12 @@ public class Network extends Listener {
 				EntityManager.player.setStatus(packet.amount);
 			}
 		}
-		else if(o instanceof InformationPacket){
-			InformationPacket packet = (InformationPacket) o;
-			if(Play.map.players.containsKey(packet.ID)){
-				Play.map.players.get(packet.ID).setName(packet.name);
-				Play.map.players.get(packet.ID).setPictureURL(packet.picture);
-			}
+		else if(o instanceof IDPacket){
+			IDPacket packet = (IDPacket) o;
+			EntityManager.player.ID = packet.ID;
 		}
+		else
+			System.out.println("Missed a goddamn packet!");
 	}
 	public void disconnected (Connection connection) {
 	}

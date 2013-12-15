@@ -13,7 +13,6 @@ import com.peter.packets.AddNPCPacket;
 import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
-import com.peter.packets.InformationPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
@@ -81,10 +80,13 @@ public class EntityManager{
 			chestQueue.remove();
 		}
 		while(!playerQueue.isEmpty()){
+			System.out.println("This should be said twice!");
 			MPPlayer newPlayer = new MPPlayer("at.png", "Player", "Online guy");
 			newPlayer.ID = playerQueue.peek().ID;
 			newPlayer.setX(playerQueue.peek().x);
 			newPlayer.setY(playerQueue.peek().y);
+			newPlayer.setPictureURL(playerQueue.peek().picture);
+			newPlayer.setName(playerQueue.peek().name);
 			Play.map.players.put(playerQueue.peek().ID, newPlayer);
 			Play.map.database.put(playerQueue.peek().ID, newPlayer);
 			Play.map.marks.put(playerQueue.peek().ID, playerQueue.peek().x, playerQueue.peek().y);
@@ -133,7 +135,7 @@ public class EntityManager{
 			player.setInformation("");
 		
 		Global.screen.begin();
-		Global.font.draw(Global.screen, Rogue.VERSION, 0, Global.SCREEN_HEIGHT);
+		Global.font.draw(Global.screen, Rogue.VERSION + "  " + player.ID, 0, Global.SCREEN_HEIGHT);
 		Global.screen.end();
 		
 		if(player.stats.getHitpoints() <= 0){
@@ -153,10 +155,11 @@ public class EntityManager{
     	Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
 		
-		InformationPacket packet = new InformationPacket();
+		AddPlayerPacket packet = new AddPlayerPacket();
 		packet.name = player.getName();
 		packet.picture = player.getPictureURL();
-		System.out.println(player.ID);
+		packet.x = (int) player.getX();
+		packet.y = (int) player.getY();
 		packet.ID = player.ID;
 		Rogue.clientWrapper.client.sendTCP(packet);
 	}

@@ -54,7 +54,7 @@ public class NPC extends Animate {
 		//time -= Global.rand(15, 0) * .8f;
 		canMove = true;
 		moves = new Stack<Node>();
-		drop = Global.rand(2, 0) == 1 ? new ItemPacket("Gold") : new ItemPacket("Gem");
+		drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
 		delay = 2.6f + Global.rand(100, 0) * .005f;
 		list = new HostilityList();
 		response = new Responses(getType());

@@ -18,7 +18,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ExperiencePacket;
-import com.peter.packets.InformationPacket;
+import com.peter.packets.IDPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -107,7 +107,7 @@ public class PragmaServer{
 		server.getKryo().register(RemoveItemPacket.class);
 		server.getKryo().register(RemoveTradeItemPacket.class);
 		server.getKryo().register(AddTradeItemPacket.class);
-		server.getKryo().register(InformationPacket.class);
+		server.getKryo().register(IDPacket.class);
 		server.getKryo().register(java.util.HashMap.class);
 		server.getKryo().register(java.util.ArrayList.class);
 		server.getKryo().register(short[][].class);
@@ -121,26 +121,9 @@ public class PragmaServer{
 			
 			//This is run when a connection is received!
 			public void connected(Connection c){
-				Player newPlayer = new Player();
-				newPlayer.ID = c.getID();
-				newPlayer.setX(28*32);
-				newPlayer.setY(7*32);
-				
-				AddPlayerPacket packet = new AddPlayerPacket();
-				packet.ID = c.getID();
-				packet.x = newPlayer.getX();
-				packet.y = newPlayer.getY();
-				
-				server.sendToAllExceptTCP(c.getID(), packet);
-				
-				for(Player player : map.players.values()){
-					AddPlayerPacket packet2 = new AddPlayerPacket();
-					packet2.ID = player.ID;
-					c.sendTCP(packet2);
-				}
-				
-				map.players.put(newPlayer.ID, newPlayer);
-				map.players.get(newPlayer.ID).floor = 0;
+				IDPacket packet3 = new IDPacket();
+				packet3.ID = c.getID();
+				c.sendTCP(packet3);
 
 				// Sync map information
 				MapPacket packet2 = new MapPacket();
@@ -266,20 +249,31 @@ public class PragmaServer{
 						server.sendToAllExceptUDP(c.getID(), packet);
 					}
 				}
-				else if(o instanceof InformationPacket){
-					InformationPacket packet = (InformationPacket) o;
-					System.out.println(packet.ID);
-					map.players.get(packet.ID).setPicture(packet.picture);
-					map.players.get(packet.ID).setName(packet.name);
-					server.sendToAllExceptTCP(c.getID(), packet);
-					
+				else if(o instanceof AddPlayerPacket){
 					for(Player player : map.players.values()){
-						InformationPacket packet2 = new InformationPacket();
-						packet2.ID = player.ID;
-						packet2.name = player.getName();
-						packet2.picture = player.getPicture();
-						server.sendToTCP(c.getID(), packet2);
+						AddPlayerPacket packet = new AddPlayerPacket();
+						packet.ID = player.ID;
+						packet.x = player.getX();
+						packet.y = player.getY();
+						packet.name = player.getName();
+						packet.picture = player.getPicture();
+						server.sendToTCP(c.getID(), packet);
+						System.out.println("Hey new guy!");
 					}
+					
+					AddPlayerPacket packet2 = (AddPlayerPacket) o;
+					Player newPlayer = new Player();
+					newPlayer.ID = packet2.ID;
+					newPlayer.setX(packet2.x);
+					newPlayer.setY(packet2.y);
+					newPlayer.setPicture(packet2.picture);
+					newPlayer.setName(packet2.name);
+					
+					System.out.println(packet2.ID);
+					map.players.put(packet2.ID, newPlayer);
+					server.sendToAllExceptTCP(packet2.ID, packet2);
+					
+					
 				}
 				else if(o instanceof RequestFloorPacket){
 					RequestFloorPacket packet = (RequestFloorPacket) o;
@@ -343,22 +337,6 @@ public class PragmaServer{
 					map.players.get(c.getID()).floor = packet.floor;
 				}
 
-				else if(o instanceof InformationPacket){
-					InformationPacket packet = (InformationPacket) o;
-					map.players.get(packet.ID).setPicture(packet.picture);
-					map.players.get(packet.ID).setName(packet.name);
-					server.sendToAllExceptTCP(packet.ID, packet);
-					
-					for(Player player : map.players.values()){
-						if(player.ID != packet.ID){
-							InformationPacket packet2 = new InformationPacket();
-							packet2.ID = player.ID;
-							packet2.name = player.getName();
-							packet2.picture = player.getPicture();
-							server.sendToTCP(packet.ID, packet2);
-						}
-					}
-				}
 			}
 			
 			
@@ -384,22 +362,22 @@ public class PragmaServer{
 					RemoveNPCPacket packet = new RemoveNPCPacket();
 					packet.ID = removeID;
 					packet.floor = removeFloor;
-					System.out.println(removeFloor);
-
-					ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
-					packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
-					packet2.y = Map.npcSets.get(removeFloor).get(removeID).getY()/32;
-					packet2.ID = ++Global.count;
-					packet2.floor = removeFloor;
-					Map.itemSets.get(removeFloor).put(packet2.ID, packet2);
-					Map.markSets.get(removeFloor).put(packet2.ID, packet2.x, packet2.y);
-					
 					for(Player player : map.players.values())
-						if(player.floor == removeFloor){
+						if(player.floor == removeFloor)
 							server.sendToTCP(player.ID, packet);
-							server.sendToTCP(player.ID, packet2);
-						}
-					
+
+					if(Map.npcSets.get(removeFloor).get(removeID).getDrop() != null){ // Drops nothing
+						ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
+						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
+						packet2.y = Map.npcSets.get(removeFloor).get(removeID).getY()/32;
+						packet2.ID = ++Global.count;
+						packet2.floor = removeFloor;
+						Map.itemSets.get(removeFloor).put(packet2.ID, packet2);
+						Map.markSets.get(removeFloor).put(packet2.ID, packet2.x, packet2.y);
+						for(Player player : map.players.values())
+							if(player.floor == removeFloor)
+								server.sendToTCP(player.ID, packet2);
+					}
 					Map.npcSets.get(removeFloor).remove(removeID);
 					removeID = 0;
 				}
@@ -411,6 +389,5 @@ public class PragmaServer{
 					System.out.println("restarting loop");
 				}
 			}
-
 	}
 }

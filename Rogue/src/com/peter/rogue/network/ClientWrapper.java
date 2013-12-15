@@ -9,7 +9,7 @@ import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ExperiencePacket;
-import com.peter.packets.InformationPacket;
+import com.peter.packets.IDPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.packets.MapPacket;
 import com.peter.packets.MessagePacket;
@@ -49,7 +49,7 @@ public class ClientWrapper {
 		client.getKryo().register(RemoveItemPacket.class);
 		client.getKryo().register(RemoveTradeItemPacket.class);
 		client.getKryo().register(AddTradeItemPacket.class);
-		client.getKryo().register(InformationPacket.class);
+		client.getKryo().register(IDPacket.class);
 		client.getKryo().register(java.util.HashMap.class);
 		client.getKryo().register(java.util.ArrayList.class);
 		client.getKryo().register(short[][].class);
