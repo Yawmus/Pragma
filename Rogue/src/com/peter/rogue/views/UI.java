@@ -215,9 +215,10 @@ public class UI{
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 
 			Global.screen.begin();
-			Global.gothicFont.draw(Global.screen, "Players", Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-60);
+			Global.gothicFont.draw(Global.screen, "Players on this floor", Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-60);
 			Global.gothicFont.setScale(.6f);
 			int i=0;
+			System.out.println(Play.map.players.size());
 			for(MPPlayer mpPlayer : Play.map.players.values()){
 				if(mpPlayer.getName() != null && mpPlayer.getPictureURL() != null){
 					Global.gothicFont.draw(Global.screen, mpPlayer.getName(), Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-100 - i*30);

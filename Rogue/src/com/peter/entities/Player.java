@@ -310,7 +310,8 @@ public class Player extends Animate implements InputProcessor {
 			}
 			break;
 		case Keys.P:
-			showPlayers = true;
+			if(!getMenu().equals("Chat"))
+					showPlayers = true;
 			break;
 		case Keys.ENTER:
 			if(getMenu().equals("Chat")){
@@ -355,6 +356,8 @@ public class Player extends Animate implements InputProcessor {
 				hostile = !hostile;
 			break;
 		case Keys.ESCAPE:
+			Rogue.clientWrapper.client.stop();
+			Rogue.clientWrapper.client.close();
 			System.exit(0);
 			break;
 		case Keys.SHIFT_LEFT:

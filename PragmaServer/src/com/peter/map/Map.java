@@ -2,11 +2,14 @@ package com.peter.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 import com.badlogic.gdx.math.Vector2;
 import com.peter.entities.Citizen;
 import com.peter.entities.Entity;
+import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.packets.ChestPacket;
@@ -18,7 +21,6 @@ public class Map{
     public HashMap<Short, Entity> database;
     public static final int HEIGHT = 40;
 	public static final int WIDTH = 80;
-	protected static int floor;
 	/*public HashMap<Integer, ChestPacket> chests;
 	public HashMap<Integer, ItemPacket> items;
 	public HashMap<Integer, NPC> npcs;*/
@@ -30,6 +32,10 @@ public class Map{
 	public static ArrayList<HashMap<Integer, ItemPacket>> itemSets;
 	public static ArrayList<HashMap<Integer, NPC>> npcSets;
 	
+	public static Queue<ItemPacket> ItemQueue;
+	public static Queue<ChestPacket> ChestQueue;
+	public static Queue<NPC> NPCQueue;
+	
 	public Map(){
 		database = new HashMap<Short, Entity>();
 		players = new HashMap<Integer, Player>();
@@ -39,6 +45,10 @@ public class Map{
 		itemSets = new ArrayList<HashMap<Integer, ItemPacket>>();
 		npcSets = new ArrayList<HashMap<Integer, NPC>>();
 		markSets = new ArrayList<Marks>();
+		
+		ItemQueue = new LinkedList<ItemPacket>();
+		ChestQueue = new LinkedList<ChestPacket>();
+		NPCQueue = new LinkedList<NPC>();
 
 
 		tileSets.add(new Tile[WIDTH][HEIGHT]);
@@ -129,28 +139,37 @@ public class Map{
 		
 		
 		
-		
+		// Adds the exit in the floor
 		System.out.println(roomLocations.size());
-		Vector2 furthest = null;
-		double furthestValue = 0;
-		while(!roomLocations.isEmpty()){
-			double currentValue = Math.sqrt(Math.pow(x - roomLocations.peek().x, 2) + Math.pow(y - roomLocations.peek().y, 2));
-			if(currentValue > furthestValue){
-				furthest = roomLocations.pop();
-				furthestValue = Math.sqrt(Math.pow(x - furthest.x, 2) + Math.pow(y - furthest.y, 2));
+		if(!roomLocations.isEmpty()){
+			Vector2 furthest = null;
+			double furthestValue = 0;
+			while(!roomLocations.isEmpty()){
+				double currentValue = Math.sqrt(Math.pow(x - roomLocations.peek().x, 2) + Math.pow(y - roomLocations.peek().y, 2));
+				if(currentValue > furthestValue){
+					furthest = roomLocations.pop();
+					furthestValue = Math.sqrt(Math.pow(x - furthest.x, 2) + Math.pow(y - furthest.y, 2));
+				}
+				else
+					roomLocations.pop();
 			}
-			else
-				roomLocations.pop();
+			tileSet[(int) furthest.x][(int) furthest.y] = Tile.DOWN;
 		}
-		tileSet[(int) furthest.x][(int) furthest.y] = Tile.DOWN;
-		
-		
-		
-		
+		// End of the dungeon!
 		
 		tileSets.add(tileSet);
+		addEntities(floor);
 		
 		return tileSet;
+	}
+	
+	private void addEntities(int floor){
+		while(!NPCQueue.isEmpty())
+			Map.npcSets.get(floor).put(NPCQueue.peek().ID, NPCQueue.remove());
+		while(!ItemQueue.isEmpty())
+			Map.itemSets.get(floor).put(ItemQueue.peek().ID, ItemQueue.remove());
+		while(!ChestQueue.isEmpty())
+			Map.chestSets.get(floor).put(ChestQueue.peek().ID, ChestQueue.remove());
 	}
 	
 	private boolean scanRoom(Tile[][] tileSet, Room room){
@@ -261,13 +280,37 @@ class Room{
 				   || j == (y-height/2) || j == (y+height/2))
 					if(tileSet[i][j].equals(Tile.BLANK))
 						tileSet[i][j] = Tile.WALL;
-		if(Global.rand(3, 0) == 0){
-			NPC temp = new Citizen();
+		ItemPacket temp;
+		NPC temp2;
+		switch(Global.rand(1, 0)){
+		case 0:
+			temp = new ItemPacket("Gem");
 			temp.ID = ++Global.count;
 			temp.floor = floor;
-			temp.setPosition(x, y);
-			Map.npcSets.get(floor).put(Global.count, temp);
-			Map.markSets.get(floor).put(temp.ID, temp.getX(), temp.getY());
+			temp.x = (x + Global.rand(4, -2));
+			temp.y = (y + Global.rand(4, -2));
+			Map.markSets.get(floor).put(temp.ID,temp.x * 32, temp.y * 32);
+			Map.ItemQueue.add(temp);
+			break;
+		case 1:
+			temp2 = new Citizen();
+			temp2.ID = ++Global.count;
+			temp2.floor = floor;
+			temp2.setPosition(x, y);
+			Map.markSets.get(floor).put(temp2.ID, temp2.getX(), temp2.getY());
+			Map.NPCQueue.add(temp2);
+			break;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			temp2 = new Monster("Worm", true);
+			temp2.ID = ++Global.count;
+			temp2.floor = floor;
+			temp2.setPosition((x + Global.rand(4, -2)), (y + Global.rand(4, -2)));
+			Map.markSets.get(floor).put(temp2.ID, temp2.getX(), temp2.getY());
+			Map.NPCQueue.add(temp2);
+			break;
 		}
 	}
 }

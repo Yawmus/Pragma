@@ -40,14 +40,15 @@ public class PragmaServer{
 	public final int HEIGHT = 40, WIDTH = 80;
 	public static Map map = new Map();
 	public static Data data = new Data();
-	private static Integer removeID = 0;
-	private static Integer removeFloor = 0;
+	public static Integer removeID = 0;
+	public static Integer removeFloor = 0;
 	
 	public static void main(String[] args) throws Exception {
 		ItemPacket temp;
 		ChestPacket temp2;
 		NPC temp3;
 		
+		// Populates floor 0 only
 		Map.itemSets.get(0).put(++Global.count, new ItemPacket("Ring", 30, 8, Global.count));
 		temp = Map.itemSets.get(0).get(Global.count);
 		Map.markSets.get(0).put(temp.ID, temp.x * 32, temp.y * 32);
@@ -62,7 +63,6 @@ public class PragmaServer{
 
 		temp2.items.add(new ItemPacket("Breast Plate"));
 		
-		//map.npcs.put(++count, new NPC())
 		for(int i=0; i<data.getCitizens(); i++){
 			temp3 = new Citizen();
 			temp3.ID = ++Global.count;
@@ -186,7 +186,7 @@ public class PragmaServer{
 				}
 				else if(o instanceof RemoveItemPacket){
 					RemoveItemPacket packet = (RemoveItemPacket) o;
-					if(Map.itemSets.get(packet.floor).get(packet.ID) != null){
+					if(Map.itemSets.get(packet.floor).containsKey(packet.ID)){
 						Map.itemSets.get(packet.floor).remove(packet.ID);
 						Map.markSets.get(packet.floor).put(-1, packet.x, packet.y);
 						server.sendToAllExceptUDP(c.getID(), packet);
@@ -210,8 +210,7 @@ public class PragmaServer{
 							removeFloor = packet.floor;
 						}
 						else{
-							Map.npcSets.get(packet.floor).get(packet.receiverID).attacker = Map.npcSets.get(packet.floor).containsKey(packet.attackerID) ? 
-									Map.npcSets.get(packet.floor).get(packet.attackerID) : map.players.get(packet.attackerID);
+							Map.npcSets.get(packet.floor).get(packet.receiverID).attacker = map.players.get(packet.attackerID);
 							Map.npcSets.get(packet.floor).get(packet.receiverID).list.addID(packet.attackerID);
 						}
 					}
@@ -383,13 +382,13 @@ public class PragmaServer{
 					Map.npcSets.get(removeFloor).remove(removeID);
 					removeID = 0;
 				}
-				try{
+				//try{
 					for(int i=0; i<Map.npcSets.size(); i++)
 						for(NPC npc : Map.npcSets.get(i).values())
 							npc.update(currentFrame/1000);
-				} catch(Exception e){
-					System.out.println("Should only be displayed if new floor");
-				}
+				//} catch(Exception e){
+				//	System.out.println("Should only be displayed if trying spawn");
+				//}
 			}
 	}
 }

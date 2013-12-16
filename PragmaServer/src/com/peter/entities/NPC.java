@@ -58,10 +58,6 @@ public class NPC extends Animate {
 		delay = 2.6f + Global.rand(100, 0) * .005f;
 		list = new HostilityList();
 		response = new Responses(getType());
-
-        stats.setExperience(1);
-        stats.setMaxHitpoints(10);
-        stats.setHitpoints(10);
 	}
 	
 	public NPC(){}
@@ -122,15 +118,17 @@ public class NPC extends Animate {
 
 	public void checkCollision(){
 		collision = false;
+		//list.displayTypes();
+		//  System.out.println(type + "     " + floor + " - " + x + ", " + y); /*BUG TESTING FOR NPC COLLISION*/
 		if(PragmaServer.map.getTile(floor, getX(), getY()).isBlocked())
 			collision = true;
 		if(Map.markSets.get(floor).get(getX(), getY()) != -1 && Map.markSets.get(floor).get(getX(), getY()) != ID){
 			if(Map.itemSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY())) || Map.chestSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){
+				collision = true;
 			}
 			else if(Map.npcSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){
-				if(list.check(Map.npcSets.get(floor).get(Map.markSets.get(floor).get(getX(), getY())))){
+				if(list.check(Map.npcSets.get(floor).get(Map.markSets.get(floor).get(getX(), getY()))))
 					attack(Map.npcSets.get(floor).get(Map.markSets.get(floor).get(getX(), getY())));
-				}
 				else{
 					MessagePacket packet = new MessagePacket();
 					packet.callerID = ID;
@@ -181,18 +179,27 @@ public class NPC extends Animate {
 		if(amount < 0)
 			amount = 0;
 		amount *= -1;
-		if(entity instanceof Player){
-			AttackPacket packet = new AttackPacket();
-			packet.attackerID = ID;
-			packet.receiverID = entity.ID;
-			packet.floor = floor;
-			packet.amount = amount;
-			for(Player player : PragmaServer.map.players.values())
-				if(player.floor == floor)
-					PragmaServer.server.sendToTCP(player.ID, packet);
-		}
+		
+		AttackPacket packet = new AttackPacket();
+		packet.attackerID = ID;
+		packet.receiverID = entity.ID;
+		packet.floor = floor;
+		packet.amount = amount;
+		for(Player player : PragmaServer.map.players.values())
+			if(player.floor == floor)
+				PragmaServer.server.sendToTCP(player.ID, packet);
 		entity.getStats().mutateHitpoints(amount);
-		entity.setStatus(amount);
+		
+		if(entity instanceof NPC){
+			if(entity.getStats().getHitpoints() <= 0){
+				PragmaServer.removeID = entity.ID;
+				PragmaServer.removeFloor = floor;
+			}
+			else{
+				((NPC) entity).list.addID(ID);
+				((NPC) entity).attacker = this;
+			}
+		}
 	}
 	
 	private ArrayList<Node> open = new ArrayList<Node>();
@@ -258,9 +265,8 @@ public class NPC extends Animate {
 		// Gets the first square and all of the options around it that arn't blocked or already in open
 		for(int i=parent.x-32; i<=parent.x+32; i+=32)
 			for(int j=parent.y-32; j<=parent.y+32; j+=32)
-				if(!(PragmaServer.map.getTile(floor, i, j).isBlocked() ||  Map.chestSets.get(floor).containsKey(Map.markSets.get(floor).get(i, j))
-						|| Map.itemSets.get(floor).containsKey(Map.markSets.get(floor).get(i, j))
-						|| Map.npcSets.get(floor).containsKey(Map.markSets.get(floor).get(i, j)) || (i == parent.x && j == parent.y))){
+				if(!(PragmaServer.map.getTile(floor, i, j).isBlocked() || (Map.markSets.get(floor).get(i, j) != -1 && Map.npcSets.get(floor).containsKey(Map.markSets.get(floor)) 
+					&& list.check(Map.npcSets.get(floor).get(Map.markSets.get(floor).get(i, j))) || (i == parent.x && j == parent.y)))){
 					flag = false;
 					for(int q=0; q<closed.size(); q++)
 						if(closed.get(q).x == i && closed.get(q).y == j){

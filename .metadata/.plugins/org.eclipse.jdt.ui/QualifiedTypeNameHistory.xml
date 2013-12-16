@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.map.Map"/>
-<fullyQualifiedTypeName name="com.peter.server.Global"/>
-<fullyQualifiedTypeName name="com.peter.packets.CollisionPacket"/>
-<fullyQualifiedTypeName name="com.peter.rogue.network.Network"/>
-<fullyQualifiedTypeName name="com.esotericsoftware.minlog.Log"/>
-<fullyQualifiedTypeName name="com.peter.rogue.network.ClientWrapper"/>
-<fullyQualifiedTypeName name="com.esotericsoftware.kryonet.Listener"/>
 <fullyQualifiedTypeName name="com.esotericsoftware.kryonet.Client"/>
 <fullyQualifiedTypeName name="com.esotericsoftware.kryonet.Connection"/>
 <fullyQualifiedTypeName name="com.peter.entities.Entity"/>
@@ -28,19 +21,15 @@
 <fullyQualifiedTypeName name="com.peter.entities.Citizen"/>
 <fullyQualifiedTypeName name="com.peter.entities.NPC"/>
 <fullyQualifiedTypeName name="com.peter.packets.NPCPacket"/>
-<fullyQualifiedTypeName name="com.peter.packets.AddNPCPacket"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType"/>
 <fullyQualifiedTypeName name="com.peter.entities.Monster"/>
-<fullyQualifiedTypeName name="com.peter.entities.Player"/>
 <fullyQualifiedTypeName name="com.peter.packets.PlayerPacket"/>
 <fullyQualifiedTypeName name="com.peter.packets.MPPlayer"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="com.peter.packets.Player"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.GL10"/>
 <fullyQualifiedTypeName name="com.peter.packets.MessagePacket"/>
-<fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
-<fullyQualifiedTypeName name="com.peter.server.PragmaServer"/>
 <fullyQualifiedTypeName name="com.peter.map.Data"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="java.nio.file.Files"/>
@@ -60,4 +49,15 @@
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
 <fullyQualifiedTypeName name="com.peter.map.Tile"/>
+<fullyQualifiedTypeName name="com.peter.entities.Player"/>
+<fullyQualifiedTypeName name="com.peter.map.Marks"/>
+<fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
+<fullyQualifiedTypeName name="com.peter.packets.IDPacket"/>
+<fullyQualifiedTypeName name="com.peter.map.Map"/>
+<fullyQualifiedTypeName name="com.peter.server.Global"/>
+<fullyQualifiedTypeName name="com.peter.server.PragmaServer"/>
+<fullyQualifiedTypeName name="com.peter.packets.AddNPCPacket"/>
+<fullyQualifiedTypeName name="java.util.Stack"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.math.Vector2"/>
+<fullyQualifiedTypeName name="java.lang.Math"/>
 </qualifiedTypeNameHistroy>
