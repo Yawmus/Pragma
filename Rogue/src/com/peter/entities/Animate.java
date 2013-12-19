@@ -16,33 +16,19 @@ public class Animate extends Entity{
 	protected static LinkedList<String> lastNames;
 	protected float messageDelay = 0, statusDelay = 0, delay, time = 0;
 	public boolean messageFlag, statusFlag;
-	protected HostilityList list;
-	protected String message;
+	protected String message, race, name;
 	protected Integer status;
-	protected String target;
 	public static Vector3 pos = new Vector3();
 	protected Animate attacker;
-	protected Sound death;
+	protected Sound deathSound;
+	public static Animation animations = new Animation();
 	
-	static{
-		/*firstNames = new LinkedList<String>();
-		lastNames = new LinkedList<String>();
-		in = new Scanner(Gdx.files.internal("data/firstName.txt").readString());
-		while(in.hasNextLine())
-			firstNames.add(new String(in.nextLine()));
-		in.close();
-		in = new Scanner(Gdx.files.internal("data/lastName.txt").readString());
-		while(in.hasNextLine())
-			lastNames.add(new String(in.nextLine()));
-		in.close();*/
-	}
-	
-	public Animate(String filename, String type) {
-		super(filename, type);
-		list = new HostilityList();
+	public Animate(String filename, String race, String type, String name) {
+		super(filename, type, name);
 		stats = new Stats();
 		message = new String("");
 		status = null;
+		this.race = race;
 	}
 	public void update(float delta){
 		time += delta;
@@ -120,13 +106,11 @@ public class Animate extends Entity{
 			Rogue.clientWrapper.client.sendUDP(packet);
 		}
 	}
-	
 
 	public void setDelays(int delay) {
 		this.delay = delay;
 		messageDelay = delay;
 		statusDelay = delay;
-		
 	}
 	
 	public void setOldX(int oldX){
@@ -135,5 +119,18 @@ public class Animate extends Entity{
 	
 	public void setOldY(int oldY){
 		this.oldY = oldY;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	public String getName(){
+		return name;
+	}
+	public void setRace(String race){
+		this.race = race;
+	}
+	public String getRace(){
+		return race;
 	}
 }

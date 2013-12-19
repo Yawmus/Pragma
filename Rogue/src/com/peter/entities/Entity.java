@@ -7,16 +7,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Entity extends Sprite{
 	
-	protected String type = new String();
-	protected String name;
+	protected String type, name;
 	public Integer ID;
 	protected float tileWidth = 32, tileHeight = 32;
 	protected int timeout = 0;
 	public boolean canDraw = false;
 
-	public Entity(String filename, String type){
+	public Entity(String filename, String type, String name){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
 		this.type = type;
+		this.name = name;
 	}
 	
 	public void draw(SpriteBatch spriteBatch){

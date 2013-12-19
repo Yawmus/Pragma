@@ -1,11 +1,11 @@
 package com.peter.entities;
 
-public class Player extends Animate{
+public class Player extends Entity{
 
 	private String picture;
 	
 	public Player(){
-		super("Player");
+		super("Human", "Player");
 		stats.setHitpoints(20);
 	}
 

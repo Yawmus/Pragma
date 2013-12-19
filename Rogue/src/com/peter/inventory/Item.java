@@ -13,16 +13,16 @@ public class Item extends Entity{
 	private boolean pickedUp;
 	
 	public Item(String name, int weight, int value, String filename){
-		super(filename, "Item");
-		this.name = name;
+		super(filename, "Item", name);
 		this.weight = weight;
 		this.value = value;
 		this.filename = filename;
 	}
 	
 	public Item(Item item){
-		super(item.filename, "Item");
+		super(item.filename, item.type, item.name);
 		this.name = item.name;
+		this.type = item.type;
 		this.weight = item.weight;
 		this.value = item.value;
 		this.filename = item.filename;

@@ -1,4 +1,4 @@
-package com.peter.entities;
+package com.peter.rogue.network;
 
 import com.peter.inventory.Food;
 import com.peter.inventory.Item;

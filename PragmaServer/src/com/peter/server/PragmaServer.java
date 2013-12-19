@@ -72,7 +72,7 @@ public class PragmaServer{
 			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
 		}
 		for(int i=0; i<data.getMonsters(); i++){
-			temp3 = new Monster(/*Monster.WORM*/"Worm", true);
+			temp3 = new Monster("Worm");
 			temp3.ID = ++Global.count;
 			temp3.floor = 0;
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
@@ -80,7 +80,7 @@ public class PragmaServer{
 			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
 		}
 		for(int i=0; i<data.getShopkeeps(); i++){
-			temp3 = new Shopkeep();
+			temp3 = new Shopkeep(Shopkeep.Bartender);
 			temp3.ID = ++Global.count;
 			temp3.floor = 0;
 			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
@@ -137,7 +137,7 @@ public class PragmaServer{
 				
 				packet2.npcs = new HashMap<Integer, AddNPCPacket>();
 				for(NPC npc : Map.npcSets.get(0).values()){
-					packet2.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getType(), npc.getName()));
+					packet2.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
 					if(npc instanceof Shopkeep){
 						packet2.npcs.get(npc.ID).items = ((Shopkeep) npc).items;
 					}
@@ -171,19 +171,20 @@ public class PragmaServer{
 					else
 						System.out.println("[SERVER] failed to message something!");
 				}
+				
 				else if(o instanceof PlayerPacket){
 					PlayerPacket packet = (PlayerPacket) o;
-					map.players.get(c.getID()).setX(packet.x);
-					map.players.get(c.getID()).setY(packet.y);
-					Map.markSets.get(packet.floor).put(c.getID(), packet.x, packet.y);
-					map.players.get(c.getID()).setOldX(packet.oldX);
-					map.players.get(c.getID()).setOldY(packet.oldY);
-					Map.markSets.get(packet.floor).put(-1, packet.oldX, packet.oldY);
 					packet.ID = c.getID();
-					for(Player player : map.players.values())
-						if(player.floor == packet.floor && player.ID != c.getID())
-							server.sendToTCP(player.ID, packet);
+					map.players.get(packet.ID).floor = packet.floor;
+					map.players.get(packet.ID).setX(packet.x);
+					map.players.get(packet.ID).setY(packet.y);
+					Map.markSets.get(packet.floor).put(c.getID(), packet.x, packet.y);
+					map.players.get(packet.ID).setOldX(packet.oldX);
+					map.players.get(packet.ID).setOldY(packet.oldY);
+					Map.markSets.get(packet.floor).put(-1, packet.oldX, packet.oldY);
+					server.sendToAllExceptTCP(packet.ID, packet);
 				}
+				
 				else if(o instanceof RemoveItemPacket){
 					RemoveItemPacket packet = (RemoveItemPacket) o;
 					if(Map.itemSets.get(packet.floor).containsKey(packet.ID)){
@@ -194,6 +195,7 @@ public class PragmaServer{
 					else
 						System.out.println("[SERVER] failed to remove item!");
 				}
+				
 				else if(o instanceof AttackPacket){
 					AttackPacket packet = (AttackPacket) o;
 					if(Map.npcSets.get(packet.floor).containsKey(packet.receiverID)){
@@ -205,6 +207,7 @@ public class PragmaServer{
 							ExperiencePacket packet2 = new ExperiencePacket();
 							packet2.amount = Map.npcSets.get(packet.floor).get(packet.receiverID).getStats().getExperience();
 							packet2.name = Map.npcSets.get(packet.floor).get(packet.receiverID).getName();
+							packet2.race = Map.npcSets.get(packet.floor).get(packet.receiverID).getRace();
 							server.sendToTCP(packet.attackerID, packet2);
 							removeID = Map.npcSets.get(packet.floor).get(packet.receiverID).ID;
 							removeFloor = packet.floor;
@@ -228,8 +231,8 @@ public class PragmaServer{
 					}
 					else
 						System.out.println("[SERVER] failed to attack something!");
-					
 				}
+				
 				else if(o instanceof RemoveTradeItemPacket){
 					RemoveTradeItemPacket packet = (RemoveTradeItemPacket) o;
 					if(Map.chestSets.get(packet.floor).get(packet.ID) != null){
@@ -240,7 +243,10 @@ public class PragmaServer{
 						((Shopkeep) Map.npcSets.get(packet.floor).get(packet.ID)).items.remove(packet.index);
 						server.sendToAllExceptUDP(c.getID(), packet);
 					}
+					else
+						System.out.println("[SERVER] failed to remove trade item!");
 				}
+				
 				else if(o instanceof AddTradeItemPacket){
 					AddTradeItemPacket packet = (AddTradeItemPacket) o;
 					if(Map.chestSets.get(packet.floor).containsKey(packet.ID)){
@@ -251,13 +257,17 @@ public class PragmaServer{
 						((Shopkeep) Map.npcSets.get(packet.floor).get(packet.ID)).items.add(packet.item);
 						server.sendToAllExceptUDP(c.getID(), packet);
 					}
+					else
+						System.out.println("[SERVER] failed to add trade item!");
 				}
+				
 				else if(o instanceof AddPlayerPacket){
 					for(Player player : map.players.values()){
 						AddPlayerPacket packet = new AddPlayerPacket();
 						packet.ID = player.ID;
 						packet.x = player.getX();
 						packet.y = player.getY();
+						packet.floor = player.floor;
 						packet.name = player.getName();
 						packet.picture = player.getPicture();
 						server.sendToTCP(c.getID(), packet);
@@ -268,47 +278,20 @@ public class PragmaServer{
 					newPlayer.ID = packet2.ID;
 					newPlayer.setX(packet2.x);
 					newPlayer.setY(packet2.y);
+					newPlayer.floor = 0;
 					newPlayer.setPicture(packet2.picture);
 					newPlayer.setName(packet2.name);
 					
 					map.players.put(packet2.ID, newPlayer);
 					server.sendToAllExceptTCP(packet2.ID, packet2);
-					
-					
 				}
+				
 				else if(o instanceof RequestFloorPacket){
 					RequestFloorPacket packet = (RequestFloorPacket) o;
-					
-					// Removes the player from the players on the previous floor
-					RemovePlayerPacket packet2 = new RemovePlayerPacket();
-					packet2.ID = c.getID();
-					packet2.x = map.players.get(c.getID()).getX();
-					packet2.y = map.players.get(c.getID()).getY();
-					
-					for(Player player : map.players.values())
-						if(player.floor == map.players.get(c.getID()).floor && player.ID != c.getID())
-							server.sendToTCP(player.ID, packet2);
-					
-					
-					// Adds the new player to any existing players on the floor and vice versa
-					AddPlayerPacket packet3 = new AddPlayerPacket();
-					packet3.ID = c.getID();
-					packet3.x = map.players.get(c.getID()).getX();
-					packet3.y = map.players.get(c.getID()).getY();
-					
-					for(Player player : map.players.values()){
-						if(player.floor == packet.floor && player.ID != c.getID()){
-							server.sendToTCP(player.ID, packet3);
-							AddPlayerPacket packet4 = new AddPlayerPacket();
-							packet4.ID = player.ID;
-							packet4.x = player.getX();
-							packet4.y = player.getY();
-							server.sendToTCP(c.getID(), packet4);
-						}
-					}
+					server.sendToAllExceptTCP(packet.ID, packet);
+					map.players.get(c.getID()).floor = packet.floor;
 					
 					// Syncs the items, chests, npcs and tiles on the map
-					map.players.get(c.getID()).floor = packet.floor;
 					MapPacket packet5 = new MapPacket();
 					
 					packet5.tiles = new byte[Map.WIDTH][Map.HEIGHT];
@@ -317,8 +300,9 @@ public class PragmaServer{
 					packet5.items = Map.itemSets.get(packet.floor);
 					packet5.chests = Map.chestSets.get(packet.floor);
 					packet5.npcs = new HashMap<Integer, AddNPCPacket>();
+					
 					for(NPC npc : Map.npcSets.get(packet.floor).values()){
-                        packet5.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getType(), npc.getName()));
+                        packet5.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
                         if(npc instanceof Shopkeep){
                                 packet5.npcs.get(npc.ID).items = ((Shopkeep) npc).items;
                         }
@@ -333,9 +317,6 @@ public class PragmaServer{
 							packet5.tiles[x][y] = ObjectToPacket.tileConverter(tileSet[x][y]);
 					
 					server.sendToTCP(c.getID(), packet5);
-					
-
-					map.players.get(c.getID()).floor = packet.floor;
 				}
 
 			}
@@ -382,13 +363,13 @@ public class PragmaServer{
 					Map.npcSets.get(removeFloor).remove(removeID);
 					removeID = 0;
 				}
-				//try{
+				try{
 					for(int i=0; i<Map.npcSets.size(); i++)
 						for(NPC npc : Map.npcSets.get(i).values())
 							npc.update(currentFrame/1000);
-				//} catch(Exception e){
-				//	System.out.println("Should only be displayed if trying spawn");
-				//}
+				} catch(Exception e){
+					System.out.println("Should only be displayed if trying spawn");
+				}
 			}
 	}
 }

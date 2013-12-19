@@ -11,14 +11,14 @@ public class Responses{
 		this.receiver = type;
 	}
 
-	public String call(Animate caller, boolean hostile){
+	public String call(Entity caller, boolean hostile){
 		if(receiver == "Shopkeep"){
 			return Shopkeep(caller, hostile);
 		}
 		if(receiver == "Citizen")
 			return Citizen(caller, hostile);
 		
-		if(receiver == "Worm"){
+		if(receiver == "Monster"){
 			dice = Global.rand(4, 0);
 			switch(dice){
 			case 0:
@@ -34,7 +34,7 @@ public class Responses{
 		
 		return "I don't have a response programmed";
 	}
-	private String Shopkeep(Animate caller, boolean hostile){
+	private String Shopkeep(Entity caller, boolean hostile){
 		dice = Global.rand(4, 0);
 		if(hostile)
 			switch(dice){
@@ -71,7 +71,7 @@ public class Responses{
 		return "";
 	}
 	
-	private String Citizen(Animate caller, boolean hostile){
+	private String Citizen(Entity caller, boolean hostile){
 		dice = Global.rand(4, 0);
 		if(hostile)
 			switch(dice){
@@ -84,7 +84,7 @@ public class Responses{
 			case 3:
 				return "Swine!";
 			}
-		if(caller.getType() == "worm")
+		if(caller.getType() == "Worm")
 			switch(dice){
 			case 0:
 				return "Eww, a " + caller.getType() + "!";

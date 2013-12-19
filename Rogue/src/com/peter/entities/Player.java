@@ -1,6 +1,7 @@
 package com.peter.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -15,7 +16,6 @@ import com.peter.inventory.Inventory;
 import com.peter.inventory.Item;
 import com.peter.map.Tile;
 import com.peter.packets.AttackPacket;
-import com.peter.packets.MPPlayer;
 import com.peter.packets.MessagePacket;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
@@ -45,12 +45,12 @@ public class Player extends Animate implements InputProcessor {
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
 	
 	public Player(String filename){
-		super(filename, "Player");
+		super(filename, "Player", "Human", null);
 		messageFlag = false;
 		name = "Adelaide";
 		pictureURL = "img/adelaide.png";
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
-		death = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
+		deathSound = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		packet = new PlayerPacket();
 		info = alert = messageBuffer = new String();
 		viewDistance = 7;
@@ -119,7 +119,7 @@ public class Player extends Animate implements InputProcessor {
 			alertDelay += delta;
 		}
 		
-		hunger -= delta/8000;
+		hunger -= delta/6000;
 		
 		if(time >= delay && !getMenu().equals("Chat")){
 			if(Gdx.input.isKeyPressed(Keys.A)){
@@ -164,16 +164,23 @@ public class Player extends Animate implements InputProcessor {
 			packet.y = (int) oldY;
 			packet.floor = Play.map.getFloor();
 			Rogue.clientWrapper.client.sendTCP(packet);
+
 			
+			RequestFloorPacket packet2 = new RequestFloorPacket();
+			packet2.prevFloor = Play.map.getFloor();
 			if(Play.map.getTile(getX(), getY()).direction())
 				Play.map.mutateFloor(-1);
 			else
 				Play.map.mutateFloor(1);
+
+			if(!(Play.map.players.size() > Play.map.getFloor()))
+				Play.map.players.add(new HashMap<Integer, MPPlayer>());
 			
-			RequestFloorPacket packet2 = new RequestFloorPacket();
 			packet2.floor = Play.map.getFloor();
+			
 			packet2.x = (int) getX();
 			packet2.y = (int) getY();
+			packet2.ID = ID;
 			Rogue.clientWrapper.client.sendTCP(packet2);
 		}
 		if(!(Play.map.marks.get((int)getX(), (int)getY()) == -1 || Play.map.marks.get((int)getX(), (int)getY()) == ID)){

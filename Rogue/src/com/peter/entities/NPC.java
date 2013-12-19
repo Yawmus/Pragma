@@ -9,12 +9,12 @@ public class NPC extends Animate {
 	protected int move;
 	protected boolean canMove;
 	
-	public NPC(String filename, String type) {
-		super(filename, type);
-		name = "Bob"/*firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0))*/;
+	public NPC(String filename, String race, String type, String name) {
+		super(filename, race, type, name);
 		delay -= Global.rand(100, 0) * .01f;
 		canMove = true;
 		delay = 2.6f;
+		this.name = name;
 	}
 
 	public void draw(SpriteBatch spriteBatch){

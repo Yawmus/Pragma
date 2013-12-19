@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.peter.entities.Entity;
+import com.peter.entities.MPPlayer;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
 import com.peter.inventory.Chest;
-import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
 import com.peter.rogue.screens.Play;
 
@@ -69,7 +69,7 @@ public class UI{
 			System.out.println("Should be concurrent mod");
 		}
 		
-		for(MPPlayer mpPlayer : Play.map.players.values()){
+		for(MPPlayer mpPlayer : Play.map.players.get(Play.map.getFloor()).values()){
 			if(mpPlayer.canDraw){
 				if(mpPlayer.statusFlag){
 					Global.mapShapes.begin(ShapeType.Filled);
@@ -215,18 +215,21 @@ public class UI{
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 
 			Global.screen.begin();
-			Global.gothicFont.draw(Global.screen, "Players on this floor", Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-60);
+			Global.gothicFont.draw(Global.screen, "Players           Floor", Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-60);
 			Global.gothicFont.setScale(.6f);
-			int i=0;
 			System.out.println(Play.map.players.size());
-			for(MPPlayer mpPlayer : Play.map.players.values()){
-				if(mpPlayer.getName() != null && mpPlayer.getPictureURL() != null){
-					Global.gothicFont.draw(Global.screen, mpPlayer.getName(), Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-100 - i*30);
-					//Global.screen.draw(new Texture(Gdx.files.internal(mpPlayer.getPictureURL())), Global.SCREEN_WIDTH-100, Global.SCREEN_HEIGHT-100 - i*30);
+			
+			int i=0;
+			for(int floor=0; floor<Play.map.players.size(); floor++)
+				for(MPPlayer mpPlayer : Play.map.players.get(floor).values()){
+					if(mpPlayer.getName() != null && mpPlayer.getPictureURL() != null){
+						Global.gothicFont.draw(Global.screen, mpPlayer.getName(), Global.SCREEN_WIDTH-285, Global.SCREEN_HEIGHT-100 - i*30);
+						Global.gothicFont.draw(Global.screen, floor + "", Global.SCREEN_WIDTH-125, Global.SCREEN_HEIGHT-100 - i*30);
+						//Global.screen.draw(new Texture(Gdx.files.internal(mpPlayer.getPictureURL())), Global.SCREEN_WIDTH-100, Global.SCREEN_HEIGHT-100 - i*30);
+						i++;
+					}
 				}
-
-				i++;
-			}
+			
 			Global.gothicFont.setScale(1f);
 			Global.screen.end();
 		}

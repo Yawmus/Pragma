@@ -30,7 +30,7 @@ public class Chest extends Entity {
 	private Entity trade;
 	
 	public Chest(){
-		super("c1.png", "Chest");
+		super("c1.png", "Chest", null);
 		this.name = "Chest";
 		this.items = new ArrayList<Item>();
 		this.collisions = new ArrayList<Rectangle>();

@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.peter.entities.Entity;
 import com.peter.entities.EntityManager;
+import com.peter.entities.MPPlayer;
 import com.peter.entities.NPC;
 import com.peter.entities.Shopkeep;
 import com.peter.inventory.Chest;
@@ -27,6 +28,7 @@ import com.peter.packets.RemoveItemPacket;
 import com.peter.packets.RemoveNPCPacket;
 import com.peter.packets.RemovePlayerPacket;
 import com.peter.packets.RemoveTradeItemPacket;
+import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.screens.Play;
 
 public class Network extends Listener {
@@ -36,8 +38,8 @@ public class Network extends Listener {
 	public void received(Connection c, Object o){
 		if(o instanceof MessagePacket){
 			MessagePacket packet = (MessagePacket) o;
-			if(Play.map.players.containsKey(packet.receiverID))
-				Play.map.players.get(packet.receiverID).setMessage(packet.message);
+			if(Play.map.players.get(packet.floor).containsKey(packet.receiverID))
+				Play.map.players.get(packet.floor).get(packet.receiverID).setMessage(packet.message);
 			else if(Play.map.npcs.containsKey(packet.receiverID))
 				Play.map.npcs.get(packet.receiverID).setMessage(packet.message);
 		}
@@ -55,19 +57,24 @@ public class Network extends Listener {
 			RemovePlayerPacket packet = (RemovePlayerPacket) o;
 			Play.map.marks.find(packet.ID, -1);
 			Play.map.database.remove(packet.ID);
-			Play.map.players.remove(packet.ID);
+			for(int i=0; i<Play.map.players.size(); i++)
+				if(Play.map.players.get(i).containsKey(packet.ID)){
+					Play.map.players.get(i).remove(packet.ID);
+					break;
+				}
 		}
 		else if(o instanceof PlayerPacket){
 			PlayerPacket packet = (PlayerPacket) o;
-			if(Play.map.players.get(packet.ID) != null){
-				Play.map.players.get(packet.ID).setX(packet.x);
-				Play.map.players.get(packet.ID).setY(packet.y);
+			Play.map.players.get(packet.floor).get(packet.ID).setX(packet.x);
+			Play.map.players.get(packet.floor).get(packet.ID).setY(packet.y);
+			Play.map.players.get(packet.floor).get(packet.ID).setOldX(packet.oldX);
+			Play.map.players.get(packet.floor).get(packet.ID).setOldY(packet.oldY);
+			if(Play.map.getFloor() == packet.floor){
 				Play.map.marks.put(packet.ID, packet.x, packet.y);
-				Play.map.players.get(packet.ID).setOldX(packet.oldX);
-				Play.map.players.get(packet.ID).setOldY(packet.oldY);
 				Play.map.marks.put(-1, packet.oldX, packet.oldY);
 			}
 		}
+		
 		else if(o instanceof NPCPacket){
 			NPCPacket packet = (NPCPacket) o;
 			if(Play.map.npcs.get(packet.ID) != null){
@@ -86,16 +93,28 @@ public class Network extends Listener {
 		else if(o instanceof RemoveNPCPacket){
 			RemoveNPCPacket packet = (RemoveNPCPacket) o;
 			Play.map.marks.put(-1, (int) Play.map.npcs.get(packet.ID).getX(), (int) Play.map.npcs.get(packet.ID).getY());
+			//Animate.animations.load("death", (int) Play.map.npcs.get(packet.ID).getX(), (int) Play.map.npcs.get(packet.ID).getY());
 			Play.map.database.remove(packet.ID);
 			Play.map.npcs.remove(packet.ID);
+		}
+		else if(o instanceof RequestFloorPacket){
+			RequestFloorPacket packet = (RequestFloorPacket) o;
+			
+			if(Play.map.players.size() > Play.map.getFloor())
+				Play.map.players.add(new HashMap<Integer, MPPlayer>());
+			
+			Play.map.players.get(packet.floor).put(packet.ID, Play.map.players.get(packet.prevFloor).remove(packet.ID));
+			
+			if(packet.floor == Play.map.getFloor()){
+				Play.map.database.put(packet.ID, Play.map.players.get(packet.floor).get(packet.ID));
+				Play.map.marks.put(packet.ID, packet.x, packet.y);
+			}
 		}
 		else if(o instanceof MapPacket){
 			Play.map.chests = new HashMap<Integer, Chest>();
 			Play.map.items = new HashMap<Integer, Item>();
 			Play.map.npcs = new HashMap<Integer, NPC>();
 			Play.map.marks = new Marks();
-			Play.map.database = new HashMap<Integer, Entity>();
-			Play.map.database.put(c.getID(), EntityManager.player);
 			
 			MapPacket packet = (MapPacket) o;
 			Play.map.marks.setMarker(packet.marks);
@@ -110,6 +129,13 @@ public class Network extends Listener {
 				for(int y=0; y<Play.map.HEIGHT; y++)
 					Play.map.init[x][y] = packet.tiles[x][y];
 			Play.map.initialize = true;
+			
+			Play.map.database = new HashMap<Integer, Entity>();
+			Play.map.database.put(c.getID(), EntityManager.player);
+			for(MPPlayer mpPlayer : Play.map.players.get(Play.map.getFloor()).values()){
+				Play.map.database.put(mpPlayer.ID, mpPlayer);
+				Play.map.marks.put(mpPlayer.ID, (int) mpPlayer.getX(), (int) mpPlayer.getY());
+			}
 		}
 		else if(o instanceof RemoveTradeItemPacket){
 			RemoveTradeItemPacket packet = (RemoveTradeItemPacket) o;
@@ -129,7 +155,8 @@ public class Network extends Listener {
 		else if(o instanceof ExperiencePacket){
 			ExperiencePacket packet = (ExperiencePacket) o;
 			EntityManager.player.getStats().mutateExperience(packet.amount);
-			EntityManager.player.setAlert("You killed " + packet.name + "!", false);
+			if(packet.name != null)
+				EntityManager.player.setAlert("You killed " + packet.name + "!", false);
 		}
 		else if(o instanceof AttackPacket){
 			AttackPacket packet = (AttackPacket) o;
@@ -137,9 +164,9 @@ public class Network extends Listener {
 				Play.map.npcs.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
 				Play.map.npcs.get(packet.receiverID).setStatus(packet.amount);
 			}
-			else if(Play.map.players.containsKey(packet.receiverID)){
-				Play.map.players.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
-				Play.map.players.get(packet.receiverID).setStatus(packet.amount);
+			else if(Play.map.players.get(packet.floor).containsKey(packet.receiverID)){
+				Play.map.players.get(packet.floor).get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+				Play.map.players.get(packet.floor).get(packet.receiverID).setStatus(packet.amount);
 			}
 			else{
 				EntityManager.player.getStats().mutateHitpoints(packet.amount);

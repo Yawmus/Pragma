@@ -9517,3 +9517,484 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2013-12-16 13:32:02.178 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2013-12-16 13:32:10.996
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-16 13:32:49.394
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-16 13:32:49.903
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Yawmus'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY com.google.gdt.eclipse.core 4 0 2013-12-16 13:34:11.882
+!MESSAGE Could not parse the XML file C:\Users\Yawmus\AppData\Local\Temp\site4232338941067152812xml
+!STACK 0
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 122; Content is not allowed in trailing section.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:198)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:441)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:368)
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1388)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$TrailingMiscDriver.next(XMLDocumentScannerImpl.java:1431)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:511)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:846)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:775)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:123)
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:242)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:345)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.getRootElement(CompositeArtifactsDowloadJobChangeListener.java:218)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.access$3(CompositeArtifactsDowloadJobChangeListener.java:212)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener$2.done(CompositeArtifactsDowloadJobChangeListener.java:248)
+	at org.eclipse.core.internal.jobs.JobListeners$3.notify(JobListeners.java:39)
+	at org.eclipse.core.internal.jobs.JobListeners.doNotify(JobListeners.java:112)
+	at org.eclipse.core.internal.jobs.JobListeners.done(JobListeners.java:152)
+	at org.eclipse.core.internal.jobs.JobManager.endJob(JobManager.java:647)
+	at org.eclipse.core.internal.jobs.WorkerPool.endJob(WorkerPool.java:105)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:70)
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2013-12-16 15:50:39.446
+!MESSAGE com.android.ide.eclipse.adt
+!SESSION 2013-12-17 14:18:03.256 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-17 14:18:51.559
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-17 14:18:51.738
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Yawmus'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.osgi 2 0 2013-12-17 14:18:55.760
+!MESSAGE While loading class "com.android.ide.eclipse.adt.internal.welcome.AdtStartup", thread "Thread[Worker-1,5,main]" timed out waiting (5003ms) for thread "Thread[Worker-0,5,main]" to finish starting bundle "com.android.ide.eclipse.adt_22.2.1.v201309180102-833290 [245]". To avoid deadlock, thread "Thread[Worker-1,5,main]" is proceeding but "com.android.ide.eclipse.adt.internal.welcome.AdtStartup" may not be fully initialized.
+!STACK 0
+org.osgi.framework.BundleException: State change in progress for bundle "reference:file:plugins/com.android.ide.eclipse.adt_22.2.1.v201309180102-833290.jar" by thread "Worker-0".
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.getExecutableExtension(EarlyStartupRunnable.java:117)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 26 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.getExecutableExtension(EarlyStartupRunnable.java:117)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY org.eclipse.osgi 2 0 2013-12-17 14:18:58.071
+!MESSAGE While loading class "com.android.ide.eclipse.adt.internal.project.FolderDecorator", thread "Thread[Worker-2,5,main]" timed out waiting (5000ms) for thread "Thread[Worker-0,5,main]" to finish starting bundle "com.android.ide.eclipse.adt_22.2.1.v201309180102-833290 [245]". To avoid deadlock, thread "Thread[Worker-2,5,main]" is proceeding but "com.android.ide.eclipse.adt.internal.project.FolderDecorator" may not be fully initialized.
+!STACK 0
+org.osgi.framework.BundleException: State change in progress for bundle "reference:file:plugins/com.android.ide.eclipse.adt_22.2.1.v201309180102-833290.jar" by thread "Worker-0".
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition$1.run(LightweightDecoratorDefinition.java:124)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.runtime.Platform.run(Platform.java:854)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.internalGetDecorator(LightweightDecoratorDefinition.java:120)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:251)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 33 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition$1.run(LightweightDecoratorDefinition.java:124)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.runtime.Platform.run(Platform.java:854)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.internalGetDecorator(LightweightDecoratorDefinition.java:120)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:251)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY org.eclipse.ui.workbench 4 2 2013-12-17 14:18:58.735
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.ui.workbench".
+!STACK 0
+org.eclipse.swt.SWTException: Device is disposed
+	at org.eclipse.swt.SWT.error(SWT.java:4397)
+	at org.eclipse.swt.SWT.error(SWT.java:4312)
+	at org.eclipse.swt.SWT.error(SWT.java:4283)
+	at org.eclipse.swt.widgets.Display.error(Display.java:1258)
+	at org.eclipse.swt.widgets.Display.asyncExec(Display.java:709)
+	at com.android.ide.eclipse.adt.internal.welcome.AdtStartup.initializeWindowCoordinator(AdtStartup.java:247)
+	at com.android.ide.eclipse.adt.internal.welcome.AdtStartup.earlyStartup(AdtStartup.java:92)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:87)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY org.eclipse.ui 4 4 2013-12-17 14:18:58.849
+!MESSAGE Unhandled Exception
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2013-12-17 14:18:58.916
+!MESSAGE Unable to execute early startup code for an extension
+!STACK 0
+org.eclipse.swt.SWTException: Device is disposed
+	at org.eclipse.swt.SWT.error(SWT.java:4397)
+	at org.eclipse.swt.SWT.error(SWT.java:4312)
+	at org.eclipse.swt.SWT.error(SWT.java:4283)
+	at org.eclipse.swt.widgets.Display.error(Display.java:1258)
+	at org.eclipse.swt.widgets.Display.asyncExec(Display.java:709)
+	at com.android.ide.eclipse.adt.internal.welcome.AdtStartup.initializeWindowCoordinator(AdtStartup.java:247)
+	at com.android.ide.eclipse.adt.internal.welcome.AdtStartup.earlyStartup(AdtStartup.java:92)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:87)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY org.eclipse.core.jobs 4 2 2013-12-17 14:18:58.993
+!MESSAGE An internal error occurred during: "Initializing Java Tooling".
+!STACK 0
+java.lang.NullPointerException
+	at com.android.ide.eclipse.adt.internal.sdk.Sdk.getProjectState(Sdk.java:520)
+	at com.android.ide.eclipse.adt.internal.project.AndroidClasspathContainerInitializer.allocateAndroidContainer(AndroidClasspathContainerInitializer.java:175)
+	at com.android.ide.eclipse.adt.internal.project.AndroidClasspathContainerInitializer.initialize(AndroidClasspathContainerInitializer.java:111)
+	at org.eclipse.jdt.internal.core.JavaModelManager.initializeContainer(JavaModelManager.java:2867)
+	at org.eclipse.jdt.internal.core.JavaModelManager$11.run(JavaModelManager.java:2773)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2345)
+	at org.eclipse.jdt.internal.core.JavaModelManager.initializeAllContainers(JavaModelManager.java:2813)
+	at org.eclipse.jdt.internal.core.JavaModelManager.getClasspathContainer(JavaModelManager.java:1897)
+	at org.eclipse.jdt.core.JavaCore.initializeAfterLoad(JavaCore.java:3990)
+	at org.eclipse.jdt.internal.ui.InitializeAfterLoadJob$RealJob.run(InitializeAfterLoadJob.java:36)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+!SESSION 2013-12-18 14:09:12.974 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.7.0_40
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-18 14:10:28.473
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.egit.ui 2 0 2013-12-18 14:10:28.573
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Yawmus'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.osgi 2 0 2013-12-18 14:10:34.186
+!MESSAGE While loading class "com.android.ide.eclipse.adt.internal.project.FolderDecorator", thread "Thread[Worker-6,5,main]" timed out waiting (5003ms) for thread "Thread[Worker-4,5,main]" to finish starting bundle "com.android.ide.eclipse.adt_22.2.1.v201309180102-833290 [245]". To avoid deadlock, thread "Thread[Worker-6,5,main]" is proceeding but "com.android.ide.eclipse.adt.internal.project.FolderDecorator" may not be fully initialized.
+!STACK 0
+org.osgi.framework.BundleException: State change in progress for bundle "reference:file:plugins/com.android.ide.eclipse.adt_22.2.1.v201309180102-833290.jar" by thread "Worker-4".
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition$1.run(LightweightDecoratorDefinition.java:124)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.runtime.Platform.run(Platform.java:854)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.internalGetDecorator(LightweightDecoratorDefinition.java:120)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:251)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 33 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition$1.run(LightweightDecoratorDefinition.java:124)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.runtime.Platform.run(Platform.java:854)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.internalGetDecorator(LightweightDecoratorDefinition.java:120)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:251)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY org.eclipse.osgi 2 0 2013-12-18 14:10:38.108
+!MESSAGE While loading class "com.android.ide.eclipse.adt.internal.welcome.AdtStartup", thread "Thread[Worker-1,5,main]" timed out waiting (5000ms) for thread "Thread[Worker-4,5,main]" to finish starting bundle "com.android.ide.eclipse.adt_22.2.1.v201309180102-833290 [245]". To avoid deadlock, thread "Thread[Worker-1,5,main]" is proceeding but "com.android.ide.eclipse.adt.internal.welcome.AdtStartup" may not be fully initialized.
+!STACK 0
+org.osgi.framework.BundleException: State change in progress for bundle "reference:file:plugins/com.android.ide.eclipse.adt_22.2.1.v201309180102-833290.jar" by thread "Worker-4".
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.getExecutableExtension(EarlyStartupRunnable.java:117)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	... 26 more
+Root exception:
+org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.beginStateChange(AbstractBundle.java:1088)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:298)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:464)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:340)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1212)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.ui.internal.WorkbenchPlugin.createExtension(WorkbenchPlugin.java:274)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.getExecutableExtension(EarlyStartupRunnable.java:117)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:66)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.Workbench$55.run(Workbench.java:2552)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY com.google.gdt.eclipse.core 4 0 2013-12-18 14:13:17.047
+!MESSAGE Could not parse the XML file C:\Users\Yawmus\AppData\Local\Temp\site7102917472637617487xml
+!STACK 0
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 122; Content is not allowed in trailing section.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:198)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:441)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:368)
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1388)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$TrailingMiscDriver.next(XMLDocumentScannerImpl.java:1431)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:511)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:846)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:775)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:123)
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:242)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:345)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.getRootElement(CompositeArtifactsDowloadJobChangeListener.java:218)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.access$3(CompositeArtifactsDowloadJobChangeListener.java:212)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener$2.done(CompositeArtifactsDowloadJobChangeListener.java:248)
+	at org.eclipse.core.internal.jobs.JobListeners$3.notify(JobListeners.java:39)
+	at org.eclipse.core.internal.jobs.JobListeners.doNotify(JobListeners.java:112)
+	at org.eclipse.core.internal.jobs.JobListeners.done(JobListeners.java:152)
+	at org.eclipse.core.internal.jobs.JobManager.endJob(JobManager.java:647)
+	at org.eclipse.core.internal.jobs.WorkerPool.endJob(WorkerPool.java:105)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:70)
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2013-12-18 15:29:05.707
+!MESSAGE com.android.ide.eclipse.adt
+
+!ENTRY com.google.gdt.eclipse.core 4 0 2013-12-19 12:49:46.876
+!MESSAGE Could not parse the XML file C:\Users\Yawmus\AppData\Local\Temp\site3525124830888226880xml
+!STACK 0
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 122; Content is not allowed in trailing section.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:198)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:441)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:368)
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1388)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$TrailingMiscDriver.next(XMLDocumentScannerImpl.java:1431)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:511)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:846)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:775)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:123)
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:242)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:345)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.getRootElement(CompositeArtifactsDowloadJobChangeListener.java:218)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener.access$3(CompositeArtifactsDowloadJobChangeListener.java:212)
+	at com.google.gdt.eclipse.suite.ext.update.CompositeArtifactsDowloadJobChangeListener$2.done(CompositeArtifactsDowloadJobChangeListener.java:248)
+	at org.eclipse.core.internal.jobs.JobListeners$3.notify(JobListeners.java:39)
+	at org.eclipse.core.internal.jobs.JobListeners.doNotify(JobListeners.java:112)
+	at org.eclipse.core.internal.jobs.JobListeners.done(JobListeners.java:152)
+	at org.eclipse.core.internal.jobs.JobManager.endJob(JobManager.java:647)
+	at org.eclipse.core.internal.jobs.WorkerPool.endJob(WorkerPool.java:105)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:70)

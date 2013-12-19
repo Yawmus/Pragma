@@ -15,19 +15,21 @@ import com.peter.packets.NPCPacket;
 import com.peter.server.Global;
 import com.peter.server.PragmaServer;
 
-public class NPC extends Animate {
+public class NPC extends Entity {
 
 	protected int move;
 	protected boolean canMove;
 	private Stack<Node> moves;
-	private ItemPacket drop;
-	public Animate attacker;
+	protected ItemPacket drop;
+	public Entity attacker;
 	public HostilityList list;
 	protected Responses response;
 
 	protected static LinkedList<String> firstNames;
 	protected static LinkedList<String> lastNames;
 	private static Scanner in;
+	
+	protected String group;
 	
 	static{
 		firstNames = new LinkedList<String>();
@@ -48,24 +50,27 @@ public class NPC extends Animate {
 		}
 	}
 	
-	public NPC(String type){
-		super(type);
-		name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));
+	public NPC(String group, String race, String type){
+		super(race, type);
+		this.group = group;
+		if(group != "Monster")
+			name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));
 		//time -= Global.rand(15, 0) * .8f;
 		canMove = true;
 		moves = new Stack<Node>();
 		drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
 		delay = 2.6f + Global.rand(100, 0) * .005f;
 		list = new HostilityList();
-		response = new Responses(getType());
+		response = new Responses(getGroup());
 	}
-	
-	public NPC(){}
 	
 	public ItemPacket getDrop(){
 		return drop;
 	}
-	
+
+	public String getGroup(){
+		return group;
+	}
 	
 	public void update(double delta){
 		super.update(delta);
@@ -163,13 +168,13 @@ public class NPC extends Animate {
 	
 	public String getMessage(Integer callerID){
 		if(Map.npcSets.get(floor).containsKey(callerID))
-			return response.call((Animate) Map.npcSets.get(floor).get(callerID), list.check(Map.npcSets.get(floor).get(callerID)));
+			return response.call((Entity) Map.npcSets.get(floor).get(callerID), list.check(Map.npcSets.get(floor).get(callerID)));
 		else if(PragmaServer.map.players.containsKey(callerID))
 			return response.call(PragmaServer.map.players.get(callerID), list.check(PragmaServer.map.players.get(callerID)));
 		return null;
 	}
 	
-	protected void attack(Animate entity){
+	protected void attack(Entity entity){
 		int amount = 0;
 		if(this.getStats().getStrength() == 0)
 			amount = Global.rand(3, 0);
@@ -194,6 +199,7 @@ public class NPC extends Animate {
 			if(entity.getStats().getHitpoints() <= 0){
 				PragmaServer.removeID = entity.ID;
 				PragmaServer.removeFloor = floor;
+				attacker = null;
 			}
 			else{
 				((NPC) entity).list.addID(ID);

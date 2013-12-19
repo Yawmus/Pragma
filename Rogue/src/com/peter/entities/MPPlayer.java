@@ -1,17 +1,15 @@
-package com.peter.packets;
+package com.peter.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.peter.entities.Animate;
 
 
 public class MPPlayer extends Animate{
 	
 	private String pictureURL;
 	
-	public MPPlayer(String filename, String type, String name) {
-		super(filename, type);
-		this.name = name;
+	public MPPlayer(String filename) {
+		super(filename, "Player", "Human", null);
 		stats.setDexterity(0);
 		stats.setMaxExperience(20);
 		stats.setExperience(0);

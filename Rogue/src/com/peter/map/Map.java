@@ -12,13 +12,13 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.peter.entities.Animate;
 import com.peter.entities.Entity;
+import com.peter.entities.MPPlayer;
 import com.peter.entities.Monster;
 import com.peter.entities.NPC;
-import com.peter.entities.PacketToObject;
 import com.peter.inventory.Chest;
 import com.peter.inventory.Item;
-import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
+import com.peter.rogue.network.PacketToObject;
 
 public class Map implements MapRenderer{
 	public Tile[][] tiles;
@@ -33,7 +33,7 @@ public class Map implements MapRenderer{
 	public ArrayList<String[][]> visibleSets;
 	public boolean initialize = true;
 
-	public HashMap<Integer, MPPlayer> players;
+	public ArrayList<HashMap<Integer, MPPlayer>> players;
 	public HashMap<Integer, NPC> npcs;
 	public HashMap<Integer, Item> items;
 	public HashMap<Integer, Chest> chests;
@@ -46,7 +46,7 @@ public class Map implements MapRenderer{
 		tiles = new Tile[WIDTH][HEIGHT];
 		init = new byte[WIDTH][HEIGHT];
 		//visible = new String[WIDTH][HEIGHT];
-		players = new HashMap<Integer, MPPlayer>();
+		players = new ArrayList<HashMap<Integer, MPPlayer>>();
 		npcs = new HashMap<Integer, NPC>();
 		items = new HashMap<Integer, Item>();
 		chests = new HashMap<Integer, Chest>();
@@ -56,6 +56,7 @@ public class Map implements MapRenderer{
 		visibleSets.add(new String[WIDTH][HEIGHT]);
 		
 		marks = new Marks();
+		players.add(new HashMap<Integer, MPPlayer>());
 		
 		for(int x=0; x<WIDTH; x++)
 			for(int y=0; y<HEIGHT; y++)
@@ -102,7 +103,7 @@ public class Map implements MapRenderer{
 		for(Chest chest : chests.values())
 			if(chest.canDraw)
 				chest.draw(spriteBatch);
-		for(MPPlayer mpPlayer : players.values())
+		for(MPPlayer mpPlayer : players.get(floor).values())
 			if(mpPlayer.canDraw)
 				mpPlayer.draw(spriteBatch);
 			else
@@ -156,9 +157,15 @@ public class Map implements MapRenderer{
 	public String cursor(Integer ID, int x, int y){
 		if(get(ID) != null && get(ID).canDraw)
 			if(get(ID) instanceof Monster)
-				return get(ID).getName() + ", level " + ((Animate) get(ID)).getStats().getLevel();
+				if(get(ID).getName() != null)
+					return ((Animate) get(ID)).getName() + ", level " + ((Animate) get(ID)).getStats().getLevel();
+				else
+					return ((Animate) get(ID)).getRace() + ", level " + ((Animate) get(ID)).getStats().getLevel();
 			else if(get(ID) instanceof NPC)
-				return get(ID).getName() + ", " + ((Animate) get(ID)).getType();
+				if(((Animate) get(ID)).getType() != null)
+					return get(ID).getName() + ", " + ((Animate) get(ID)).getType().toLowerCase();
+				else
+					return get(ID).getName();
 			else
 				return get(ID).getName();
 		else if(getTile(x, y) != null && !visibleSets.get(floor)[(int)(x/32)][(int)(y/32)].equals("notVisited"))

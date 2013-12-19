@@ -14,9 +14,9 @@ import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
-import com.peter.packets.MPPlayer;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
+import com.peter.rogue.network.PacketToObject;
 import com.peter.rogue.screens.Play;
 import com.peter.rogue.views.UI;
 
@@ -53,15 +53,21 @@ public class EntityManager{
 		}
 		while(!NPCQueue.isEmpty()){
 			NPC newNPC;
-			if(NPCQueue.peek().type.equals("Citizen"))
-				newNPC = new Citizen("c_.png");
-			else if(NPCQueue.peek().type.equals("Shopkeep")){
-				newNPC = new Shopkeep("s_.png", "Shopkeep");
+			if(NPCQueue.peek().group.equals("Citizen"))
+				newNPC = new Citizen(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
+			else if(NPCQueue.peek().group.equals("Shopkeep")){
+				newNPC = new Shopkeep(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
 				for(int i=0; i<NPCQueue.peek().items.size(); i++)
 					((Shopkeep) newNPC).add(PacketToObject.itemConverter(NPCQueue.peek().items.get(i)));
 			}
-			else
-				newNPC = new Monster("tilda.png", "Worm");
+			else if(NPCQueue.peek().group.equals("Monster"))
+				newNPC = new Monster(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
+			else{
+				newNPC = null;
+				System.out.println("[CLIENT] npc conversion failed!");
+			}
+			newNPC.race = NPCQueue.peek().race;
+			newNPC.type = NPCQueue.peek().type;
 			newNPC.name = NPCQueue.peek().name;
 			newNPC.ID = NPCQueue.peek().ID;
 			newNPC.setPosition(NPCQueue.peek().x/32, NPCQueue.peek().y/32);
@@ -82,15 +88,17 @@ public class EntityManager{
 			chestQueue.remove();
 		}
 		while(!playerQueue.isEmpty()){
-			MPPlayer newPlayer = new MPPlayer("at.png", "Player", "Online guy");
+			MPPlayer newPlayer = new MPPlayer("at.png");
 			newPlayer.ID = playerQueue.peek().ID;
 			newPlayer.setX(playerQueue.peek().x);
 			newPlayer.setY(playerQueue.peek().y);
 			newPlayer.setPictureURL(playerQueue.peek().picture);
 			newPlayer.setName(playerQueue.peek().name);
-			Play.map.players.put(playerQueue.peek().ID, newPlayer);
-			Play.map.database.put(playerQueue.peek().ID, newPlayer);
-			Play.map.marks.put(playerQueue.peek().ID, playerQueue.peek().x, playerQueue.peek().y);
+			Play.map.players.get(playerQueue.peek().floor).put(playerQueue.peek().ID, newPlayer);
+			if(playerQueue.peek().floor == Play.map.getFloor()){
+				Play.map.database.put(playerQueue.peek().ID, newPlayer);
+				Play.map.marks.put(playerQueue.peek().ID, playerQueue.peek().x, playerQueue.peek().y);
+			}
 			playerQueue.remove();
 		}
 		while(!tradeItemQueue.isEmpty()){
@@ -161,6 +169,7 @@ public class EntityManager{
 		packet.picture = player.getPictureURL();
 		packet.x = (int) player.getX();
 		packet.y = (int) player.getY();
+		packet.floor = Play.map.getFloor();
 		packet.ID = player.ID;
 		Rogue.clientWrapper.client.sendTCP(packet);
 	}
