@@ -1,5 +1,6 @@
 package com.peter.entities;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -94,6 +95,11 @@ public class EntityManager{
 			newPlayer.setY(playerQueue.peek().y);
 			newPlayer.setPictureURL(playerQueue.peek().picture);
 			newPlayer.setName(playerQueue.peek().name);
+			System.out.println(playerQueue.peek().floor);
+			System.out.println(Play.map.players.size());
+			while(playerQueue.peek().floor > Play.map.players.size()-1)
+				Play.map.players.add(new HashMap<Integer, MPPlayer>());
+			System.out.println(Play.map.players.size());
 			Play.map.players.get(playerQueue.peek().floor).put(playerQueue.peek().ID, newPlayer);
 			if(playerQueue.peek().floor == Play.map.getFloor()){
 				Play.map.database.put(playerQueue.peek().ID, newPlayer);
