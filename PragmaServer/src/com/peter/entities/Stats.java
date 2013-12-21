@@ -8,13 +8,7 @@ public class Stats{
 	private int strength;
 	private int hitpoints;
 	private int maxHitpoints;
-	private int points;
 	private int defense;
-	
-	public Stats(){
-		setLevel(1);
-		points = 0;
-	}
 
 	public int getHitpoints() {
 		return hitpoints;
@@ -22,23 +16,6 @@ public class Stats{
 
 	public void mutateHitpoints(int amount){
 		this.hitpoints += amount;
-	}
-	
-	public void addExperience(String type){
-		if(type == "Worm")
-			mutateExperience(5);
-		else if(type == "Citizen")
-			mutateExperience(1);
-		else if(type == "Shopkeep")
-			mutateExperience(1);
-	}
-	
-	public void mutateExperience(int experience){
-		this.experience += experience;
-		if(this.experience >= maxExperience){
-			mutateLevel(1);
-			maxExperience += maxExperience*(level+1);
-		}
 	}
 	
 	public void setHitpoints(int hitpoints) {
@@ -83,11 +60,6 @@ public class Stats{
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	
-	public void mutateLevel(int amount){
-		this.level += amount;
-		mutatePoints(5);
-	}
 
 	public int getMaxHitpoints() {
 		return maxHitpoints;
@@ -95,14 +67,6 @@ public class Stats{
 
 	public void setMaxHitpoints(int maxHitpoints) {
 		this.maxHitpoints = maxHitpoints;
-	}
-	
-	public int getPoints(){
-		return points;
-	}
-	
-	public void mutatePoints(int amount){
-		points += amount;
 	}
 
 	public int getDefense() {

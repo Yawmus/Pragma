@@ -5,12 +5,9 @@ import java.util.HashMap;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.peter.entities.Citizen;
-import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
-import com.peter.map.Data;
 import com.peter.map.Map;
 import com.peter.map.Tile;
 import com.peter.packets.AddNPCPacket;
@@ -39,56 +36,10 @@ public class PragmaServer{
 	private static int udpPort = 23989, tcpPort = 23989;   //
 	public final int HEIGHT = 40, WIDTH = 80;
 	public static Map map = new Map();
-	public static Data data = new Data();
 	public static Integer removeID = 0;
 	public static Integer removeFloor = 0;
 	
 	public static void main(String[] args) throws Exception {
-		ItemPacket temp;
-		ChestPacket temp2;
-		NPC temp3;
-		
-		// Populates floor 0 only
-		Map.itemSets.get(0).put(++Global.count, new ItemPacket("Ring", 30, 8, Global.count));
-		temp = Map.itemSets.get(0).get(Global.count);
-		Map.markSets.get(0).put(temp.ID, temp.x * 32, temp.y * 32);
-
-		Map.itemSets.get(0).put(++Global.count, new ItemPacket("Hat", 32, 8, Global.count));
-		temp = Map.itemSets.get(0).get(Global.count);
-		Map.markSets.get(0).put(temp.ID, temp.x * 32, temp.y * 32);
-
-		Map.chestSets.get(0).put(++Global.count, new ChestPacket("Chest", 32, 7, Global.count));
-		temp2 = Map.chestSets.get(0).get(Global.count);
-		Map.markSets.get(0).put(temp2.ID, temp2.x * 32, temp2.y * 32);
-
-		temp2.items.add(new ItemPacket("Breast Plate"));
-		
-		for(int i=0; i<data.getCitizens(); i++){
-			temp3 = new Citizen();
-			temp3.ID = ++Global.count;
-			temp3.floor = 0;
-			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
-			Map.npcSets.get(0).put(Global.count, temp3);
-			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
-		}
-		for(int i=0; i<data.getMonsters(); i++){
-			temp3 = new Monster("Worm");
-			temp3.ID = ++Global.count;
-			temp3.floor = 0;
-			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
-			Map.npcSets.get(0).put(Global.count, temp3);
-			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
-		}
-		for(int i=0; i<data.getShopkeeps(); i++){
-			temp3 = new Shopkeep(Shopkeep.Bartender);
-			temp3.ID = ++Global.count;
-			temp3.floor = 0;
-			temp3.setPosition(Global.rand(30, 28), Global.rand(9, 5));
-			Map.npcSets.get(0).put(Global.count, temp3);
-			Map.markSets.get(0).put(temp3.ID, temp3.getX(), temp3.getY());
-			((Shopkeep) Map.npcSets.get(0).get(Global.count)).items.add(new ItemPacket("Breast Plate"));
-		}
-		
 		connect();
 	}
 	
@@ -137,7 +88,7 @@ public class PragmaServer{
 				
 				packet2.npcs = new HashMap<Integer, AddNPCPacket>();
 				for(NPC npc : Map.npcSets.get(0).values()){
-					packet2.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
+					packet2.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.getStats().getLevel(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
 					if(npc instanceof Shopkeep){
 						packet2.npcs.get(npc.ID).items = ((Shopkeep) npc).items;
 					}
@@ -302,7 +253,7 @@ public class PragmaServer{
 					packet5.npcs = new HashMap<Integer, AddNPCPacket>();
 					
 					for(NPC npc : Map.npcSets.get(packet.floor).values()){
-                        packet5.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
+                        packet5.npcs.put(npc.ID, new AddNPCPacket(npc.getX(), npc.getY(), npc.getStats().getLevel(), npc.ID, npc.getGroup(), npc.getRace(), npc.getType(), npc.getName()));
                         if(npc instanceof Shopkeep){
                                 packet5.npcs.get(npc.ID).items = ((Shopkeep) npc).items;
                         }
@@ -347,7 +298,9 @@ public class PragmaServer{
 					for(Player player : map.players.values())
 						if(player.floor == removeFloor)
 							server.sendToTCP(player.ID, packet);
-
+					System.out.println(Map.npcSets.size());
+					System.out.println(Map.npcSets.get(removeFloor).size());
+					System.out.println(Map.npcSets.get(removeFloor).get(removeID).getGroup());
 					if(Map.npcSets.get(removeFloor).get(removeID).getDrop() != null){ // Drops nothing
 						ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
 						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;

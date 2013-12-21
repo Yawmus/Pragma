@@ -42,10 +42,12 @@ public class Player extends Animate implements InputProcessor {
 	public boolean showPlayers = false;
 	private String alert;
 	private float alertDelay = 0;
+	protected Stats stats;
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
 	
 	public Player(String filename){
 		super(filename, "Player", "Human", null);
+		stats = new Stats();
 		messageFlag = false;
 		name = "Adelaide";
 		pictureURL = "img/adelaide.png";
@@ -82,6 +84,15 @@ public class Player extends Animate implements InputProcessor {
 	
 	public Texture getPicture(){
 		return picture;
+	}
+
+
+	public Stats getStats() {
+		return stats;
+	}
+
+	public void setStats(Stats stats) {
+		this.stats = stats;
 	}
 	
 	public void update(float delta){
@@ -249,11 +260,12 @@ public class Player extends Animate implements InputProcessor {
 	
 	protected void attack(Animate entity){
 		int amount = 0;
-		if(this.getStats().getStrength() == 0)
+		if(stats.getStrength() == 0)
 			amount = Global.rand(3, 0);
 		else
-			amount = Global.rand(this.getStats().getStrength(), 0);
-		amount -= entity.getStats().getDefense();
+			amount = Global.rand(stats.getStrength(), 0);
+		/*if(entity instanceof MPPlayer)
+			amount -= entity.defense;*/ //Fix this to have defense modifier
 		if(amount < 0)
 			amount = 0;
 		amount *= -1;

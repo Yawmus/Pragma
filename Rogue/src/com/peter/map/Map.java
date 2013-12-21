@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -158,9 +159,9 @@ public class Map implements MapRenderer{
 		if(get(ID) != null && get(ID).canDraw)
 			if(get(ID) instanceof Monster)
 				if(get(ID).getName() != null)
-					return ((Animate) get(ID)).getName() + ", level " + ((Animate) get(ID)).getStats().getLevel();
+					return ((Animate) get(ID)).getName() + ", level " + ((NPC) get(ID)).level;
 				else
-					return ((Animate) get(ID)).getRace() + ", level " + ((Animate) get(ID)).getStats().getLevel();
+					return ((Animate) get(ID)).getRace() + ", level " + ((NPC) get(ID)).level;
 			else if(get(ID) instanceof NPC)
 				if(((Animate) get(ID)).getType() != null)
 					return get(ID).getName() + ", " + ((Animate) get(ID)).getType().toLowerCase();

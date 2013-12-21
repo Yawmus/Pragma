@@ -13,7 +13,7 @@ import com.peter.rogue.screens.Splash;
 
 public class Rogue extends Game{
 	
-	public static final String TITLE = "Rogue", VERSION = "0.6.2";
+	public static final String TITLE = "Pragma", VERSION = "v0.7.2-alpha";
 
 	Splash splash;
 	Play play;

@@ -38,6 +38,8 @@ public class Network extends Listener {
 	public void received(Connection c, Object o){
 		if(o instanceof MessagePacket){
 			MessagePacket packet = (MessagePacket) o;
+			while(packet.floor > Play.map.players.size()-1)
+				Play.map.players.add(new HashMap<Integer, MPPlayer>());
 			if(Play.map.players.get(packet.floor).containsKey(packet.receiverID))
 				Play.map.players.get(packet.floor).get(packet.receiverID).setMessage(packet.message);
 			else if(Play.map.npcs.containsKey(packet.receiverID))
@@ -160,14 +162,10 @@ public class Network extends Listener {
 		}
 		else if(o instanceof AttackPacket){
 			AttackPacket packet = (AttackPacket) o;
-			if(Play.map.npcs.containsKey(packet.receiverID)){
-				Play.map.npcs.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+			if(Play.map.npcs.containsKey(packet.receiverID))
 				Play.map.npcs.get(packet.receiverID).setStatus(packet.amount);
-			}
-			else if(Play.map.players.get(packet.floor).containsKey(packet.receiverID)){
-				Play.map.players.get(packet.floor).get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+			else if(Play.map.players.get(packet.floor).containsKey(packet.receiverID))
 				Play.map.players.get(packet.floor).get(packet.receiverID).setStatus(packet.amount);
-			}
 			else{
 				EntityManager.player.getStats().mutateHitpoints(packet.amount);
 				EntityManager.player.setStatus(packet.amount);

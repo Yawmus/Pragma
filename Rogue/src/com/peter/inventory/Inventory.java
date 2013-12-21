@@ -130,7 +130,7 @@ public class Inventory {
 		font.draw(spriteBatch, " Strength: " + player.getStats().getStrength(), ORIGIN_X + 190, ORIGIN_Y + 205);
 		font.draw(spriteBatch, "    Health: " + player.getStats().getMaxHitpoints(), ORIGIN_X + 190, ORIGIN_Y + 185);
 		font.draw(spriteBatch, " Defense: " + player.getStats().getDefense(), ORIGIN_X + 190, ORIGIN_Y + 165);
-		font.draw(spriteBatch, "Dexterity: " + player.getStats().getDexterity(), ORIGIN_X + 190, ORIGIN_Y + 145);
+		font.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), ORIGIN_X + 190, ORIGIN_Y + 145);
 		font.draw(spriteBatch, "  Points: " + player.getStats().getPoints(), ORIGIN_X + 200, ORIGIN_Y + 125);
 
 		if(player.getStats().getPoints() > 0)

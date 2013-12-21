@@ -31,7 +31,7 @@ public class ClientWrapper {
 	public ClientWrapper(){
 		System.out.println("Connecting to the server...");
 		client = new Client();
-		client = new Client(16000, 11000);
+		client = new Client(22000, 17000);
 		network = new Network();
 		client.getKryo().register(PlayerPacket.class);
 		client.getKryo().register(NPCPacket.class);

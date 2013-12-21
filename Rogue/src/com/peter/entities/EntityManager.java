@@ -55,14 +55,14 @@ public class EntityManager{
 		while(!NPCQueue.isEmpty()){
 			NPC newNPC;
 			if(NPCQueue.peek().group.equals("Citizen"))
-				newNPC = new Citizen(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
+				newNPC = new Citizen(NPCQueue.peek().level, NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
 			else if(NPCQueue.peek().group.equals("Shopkeep")){
-				newNPC = new Shopkeep(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
+				newNPC = new Shopkeep(NPCQueue.peek().level, NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
 				for(int i=0; i<NPCQueue.peek().items.size(); i++)
 					((Shopkeep) newNPC).add(PacketToObject.itemConverter(NPCQueue.peek().items.get(i)));
 			}
 			else if(NPCQueue.peek().group.equals("Monster"))
-				newNPC = new Monster(NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
+				newNPC = new Monster(NPCQueue.peek().level, NPCQueue.peek().race, NPCQueue.peek().type, NPCQueue.peek().name);
 			else{
 				newNPC = null;
 				System.out.println("[CLIENT] npc conversion failed!");
@@ -95,11 +95,8 @@ public class EntityManager{
 			newPlayer.setY(playerQueue.peek().y);
 			newPlayer.setPictureURL(playerQueue.peek().picture);
 			newPlayer.setName(playerQueue.peek().name);
-			System.out.println(playerQueue.peek().floor);
-			System.out.println(Play.map.players.size());
-			while(playerQueue.peek().floor > Play.map.players.size()-1)
+			while(playerQueue.peek().floor > Play.map.players.size()-1) // Creates a player hashmap for every floor that a player is on
 				Play.map.players.add(new HashMap<Integer, MPPlayer>());
-			System.out.println(Play.map.players.size());
 			Play.map.players.get(playerQueue.peek().floor).put(playerQueue.peek().ID, newPlayer);
 			if(playerQueue.peek().floor == Play.map.getFloor()){
 				Play.map.database.put(playerQueue.peek().ID, newPlayer);

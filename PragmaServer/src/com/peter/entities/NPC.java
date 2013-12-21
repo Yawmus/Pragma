@@ -50,8 +50,9 @@ public class NPC extends Entity {
 		}
 	}
 	
-	public NPC(String group, String race, String type){
+	public NPC(int floor, String group, String race, String type){
 		super(race, type);
+		this.floor = floor;
 		this.group = group;
 		if(group != "Monster")
 			name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));

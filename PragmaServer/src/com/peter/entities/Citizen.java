@@ -23,8 +23,8 @@ public class Citizen extends NPC{
 		return null;
 	}
 	
-    public Citizen(String type){
-    	super("Citizen", "Human", type);
+    public Citizen(int floor, String type){
+    	super(floor, "Citizen", "Human", type);
     	list.addRace("Worm");
 
         stats.setExperience(2);
@@ -32,8 +32,8 @@ public class Citizen extends NPC{
         stats.setHitpoints(20);
     }
     
-    public Citizen(){
-    	super("Citizen", "Human", randType());
+    public Citizen(int floor){
+    	super(floor, "Citizen", "Human", randType());
     	list.addRace("Worm");
 
         stats.setExperience(2);

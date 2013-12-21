@@ -9,7 +9,6 @@ import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 
 public class Animate extends Entity{
-	protected Stats stats;
 	protected int oldX, oldY;
 	public boolean collision;
 	protected static LinkedList<String> firstNames;
@@ -25,7 +24,6 @@ public class Animate extends Entity{
 	
 	public Animate(String filename, String race, String type, String name) {
 		super(filename, type, name);
-		stats = new Stats();
 		message = new String("");
 		status = null;
 		this.race = race;
@@ -63,15 +61,6 @@ public class Animate extends Entity{
 		oldX = (int) getX();
 		oldY = (int) getY();
 	}
-
-	public Stats getStats() {
-		return stats;
-	}
-
-	public void setStats(Stats stats) {
-		this.stats = stats;
-	}
-	
 	
 	public String getMessage() {
 		return message;
