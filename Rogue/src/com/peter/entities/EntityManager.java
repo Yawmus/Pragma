@@ -37,7 +37,7 @@ public class EntityManager{
 	public static Queue<AddTradeItemPacket> tradeItemQueue;
     
     public EntityManager(Play play){
-    	player = new Player("at.png");
+    	player = new Player("santa.png");
     	System.out.print("Name?: ");
     	player.setName(in.next());
     	
@@ -94,7 +94,7 @@ public class EntityManager{
 			chestQueue.remove();
 		}
 		while(!playerQueue.isEmpty()){
-			MPPlayer newPlayer = new MPPlayer("at.png");
+			MPPlayer newPlayer = new MPPlayer("santa.png");
 			newPlayer.ID = playerQueue.peek().ID;
 			newPlayer.setX(playerQueue.peek().x);
 			newPlayer.setY(playerQueue.peek().y);

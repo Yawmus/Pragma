@@ -74,7 +74,7 @@ public class Player extends Animate implements InputProcessor {
 		hunger = 1.01f;
 		delay = .2f;
 		
-		switch(Global.rand(5, 0)){
+		switch(Global.rand(8, 0)){
 		case 0:
 			color = new Color(.7f, .7f, .7f, 1f); // gray
 			break;
@@ -89,6 +89,15 @@ public class Player extends Animate implements InputProcessor {
 			break;
 		case 4:
 			color = new Color(1f, 1f, .5f, 1f); // yella
+			break;
+		case 5:
+			color = new Color(0f, 1f, .5f, 1f); // yella
+			break;
+		case 6:
+			color = new Color(1f, 0f, .5f, 1f); // yella
+			break;
+		case 7:
+			color = new Color(1f, .5f, 0f, 1f); // yella
 			break;
 			
 		}

@@ -13,7 +13,6 @@ INDEX VERSION 1.126+F:\Programming\Java\Games\.metadata\.plugins\org.eclipse.jdt
 3003922580.index
 2112042915.index
 4201153813.index
-2323282253.index
 2264390850.index
 2870075066.index
 3210182782.index
