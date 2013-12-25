@@ -16,14 +16,14 @@
 		<item value="0" key="pageIndex"/>
 	</section>
 	<section name="FatJarPackageWizard">
-		<item value="C:\Users\Yawmus\Desktop\server.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
-		<item value="PragmaServer - PragmaServer" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
+		<item value="C:\Users\Yawmus\Desktop\pragma.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="Main - Rogue-desktop" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
 		<item value="F:\Programming\Java\Games" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
 		<item value="2" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
-			<item value="C:\Users\Yawmus\Desktop\server.jar"/>
 			<item value="C:\Users\Yawmus\Desktop\pragma.jar"/>
+			<item value="C:\Users\Yawmus\Desktop\server.jar"/>
 			<item value="F:\Dropbox\Pragma\Working version\pragma.jar"/>
 		</list>
 		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">

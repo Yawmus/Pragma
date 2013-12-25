@@ -9,7 +9,6 @@ public class Entity extends Sprite{
 	
 	protected String type, name;
 	public Integer ID;
-	protected float tileWidth = 32, tileHeight = 32;
 	protected int timeout = 0;
 	public boolean canDraw = false;
 

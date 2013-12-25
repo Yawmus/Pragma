@@ -3,8 +3,10 @@ package com.peter.entities;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
@@ -26,6 +28,7 @@ public class EntityManager{
     private UI ui;
 	private Vector3 mapCoord;
     public static Player player;
+    public Scanner in = new Scanner(System.in);
     
 	public static Queue<AddPlayerPacket> playerQueue;
 	public static Queue<AddNPCPacket> NPCQueue;
@@ -35,6 +38,8 @@ public class EntityManager{
     
     public EntityManager(Play play){
     	player = new Player("at.png");
+    	System.out.print("Name?: ");
+    	player.setName(in.next());
     	
     	playerQueue = new LinkedList<AddPlayerPacket>();
     	NPCQueue = new LinkedList<AddNPCPacket>();
@@ -95,6 +100,7 @@ public class EntityManager{
 			newPlayer.setY(playerQueue.peek().y);
 			newPlayer.setPictureURL(playerQueue.peek().picture);
 			newPlayer.setName(playerQueue.peek().name);
+			newPlayer.setColor(new Color((float) playerQueue.peek().color[0]/100, (float) playerQueue.peek().color[1]/100, (float) playerQueue.peek().color[2]/100, (float) playerQueue.peek().color[3]/100));
 			while(playerQueue.peek().floor > Play.map.players.size()-1) // Creates a player hashmap for every floor that a player is on
 				Play.map.players.add(new HashMap<Integer, MPPlayer>());
 			Play.map.players.get(playerQueue.peek().floor).put(playerQueue.peek().ID, newPlayer);
@@ -116,9 +122,9 @@ public class EntityManager{
 		Play.map.draw();
 		player.draw(spriteBatch);
 		Play.map.getSpriteBatch().end();
-
+		
 		// If near edge of map then don't update respective axis
-		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Play.map.WIDTH*32 - 18*32)
+		if(player.getX() > Global.SCREEN_WIDTH/2 - 32*3 && player.getX() < Play.map.WIDTH*32 - 19*32)
 			Global.camera.position.x = player.getX() + player.getWidth() / 2;
 		if(player.getY() > Global.SCREEN_HEIGHT/2 - 32*6 && player.getY() < Play.map.HEIGHT*32 - 9*32)
 			Global.camera.position.y = player.getY() + player.getHeight() / 2;
@@ -147,7 +153,7 @@ public class EntityManager{
 			player.setInformation("");
 		
 		Global.screen.begin();
-		Global.font.draw(Global.screen, Rogue.VERSION + "  " + player.ID, 0, Global.SCREEN_HEIGHT);
+		Global.font.draw(Global.screen, Rogue.VERSION + "    player " + player.ID, 0, Global.SCREEN_HEIGHT);
 		Global.screen.end();
 		
 		if(player.stats.getHitpoints() <= 0){
@@ -174,7 +180,19 @@ public class EntityManager{
 		packet.y = (int) player.getY();
 		packet.floor = Play.map.getFloor();
 		packet.ID = player.ID;
+		packet.color = new short[4];
+		packet.color[0] = (short)(100 * player.getColor().r);
+		packet.color[1] = (short)(100 * player.getColor().g);
+		packet.color[2] = (short)(100 * player.getColor().b);
+		packet.color[3] = (short)(100 * player.getColor().a);
+		
 		Rogue.clientWrapper.client.sendTCP(packet);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
     
     public void dispose(){

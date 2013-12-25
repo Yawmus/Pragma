@@ -28,9 +28,12 @@ public class Chest extends Entity {
 	public static final int HEIGHT = 300, WIDTH = 350;
 	public static final int ORIGIN_X = 250, ORIGIN_Y = 250;
 	private Entity trade;
+	private int hoverIndex;
+	private Character selector;
 	
 	public Chest(){
-		super("c1.png", "Chest", null);
+		super("equals.png", "Chest", null);
+		setColor(Color.WHITE);
 		this.name = "Chest";
 		this.items = new ArrayList<Item>();
 		this.collisions = new ArrayList<Rectangle>();
@@ -42,6 +45,8 @@ public class Chest extends Entity {
 	}
 	public Item remove(int i){
 		getCollision().remove(i);
+		hoverCollision = null;
+		hover = null;
 		return items.remove(i);
 	}
 	
@@ -62,27 +67,27 @@ public class Chest extends Entity {
 		Global.screenShapes.begin(ShapeType.Line);
 		Global.screenShapes.setColor(Color.DARK_GRAY);
 		Global.screenShapes.rect(ORIGIN_X, ORIGIN_Y, WIDTH, HEIGHT);
-		Global.screenShapes.line(ORIGIN_X + 170, ORIGIN_Y + 100, ORIGIN_X + WIDTH, ORIGIN_Y + 100);
+        Global.screenShapes.line(ORIGIN_X + 170, ORIGIN_Y + 150, ORIGIN_X + WIDTH, ORIGIN_Y + 150);
 		Global.screenShapes.line(ORIGIN_X + 170, ORIGIN_Y, ORIGIN_X + 170, HEIGHT + 250);
 		Global.screenShapes.end();
 		
 		if(hover != null){
 			spriteBatch.begin();
-			spriteBatch.draw(hover.getTexture(), ORIGIN_X + 205, ORIGIN_Y + 50);
-			font.draw(spriteBatch, hover.getName(), ORIGIN_X + 245, ORIGIN_Y + 70);
-			font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 180, ORIGIN_Y + 30);
-			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 260, ORIGIN_Y + 30);
+            spriteBatch.draw(hover.getTexture(), ORIGIN_X + 205, ORIGIN_Y + 100);
+            font.draw(spriteBatch, hover.getName(), ORIGIN_X + 245, ORIGIN_Y + 120);
+            font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 190, ORIGIN_Y + 80);
+            font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 255, ORIGIN_Y + 80);
+			font.draw(spriteBatch, "1 - move", ORIGIN_X + 196, ORIGIN_Y + 50);
 			spriteBatch.end();
 			Global.screenShapes.begin(ShapeType.Filled);
 			Global.screenShapes.setColor(.2f, .2f, .2f, 1f);
 			Global.screenShapes.rect(hoverCollision.x, hoverCollision.y, hoverCollision.width, hoverCollision.height);
 			Global.screenShapes.end();
-			hover = null;
 		}
-
 		spriteBatch.begin();
-		for(int i=0; i<items.size(); i++){
-			font.draw(spriteBatch, items.get(i).getName(), ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 10) - i*15);
+		selector = 'A';
+		for(int i=0; i<items.size(); i++, selector++){
+			font.draw(spriteBatch, selector + ") " + items.get(i).getName(), ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 10) - i*15);
 			collisions.get(i).setPosition(ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 24) - i*15);
 		}
 		spriteBatch.end();
@@ -128,7 +133,7 @@ public class Chest extends Entity {
 					}
 				}
 				else{
-					setHover(getItems().get(i), collisions.get(i));
+					setHover(getItems().get(i), collisions.get(i), i);
 				}
 			}
 		}
@@ -142,24 +147,36 @@ public class Chest extends Entity {
 	public void setCollisions(ArrayList<Rectangle> collisions) {
 		this.collisions = collisions;
 	}
-	
 	public boolean isItem(){
 		if(hover == null)
 			return false;
 		return true;
 	}
-	public void setHover(Item hover, Rectangle collision){
+	public void setHover(Item hover, Rectangle collision, int hoverIndex){
 		this.hover = hover;
 		this.hoverCollision = collision;
+		this.hoverIndex = hoverIndex;
 	}
+	public void setHover(Item hover){
+		this.hover = hover;
+	}
+    public Item getHover(){
+    	return hover;
+    }
+    public int getHoverIndex(){
+    	return hoverIndex;
+    }
 	
 	public ArrayList<Item> getItems(){
 		return items;
 	}
+	public Entity getTrade() {
+		return trade;
+	}
 	
 	public void setPosition(float x, float y){
-		setX(x * tileWidth);
-		setY(y * tileHeight);
+		setX(x * 32);
+		setY(y * 32);
 	}
 	
 	public void setTrade(Entity trade) {

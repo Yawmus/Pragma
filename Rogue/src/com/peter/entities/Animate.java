@@ -55,8 +55,8 @@ public class Animate extends Entity{
 	}
 	@Override
 	public void setPosition(float x, float y){
-		setX(x * tileWidth);
-		setY(y * tileHeight);
+		setX(x * 32);
+		setY(y * 32);
 
 		oldX = (int) getX();
 		oldY = (int) getY();

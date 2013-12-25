@@ -5,7 +5,10 @@ import com.peter.entities.Entity;
 public class Item extends Entity{
 	
 	public static Item GOLD = new Item("Gold", 0, 5, "$.png");
-	public static Item GEM = new Item("Gem", 0, 10, "asterisk.png");
+	public static Item GEM_DIAMOND = new Item("Diamond", 0, 25, "asterisk.png");
+	public static Item GEM_RUBY = new Item("Ruby", 0, 10, "asterisk.png");
+	public static Item GEM_TOPAZ = new Item("Topaz", 0, 10, "asterisk.png");
+	public static Item GEM_SPESSARITE = new Item("Spessartite", 0, 20, "asterisk.png");
 	
 	private int weight;
 	private int value;

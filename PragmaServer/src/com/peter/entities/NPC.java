@@ -128,6 +128,8 @@ public class NPC extends Entity {
 		//  System.out.println(type + "     " + floor + " - " + x + ", " + y); /*BUG TESTING FOR NPC COLLISION*/
 		if(PragmaServer.map.getTile(floor, getX(), getY()).isBlocked())
 			collision = true;
+		else if(PragmaServer.map.getTile(floor, getX(), getY()).getName() == "Door" && group.equals("Shopkeep"))
+			collision = true;
 		if(Map.markSets.get(floor).get(getX(), getY()) != -1 && Map.markSets.get(floor).get(getX(), getY()) != ID){
 			if(Map.itemSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY())) || Map.chestSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){
 				collision = true;

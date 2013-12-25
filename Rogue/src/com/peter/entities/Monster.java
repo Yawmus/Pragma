@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 public class Monster extends NPC{
 	
 	public Monster(int level, String race, String type, String name) {
-		super("tilda.png", level, race, type, name);
+		super("w.png", level, race, type, name);
 		if(level > 10)
 			setColor(Color.RED);
-		else if(level > 7)
-			setColor(Color.YELLOW);
-		if(level > 3)
-			setColor(Color.LIGHT_GRAY);
+		else if(level > 5)
+			setColor(Color.PINK);
+		else
+			setColor(new Color(.96f, .94f, .69f, 1));
 	}
 }

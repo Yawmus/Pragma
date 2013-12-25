@@ -2,7 +2,7 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="287" key="DIALOG_WIDTH"/>
-		<item value="620" key="DIALOG_Y_ORIGIN"/>
+		<item value="592" key="DIALOG_Y_ORIGIN"/>
 		<item value="428" key="DIALOG_HEIGHT"/>
 		<item value="9" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.163636|0|WINDOWS|1|-14|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="AddNPC" key="selection"/>
+		<item value="75" key="selection"/>
 		<list key="findhistory">
+			<item value="75"/>
+			<item value="70"/>
+			<item value="visited"/>
+			<item value="100, 100"/>
+			<item value="selector"/>
+			<item value="system"/>
 			<item value="addnpc"/>
 			<item value="floor"/>
-			<item value="packet"/>
-			<item value="packet.id"/>
-			<item value="addplayerpacket"/>
-			<item value="alert"/>
-			<item value="you killed"/>
-			<item value="light"/>
 		</list>
 		<list key="replacehistory">
 			<item value="alert"/>

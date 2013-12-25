@@ -18,7 +18,6 @@ import com.peter.packets.ItemPacket;
 import com.peter.server.Global;
 
 public class Map{
-	
     public HashMap<Short, Entity> database;
     public static final int HEIGHT = 40;
 	public static final int WIDTH = 80;
@@ -29,6 +28,7 @@ public class Map{
 	private static Data data = new Data();
 	
 	public static ArrayList<Tile[][]> tileSets;
+	public static ArrayList<String[][]> tintSets;
 	public static ArrayList<HashMap<Integer, ChestPacket>> chestSets;
 	public static ArrayList<HashMap<Integer, ItemPacket>> itemSets;
 	public static ArrayList<HashMap<Integer, NPC>> npcSets;
@@ -42,6 +42,7 @@ public class Map{
 		players = new HashMap<Integer, Player>();
 
 		tileSets = new ArrayList<Tile[][]>();
+		tintSets = new ArrayList<String[][]>();
 		chestSets = new ArrayList<HashMap<Integer, ChestPacket>>();
 		itemSets = new ArrayList<HashMap<Integer, ItemPacket>>();
 		npcSets = new ArrayList<HashMap<Integer, NPC>>();
@@ -53,6 +54,7 @@ public class Map{
 
 
 		tileSets.add(new Tile[WIDTH][HEIGHT]);
+		tintSets.add(new String[WIDTH][HEIGHT]);
 
 		itemSets.add(new HashMap<Integer, ItemPacket>());
 		chestSets.add(new HashMap<Integer, ChestPacket>());
@@ -69,33 +71,43 @@ public class Map{
 	}
 
 	private void baseFloor(){
-		int seaX = WIDTH-9, seaY = 1;
+		int seaX = WIDTH-8, seaY = 1;
 		Store store;
 		House house;
 		for(int x=0; x<WIDTH; x++)
-			for(int y=0; y<HEIGHT; y++)
+			for(int y=0; y<HEIGHT; y++){
 				if(y == 0 || y == HEIGHT-1 || x == 0 || x == WIDTH-1)
 					tileSets.get(0)[x][y] = Tile.WALL;
-				else
-					tileSets.get(0)[x][y] = Tile.GROUND;
+				else{
+					if(Global.rand(6, 0) >= 4)
+						tileSets.get(0)[x][y] = Tile.GRASS;
+					else
+						tileSets.get(0)[x][y] = Tile.GROUND;
+				}
+			}
+		
+		for(int y=seaY; y<HEIGHT-1; y++)
+			for(int x=Global.rand(3, seaX-7); x<WIDTH; x++){
+				tileSets.get(0)[x][y] = Tile.GROUND;
+				tintSets.get(0)[x][y] = "Sand";
+			}
+		for(int y=seaY; y<HEIGHT-1; y++)
+			for(int x=Global.rand(3, seaX-3); x<WIDTH; x++)
+					tileSets.get(0)[x][y] = Tile.WATER;
+		
 		
 		store = new Store(seaX-11, HEIGHT-12);
-		store.write(tileSets.get(0), 0, Shopkeep.Armorer);
+		store.write(tileSets.get(0), tintSets.get(0), 0, Shopkeep.Armorer);
 		store = new Store(seaX-11, 6);
-		store.write(tileSets.get(0), 0, Shopkeep.Fletcher);
+		store.write(tileSets.get(0), tintSets.get(0), 0, Shopkeep.Fletcher);
 		store = new Store(12, 9);
-		store.write(tileSets.get(0), 0, Shopkeep.Blacksmith);
+		store.write(tileSets.get(0), tintSets.get(0), 0, Shopkeep.Blacksmith);
 
-		house = new House(16, 18);
-		house.write(tileSets.get(0));
-
+		house = new House(30, 18);
+		house.write(tileSets.get(0), tintSets.get(0), 0);
 
 		for(int x=WIDTH/2-1; x<=WIDTH/2+1; x++)
 			for(int y=HEIGHT/2-1; y<=HEIGHT/2+1; y++)
-				tileSets.get(0)[x][y] = Tile.WATER;
-		
-		for(int x=seaX; x<WIDTH-1; x++)
-			for(int y=seaY; y<HEIGHT-1; y++)
 				tileSets.get(0)[x][y] = Tile.WATER;
 		
 		for(int y=0; y<HEIGHT-1; y++)
@@ -142,6 +154,7 @@ public class Map{
 		if(tileSets.size() > floor)
 			return tileSets.get(floor);
 		Tile[][] tileSet = new Tile[WIDTH][HEIGHT];
+		tintSets.add(new String[WIDTH][HEIGHT]);
 		Map.npcSets.add(new HashMap<Integer, NPC>());
 		Map.chestSets.add(new HashMap<Integer, ChestPacket>());
 		Map.itemSets.add(new HashMap<Integer, ItemPacket>());
@@ -151,14 +164,26 @@ public class Map{
 			for(int j=0; j<HEIGHT; j++)
 				tileSet[i][j] = Tile.BLANK;
 		Chamber chamber = new Chamber(x, y, 10, 6, floor);
-		generateRoom(tileSet, floor, chamber);
+		generateRoom(tileSet, tintSets.get(floor), floor, chamber);
 		tileSet[x][y] = Tile.UP;
 		
-		
+		for(int i=0; i<WIDTH-1; i++)
+			for(int j=0; j<HEIGHT-1; j++){
+				if(tileSet[i][j] == Tile.GROUND && tileSet[i+1][j] == Tile.BLANK)
+					tileSet[i+1][j] = Tile.WALL;
+				if(tileSet[i][j] == Tile.GROUND && tileSet[i][j+1] == Tile.BLANK)
+					tileSet[i][j+1] = Tile.WALL;
+			}
+		for(int i=1; i<WIDTH; i++)
+			for(int j=1; j<HEIGHT; j++){
+				if(tileSet[i][j] == Tile.GROUND && tileSet[i-1][j] == Tile.BLANK)
+					tileSet[i-1][j] = Tile.WALL;
+				if(tileSet[i][j] == Tile.GROUND && tileSet[i][j-1] == Tile.BLANK)
+					tileSet[i][j-1] = Tile.WALL;
+			}
 		
 		
 		// Adds the exit in the floor
-		System.out.println(roomLocations.size());
 		if(!roomLocations.isEmpty()){
 			Vector2 furthest = null;
 			double furthestValue = 0;
@@ -198,14 +223,14 @@ public class Map{
 		return true;
 	}
 	
-	private boolean generateRoom(Tile[][] tileSet, int floor, Chamber chamber){
+	private boolean generateRoom(Tile[][] tileSet, String[][] tintSet, int floor, Chamber chamber){
 		if(chamber.x-chamber.width/2 < 0 || chamber.x+chamber.width/2 >= WIDTH || chamber.y-chamber.height/2 < 0 || chamber.y+chamber.height/2 >= HEIGHT)
 			return false;
 		if(!scanRoom(tileSet, chamber))
 			return false;
 		Chamber chamber2 = new Chamber(floor);
 		
-		chamber.write(tileSet);
+		chamber.write(tileSet, tintSet);
 		int times = 0;
 		while(times < 4){
 			Hall hall = new Hall();
@@ -217,8 +242,8 @@ public class Map{
 				hall.dy = chamber.y + chamber.height/2 + Global.rand(5, 0);
 				chamber2.x = hall.dx + Global.rand(3, -1);
 				chamber2.y = hall.dy + chamber2.height/2;
-				if(generateRoom(tileSet, floor, chamber2)){
-					hall.write(tileSet, "up");
+				if(generateRoom(tileSet, tintSet, floor, chamber2)){
+					hall.write(tileSet, tintSet, "up");
 					roomLocations.add(new Vector2(chamber2.x, chamber2.y));
 				}
 				break;
@@ -229,8 +254,8 @@ public class Map{
 				hall.dy = chamber.y - chamber.height/2 - Global.rand(5, 0);
 				chamber2.x = hall.dx + Global.rand(3, -1);
 				chamber2.y = hall.dy - chamber2.height/2;
-				if(generateRoom(tileSet, floor, chamber2)){
-					hall.write(tileSet, "down");
+				if(generateRoom(tileSet, tintSet, floor, chamber2)){
+					hall.write(tileSet, tintSet, "down");
 					roomLocations.add(new Vector2(chamber2.x, chamber2.y));
 				}
 				break;
@@ -241,8 +266,8 @@ public class Map{
 				hall.dy = chamber.y + Global.rand(chamber.height-2, -(chamber.height/2-1));
 				chamber2.x = hall.dx + chamber2.width/2;
 				chamber2.y = hall.dy + Global.rand(3, -1);
-				if(generateRoom(tileSet, floor, chamber2)){
-					hall.write(tileSet, "right");
+				if(generateRoom(tileSet, tintSet, floor, chamber2)){
+					hall.write(tileSet, tintSet, "right");
 					roomLocations.add(new Vector2(chamber2.x, chamber2.y));
 				}
 				break;
@@ -253,8 +278,8 @@ public class Map{
 				hall.dy = chamber.y + Global.rand(chamber.height-2, -(chamber.height/2-1));
 				chamber2.x = hall.dx - chamber2.width/2;
 				chamber2.y = hall.dy + Global.rand(3, -1);
-				if(generateRoom(tileSet, floor, chamber2)){
-					hall.write(tileSet, "left");
+				if(generateRoom(tileSet, tintSet, floor, chamber2)){
+					hall.write(tileSet, tintSet, "left");
 					roomLocations.add(new Vector2(chamber2.x, chamber2.y));
 				}
 				break;
@@ -316,13 +341,15 @@ class Room{
 	
 	public void write(Tile[][] tileSet){
 		for(int i=(x-width/2 + 1); i<(x+width/2); i++)
-			for(int j=(y-height/2 + 1); j<(y+height/2); j++)
+			for(int j=(y-height/2 + 1); j<(y+height/2); j++){
 				tileSet[i][j] = Tile.GROUND;
+			}
 		for(int i=(x-width/2); i<(x+width/2+1); i++)
 			for(int j=(y-height/2); j<(y+height/2+1); j++)
 				if(i == (x-width/2) || i == (x+width/2)
-				   || j == (y-height/2) || j == (y+height/2))
+				   || j == (y-height/2) || j == (y+height/2)){
 					tileSet[i][j] = Tile.WALL;
+				}
 	}
 }
 
@@ -331,8 +358,18 @@ class Store extends Room{
 		super(x, y);
 	}
 
-	public void write(Tile[][] tileSet, int floor, String type){
+	public void write(Tile[][] tileSet, String[][] tintSet, int floor, String type){
 		super.write(tileSet);
+		for(int i=(x-width/2 + 1); i<(x+width/2); i++)
+			for(int j=(y-height/2 + 1); j<(y+height/2); j++){
+				tintSet[i][j] = "Wood";
+			}
+		for(int i=(x-width/2); i<(x+width/2+1); i++)
+			for(int j=(y-height/2); j<(y+height/2+1); j++)
+				if(i == (x-width/2) || i == (x+width/2)
+				   || j == (y-height/2) || j == (y+height/2)){
+					tintSet[i][j] = "";
+				}
 		tileSet[(int) door.x][(int) door.y] = Tile.DOOR;
 		
 		ItemPacket temp;
@@ -351,8 +388,13 @@ class House extends Room{
 		super(x, y);
 	}
 
-	public void write(Tile[][] tileSet, int floor){
+	public void write(Tile[][] tileSet, String[][] tintSet, int floor){
 		super.write(tileSet);
+		for(int i=(x-width/2 + 1); i<(x+width/2); i++)
+			for(int j=(y-height/2 + 1); j<(y+height/2); j++){
+				tintSet[i][j] = "Wood";
+			}
+		
 		tileSet[(int) door.x][(int) door.y] = Tile.DOOR;
 		
 		ItemPacket temp;
@@ -379,7 +421,7 @@ class Chamber extends Room{
 		this.floor = floor;
 	}
 	
-	public void write(Tile[][] tileSet){
+	public void write(Tile[][] tileSet, String[][] tintSet){
 		super.write(tileSet);
 		for(int i=0; i<3; i++)
 			populate(Global.rand(100, 0));
@@ -397,6 +439,22 @@ class Chamber extends Room{
 		}
 		else if(chance < 3){
 			temp = new ItemPacket("Gem");
+			switch(Global.rand(6, 0)){
+			case 0:
+				temp.type = "Diamond";
+				break;
+			case 1:
+			case 2:
+				temp.type = "Topaz";
+				break;
+			case 3:
+			case 4:
+				temp.type = "Ruby";
+				break;
+			case 5:
+				temp.type = "Spessarite";
+				break;
+			}
 			temp.ID = ++Global.count;
 			temp.floor = floor;
 			temp.x = (x + Global.rand(width-1, -(width/2-1)));
@@ -404,7 +462,7 @@ class Chamber extends Room{
 			Map.markSets.get(floor).put(temp.ID,temp.x * 32, temp.y * 32);
 			Map.ItemQueue.add(temp);
 		}
-		else if(chance < 12){
+		else if(chance < 8){
 			for(int i=0; i<Global.rand(4, 1); i++){
 				temp = new ItemPacket("Gold");
 				temp.ID = ++Global.count;
@@ -429,7 +487,7 @@ class Hall{
 	public int x, y, dx, dy;
 	public Hall(){
 	}
-	public void write(Tile[][] tileSet, String direction){
+	public void write(Tile[][] tileSet, String[][] tintSet, String direction){
 		int tempX = x, tempY = y;
 		while(tempX != dx || tempY != dy){
 			if(tempX == dx)

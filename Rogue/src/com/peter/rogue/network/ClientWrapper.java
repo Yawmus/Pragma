@@ -31,7 +31,7 @@ public class ClientWrapper {
 	public ClientWrapper(){
 		System.out.println("Connecting to the server...");
 		client = new Client();
-		client = new Client(22000, 17000);
+		client = new Client(79000, 42000);
 		network = new Network();
 		client.getKryo().register(PlayerPacket.class);
 		client.getKryo().register(NPCPacket.class);
@@ -52,6 +52,8 @@ public class ClientWrapper {
 		client.getKryo().register(IDPacket.class);
 		client.getKryo().register(java.util.HashMap.class);
 		client.getKryo().register(java.util.ArrayList.class);
+		client.getKryo().register(String[][].class);
+		client.getKryo().register(String[].class);
 		client.getKryo().register(short[][].class);
 		client.getKryo().register(short[].class);
 		client.getKryo().register(byte[][].class);

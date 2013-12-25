@@ -28,10 +28,12 @@ public class Inventory {
 	private ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
 	private Rectangle[] pointCollisions;
-	private Gear gear;
+	public Gear gear;
 	private int weight;
 	private int wallet;
 	private Item hover;
+	private int hoverIndex;
+	private Character selector;
 	private Rectangle hoverCollision;
 	public static final int BOX1_WIDTH = 150, BOX2_WIDTH = 165, HEIGHT = 300, WIDTH = 500;
 	public static final int ORIGIN_X = 670, ORIGIN_Y = 250, STATS = 5;
@@ -76,9 +78,14 @@ public class Inventory {
 	}
 	public Item remove(int i){
 		weight -= items.get(i).getWeight();
+		collisions.remove(i);
+		hoverCollision = null;
+		hover = null;
 		return items.remove(i);
 	}
 	public Item move(int i){
+		hoverCollision = null;
+		hover = null;
 		return items.remove(i);
 	}
 	public void move(Item item){
@@ -100,38 +107,48 @@ public class Inventory {
 		Global.screenShapes.begin(ShapeType.Line);
 		Global.screenShapes.setColor(Color.DARK_GRAY);
 		Global.screenShapes.rect(ORIGIN_X, ORIGIN_Y, WIDTH, HEIGHT);
-		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y + HEIGHT - 60, ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y);
-		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH, ORIGIN_Y + 100, ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y + 100);
-		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH, ORIGIN_Y + HEIGHT - 60, ORIGIN_X + WIDTH, ORIGIN_Y + HEIGHT - 60);
+		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y + HEIGHT, ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y);
+		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH, ORIGIN_Y + 155, ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y + 155);
+		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH + BOX2_WIDTH, ORIGIN_Y + HEIGHT - 60, ORIGIN_X + WIDTH, ORIGIN_Y + HEIGHT - 60);
 		Global.screenShapes.line(ORIGIN_X + BOX1_WIDTH, ORIGIN_Y, ORIGIN_X + 150, HEIGHT + 250);
 		Global.screenShapes.end();
 
 
 		if(hover != null){
 			spriteBatch.begin();
-			spriteBatch.draw(hover.getTexture(), ORIGIN_X + 185, ORIGIN_Y + 50);
-			font.draw(spriteBatch, hover.getName(), ORIGIN_X + 225, ORIGIN_Y + 70);
-			font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 170, ORIGIN_Y + 30);
-			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 235, ORIGIN_Y + 30);
+			spriteBatch.draw(hover.getTexture(), ORIGIN_X + 185, ORIGIN_Y + 100);
+			font.draw(spriteBatch, hover.getName(), ORIGIN_X + 225, ORIGIN_Y + 120);
+			font.draw(spriteBatch, "Value: " + hover.getValue(), ORIGIN_X + 170, ORIGIN_Y + 80);
+			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 235, ORIGIN_Y + 80);
+			
+			font.draw(spriteBatch, "1 - drop", ORIGIN_X + 175, ORIGIN_Y + 50);
+			if(hover instanceof Food)
+				font.draw(spriteBatch, "2 - eat", ORIGIN_X + 238, ORIGIN_Y + 50);
+			else if(hover instanceof Wearable || hover instanceof Equipable)
+				font.draw(spriteBatch, "2 - wear", ORIGIN_X + 238, ORIGIN_Y + 50);
+			if(trade instanceof Chest)
+				font.draw(spriteBatch, "3 - move", ORIGIN_X + 175, ORIGIN_Y + 30);
+			else if(trade instanceof Shopkeep)
+				font.draw(spriteBatch, "3 - sell", ORIGIN_X + 175, ORIGIN_Y + 30);
+			
 			spriteBatch.end();
+			
 			if(hoverCollision != null){
 				Global.screenShapes.begin(ShapeType.Filled);
 				Global.screenShapes.setColor(.2f, .2f, .2f, 1f);
 				Global.screenShapes.rect(hoverCollision.x, hoverCollision.y, hoverCollision.width, hoverCollision.height);
 				Global.screenShapes.end();
-				hoverCollision = null;
 			}
-			hover = null;
 		}
 		
 		
 		spriteBatch.begin();
-		font.draw(spriteBatch, "    ?????: " + 30, ORIGIN_X + 190, ORIGIN_Y + 225);
-		font.draw(spriteBatch, " Strength: " + player.getStats().getStrength(), ORIGIN_X + 190, ORIGIN_Y + 205);
-		font.draw(spriteBatch, "    Health: " + player.getStats().getMaxHitpoints(), ORIGIN_X + 190, ORIGIN_Y + 185);
-		font.draw(spriteBatch, " Defense: " + player.getStats().getDefense(), ORIGIN_X + 190, ORIGIN_Y + 165);
-		font.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), ORIGIN_X + 190, ORIGIN_Y + 145);
-		font.draw(spriteBatch, "  Points: " + player.getStats().getPoints(), ORIGIN_X + 200, ORIGIN_Y + 125);
+		font.draw(spriteBatch, "    ?????: " + 30, ORIGIN_X + 190, ORIGIN_Y + HEIGHT-15);
+		font.draw(spriteBatch, " Strength: " + player.getStats().getStrength(), ORIGIN_X + 190, ORIGIN_Y + HEIGHT-35);
+		font.draw(spriteBatch, "    Health: " + player.getStats().getMaxHitpoints(), ORIGIN_X + 190, ORIGIN_Y + HEIGHT-55);
+		font.draw(spriteBatch, " Defense: " + player.getStats().getDefense(), ORIGIN_X + 190, ORIGIN_Y + HEIGHT-75);
+		font.draw(spriteBatch, "Dexterity:  " + player.getStats().getDexterity(), ORIGIN_X + 190, ORIGIN_Y + HEIGHT-95);
+		font.draw(spriteBatch, "  Points: " + player.getStats().getPoints(), ORIGIN_X + 200, ORIGIN_Y + HEIGHT-115);
 
 		if(player.getStats().getPoints() > 0)
 			for(int i=0; i<STATS; i++){
@@ -139,15 +156,17 @@ public class Inventory {
 				pointCollisions[i].setPosition(ORIGIN_X + 285, ORIGIN_Y + 134 + i*20);
 			}
 		
-		font.draw(spriteBatch, "Hunger   " + (int)(player.getHunger()*100) + "%", ORIGIN_X + WIDTH - 120, ORIGIN_Y + HEIGHT - 15);
-		font.draw(spriteBatch, "Thirst        " + "90%", ORIGIN_X + WIDTH - 120, ORIGIN_Y + HEIGHT - 30);
-		font.draw(spriteBatch, "Wallet  " + wallet, ORIGIN_X + BOX1_WIDTH + 10, ORIGIN_Y + HEIGHT - 15);
-		font.draw(spriteBatch, "Weight " + weight + "/" + backpack.getCapacity(), ORIGIN_X + BOX1_WIDTH + 10, ORIGIN_Y + HEIGHT - 30);
+		font.draw(spriteBatch, "Hunger   " + (int)(player.getHunger()*100) + "%", ORIGIN_X + WIDTH - 135, ORIGIN_Y + HEIGHT - 15);
+		font.draw(spriteBatch, "Wallet       " + wallet, ORIGIN_X + WIDTH - 135, ORIGIN_Y + HEIGHT - 30);
+		//font.draw(spriteBatch, "Thirst        " + "90%", ORIGIN_X + WIDTH - 120, ORIGIN_Y + HEIGHT - 30);
+		//font.draw(spriteBatch, "Wallet  " + wallet, ORIGIN_X + BOX1_WIDTH + 10, ORIGIN_Y + HEIGHT - 15);
+		//font.draw(spriteBatch, "Weight " + weight + "/" + backpack.getCapacity(), ORIGIN_X + BOX1_WIDTH + 10, ORIGIN_Y + HEIGHT - 30);
 		
 		gear.draw(spriteBatch);
 		
-		for(int i=0; i<items.size(); i++){
-			font.draw(spriteBatch, items.get(i).getName(), ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 10) - i*15);
+		selector = 'a';
+		for(int i=0; i<items.size(); i++, selector++){
+			font.draw(spriteBatch, selector + ") " + items.get(i).getName(), ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 10) - i*15);
 			collisions.get(i).setPosition(ORIGIN_X + 10, (ORIGIN_Y + HEIGHT - 24) - i*15);
 		}
 
@@ -186,12 +205,13 @@ public class Inventory {
 		Global.screenShapes.setColor(0f, 1f, 1f, .4f);
 		*/
 
-		setHover(gear.check(screenCoord, coord, player));
+		if(gear.check(screenCoord, coord, player) != null)
+			setHover(gear.check(screenCoord, coord, player));
 		// Item-mouse collision
 		for(int i=0; i<getItems().size(); i++){
 			//Global.screenShapes.rect(collisions.get(i).x, collisions.get(i).y, 130, 15);
 			if(collisions.get(i).contains(screenCoord)){
-				setHover(getItems().get(i), collisions.get(i));
+				setHover(getItems().get(i), collisions.get(i), i);
 				if(items.get(i) instanceof Food){
 					Global.mapShapes.begin(ShapeType.Filled);
 					Global.mapShapes.setColor(0f, 0, 0, 1f);
@@ -288,13 +308,25 @@ public class Inventory {
 			return false;
 		return true;
 	}
-	public void setHover(Item hover, Rectangle collision){
+	public void setHover(Item hover, Rectangle collision, int i){
 		this.hover = hover;
 		this.hoverCollision = collision;
+		this.hoverIndex = i;
 	}
 	
 	public void setHover(Item hover){
 		this.hover = hover;
+	}
+	public void setHoverCollision(Rectangle hoverCollision){
+		this.hoverCollision = hoverCollision;
+	}
+	
+	public Item getHover(){
+		return hover;
+	}
+	
+	public int getHoverIndex(){
+		return hoverIndex;
 	}
 	
 	public ArrayList<Item> getItems(){
@@ -303,6 +335,9 @@ public class Inventory {
 
 	public int getWallet() {
 		return wallet;
+	}
+	public ArrayList<Rectangle> getCollision(){
+		return collisions;
 	}
 
 	public void setWallet(int wallet) {
@@ -320,96 +355,5 @@ public class Inventory {
 
 	public void setTrade(Entity trade) {
 		this.trade = trade;
-	}
-}
-
-class Gear{
-	private Item[] items;
-	// 0 - head, 1 - body, 2 - arms, 3 - legs, 4 - feet, 5 - hand, 6 - ring
-	private Texture[] unused;
-	private String[] names;
-	private final int SLOTS = 7;
-	private int originX, originY;
-	private Rectangle[] collisions;
-	
-	public Gear(int originX, int originY){
-		collisions = new Rectangle[SLOTS];
-		unused = new Texture[SLOTS];
-		items = new Wearable[SLOTS];
-		names = new String[SLOTS];
-		
-		this.originX = originX;
-		this.originY = originY;
-		
-		unused[0] = new Texture(Gdx.files.internal("img/head.png"));
-		unused[1] = new Texture(Gdx.files.internal("img/body.png"));
-		unused[2] = new Texture(Gdx.files.internal("img/arms.png"));
-		unused[3] = new Texture(Gdx.files.internal("img/legs.png"));
-		unused[4] = new Texture(Gdx.files.internal("img/feet.png"));
-		unused[5] = new Texture(Gdx.files.internal("img/hand.png"));
-		unused[6] = new Texture(Gdx.files.internal("img/ring.png"));
-		
-		for(int i=0; i<SLOTS; i++){
-			collisions[i] = new Rectangle();
-			collisions[i].setSize(32, 32);
-		}
-
-		collisions[0].setPosition(originX + 80, originY + 165);
-		collisions[1].setPosition(originX + 80, originY + 125);
-		collisions[2].setPosition(originX + 40, originY + 125);
-		collisions[3].setPosition(originX + 80, originY + 85);
-		collisions[4].setPosition(originX + 80, originY + 45);
-		collisions[5].setPosition(originX + 120, originY + 125);
-		collisions[6].setPosition(originX + 40, originY + 165);
-		
-		names[0] = "Head";
-		names[1] = "Body";
-		names[2] = "Arms";
-		names[3] = "Legs";
-		names[4] = "Feet";
-		names[5] = "Hand";
-		names[6] = "Ring";
-	}
-	public Item check(Vector2 screenCoord, Vector3 coord, Player player) {
-		for(int i=0; i<SLOTS; i++)
-			if(collisions[i].contains(screenCoord) && this.items[i] != null){
-				Global.mapShapes.begin(ShapeType.Filled);
-				Global.mapShapes.setColor(0f, 0, 0, 1f);
-				Global.mapShapes.rect(coord.x, coord.y, Global.font.getBounds("remove").width, Global.font.getLineHeight());
-				Global.mapShapes.end();
-				
-				Play.map.getSpriteBatch().begin();
-				Global.font.draw(Play.map.getSpriteBatch(), "remove", coord.x, coord.y + Global.font.getLineHeight() - 2);
-				Play.map.getSpriteBatch().end();
-				
-				if(Gdx.input.isButtonPressed(Buttons.RIGHT) && Gdx.input.justTouched()){
-					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
-					player.getInventory().move(items[i]);
-					this.items[i] = null;
-				}
-				return this.items[i] != null ? this.items[i] : null;
-			}
-		return null;			
-	}
-	public void draw(SpriteBatch spriteBatch) {
-		spriteBatch.draw(items[0] != null ? items[0].getTexture() : unused[0], originX + 80, originY + 165);
-		spriteBatch.draw(items[1] != null ? items[1].getTexture() : unused[1], originX + 80, originY + 125);
-		spriteBatch.draw(items[2] != null ? items[2].getTexture() : unused[2], originX + 40, originY + 125);
-		spriteBatch.draw(items[3] != null ? items[3].getTexture() : unused[3], originX + 80, originY + 85);
-		spriteBatch.draw(items[4] != null ? items[4].getTexture() : unused[4], originX + 80, originY + 45);
-		spriteBatch.draw(items[5] != null ? items[5].getTexture() : unused[5], originX + 120, originY + 125);
-		spriteBatch.draw(items[6] != null ? items[6].getTexture() : unused[6], originX + 40, originY + 165);
-	}
-	
-	public void wear(Wearable item, Player player){
-		for(int i=0; i<SLOTS; i++)
-			if(names[i] == item.getType()){
-				if(items[i] != null){
-					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
-					player.getInventory().move(items[i]);
-				}
-				items[i] = item;
-				player.getStats().mutateDefense(((Wearable) (items[i])).getDefense());
-			}
 	}
 }

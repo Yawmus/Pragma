@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.packets.MapPacket"/>
-<fullyQualifiedTypeName name="com.peter.inventory.Wearable"/>
-<fullyQualifiedTypeName name="com.peter.inventory.Food"/>
-<fullyQualifiedTypeName name="com.peter.inventory.Item"/>
 <fullyQualifiedTypeName name="com.peter.inventory.Chest"/>
 <fullyQualifiedTypeName name="com.peter.packets.ChestPacket"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.maps.Map"/>
@@ -56,8 +52,12 @@
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="com.peter.entities.Shopkeep"/>
-<fullyQualifiedTypeName name="com.peter.server.Global"/>
 <fullyQualifiedTypeName name="com.peter.entities.Animate"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.sql.Date"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.Input.Keys"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Color"/>
+<fullyQualifiedTypeName name="com.peter.server.Global"/>
 </qualifiedTypeNameHistroy>

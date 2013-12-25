@@ -5,7 +5,7 @@ public class Wearable extends Item{
 	public static Wearable HAT = new Wearable("Hat", 2, 6, "^.png", "Head", 1);
 	public static Wearable BREAST_PLATE = new Wearable("Breast Plate", 5, 17, "[.png", "Body", 3);
 	public static Wearable SHOES = new Wearable("Shoes", 2, 6, "congruent.png", "Feet", 1);
-	public static Wearable RING = new Wearable("Ring", 1, 20, "=.png", "Ring", 1);
+	public static Wearable RING = new Wearable("Ring", 1, 20, "dash.png", "Ring", 1);
 	
 	private int defense;
 	private String type;

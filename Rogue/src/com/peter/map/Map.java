@@ -20,10 +20,12 @@ import com.peter.inventory.Chest;
 import com.peter.inventory.Item;
 import com.peter.rogue.Global;
 import com.peter.rogue.network.PacketToObject;
+import com.peter.rogue.screens.Play;
 
 public class Map implements MapRenderer{
 	public Tile[][] tiles;
-	public byte[][] init;
+	public byte[][] initTiles;
+	public String[][] initTints;
 	public final int HEIGHT = 40, WIDTH = 80;
 	public final int ROOM_HEIGHT = 6, ROOM_WIDTH = 10, HALL_LENGTH = 6;
 	protected SpriteBatch spriteBatch;
@@ -32,7 +34,6 @@ public class Map implements MapRenderer{
 	protected int floor;
 	public Marks marks;
 	public ArrayList<String[][]> visibleSets;
-	public boolean initialize = true;
 
 	public ArrayList<HashMap<Integer, MPPlayer>> players;
 	public HashMap<Integer, NPC> npcs;
@@ -40,12 +41,15 @@ public class Map implements MapRenderer{
 	public HashMap<Integer, Chest> chests;
 	public HashMap<Integer, Entity> database;
 	
+	public boolean initialize = false;
+	
 	public Map(){
 		spriteBatch = new SpriteBatch();
 		viewBounds = new Rectangle();
 		region = new TextureRegion();
 		tiles = new Tile[WIDTH][HEIGHT];
-		init = new byte[WIDTH][HEIGHT];
+		initTiles = new byte[WIDTH][HEIGHT];
+		initTints = new String[WIDTH][HEIGHT];
 		//visible = new String[WIDTH][HEIGHT];
 		players = new ArrayList<HashMap<Integer, MPPlayer>>();
 		npcs = new HashMap<Integer, NPC>();
@@ -73,9 +77,12 @@ public class Map implements MapRenderer{
 
 	public void draw(){
 		if(initialize){
-			for(int x=0; x<WIDTH; x++)
-				for(int y=0; y<HEIGHT; y++)
-					tiles[x][y] = PacketToObject.tileConverter(init[x][y]);
+			for(int x=0; x<Play.map.WIDTH; x++)
+				for(int y=0; y<Play.map.HEIGHT; y++){
+					tiles[x][y] = PacketToObject.tileConverter(initTiles[x][y]);
+					if(initTints[x][y] != null && initTints[x][y] != "")
+						tiles[x][y].setTint(initTints[x][y]);
+				}
 			initialize = false;
 		}
 		for(int x=(int) (Global.camera.position.x/32 -  Gdx.graphics.getWidth()/64) > 0 ? (int) (Global.camera.position.x/32 - Gdx.graphics.getWidth()/64) : 0;
@@ -83,13 +90,17 @@ public class Map implements MapRenderer{
 			for(int y=(int) (Global.camera.position.y/32 -  Gdx.graphics.getHeight()/64) + 2 > 0 ? (int) (Global.camera.position.y/32 - Gdx.graphics.getHeight()/64) + 2 : 0;
 			        y<HEIGHT && y<(int) (Global.camera.position.y/32 + Gdx.graphics.getHeight()/64) + 1; y++){
 				if(visibleSets.get(floor)[x][y].equals("visited")){
-					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y);
+					tiles[x][y].update(Gdx.graphics.getDeltaTime());
+					spriteBatch.setColor(tiles[x][y].getTint());
+					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y, 32, 32);
 					visibleSets.get(floor)[x][y] = "hasVisited";
 				}
-				else if(visibleSets.get(floor)[x][y].equals("hasVisited"))
-					spriteBatch.draw(tiles[x][y].getVisiedTexture(), 32 * x, 32 * y);
+				else if(visibleSets.get(floor)[x][y].equals("hasVisited")){
+					spriteBatch.setColor(Color.DARK_GRAY);
+					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y, 32, 32);
+				}
 				else
-					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y);
+					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y, 32, 32);
 			}
 
 		
@@ -169,7 +180,7 @@ public class Map implements MapRenderer{
 					return get(ID).getName();
 			else
 				return get(ID).getName();
-		else if(getTile(x, y) != null && !visibleSets.get(floor)[(int)(x/32)][(int)(y/32)].equals("notVisited"))
+		else if(getTile(x, y) != null && !visibleSets.get(floor)[(int)(x/32)][(int)(y/32)].equals("notVisited") && getTile(x, y).hasDescription())
 			return getTile(x, y).getName();
 		return "";
 	}

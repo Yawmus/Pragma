@@ -4,26 +4,21 @@ import java.util.Scanner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.peter.rogue.network.ClientWrapper;
 import com.peter.rogue.screens.Death;
 import com.peter.rogue.screens.Play;
-import com.peter.rogue.screens.Splash;
 
 public class Rogue extends Game{
 	
-	public static final String TITLE = "Pragma", VERSION = "v0.7.2-alpha";
+	public static final String TITLE = "Pragma", VERSION = "v0.8.2-alpha";
 
-	Splash splash;
 	Play play;
 	public static ClientWrapper clientWrapper;
-    public static Scanner in;
 	
 	@Override
 	public void create() {
-		in = new Scanner(System.in);
-		splash = new Splash(this);
 
 		Global.camera.setToOrtho(false);    
 		/*System.out.print("IP?: ");

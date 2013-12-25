@@ -13,11 +13,16 @@ public class Tile{
 	public static final Tile WATER = new Tile("", new boolean[]{true, false, false, false, true});
 	public static final Tile DOWN = new Tile("Downstairs", new boolean[]{false, true, false, false, true});
 	public static final Tile UP = new Tile("Upstairs", new boolean[]{false, true, false, true, true});
-	public static final Tile ONE = new Tile("Inn", new boolean[]{false, false, true, false, true});
+	public static final Tile GRASS = new Tile("", new boolean[]{false, false, false, false, true});
 	
 	public Tile(String name, boolean[] properties){
 		this.name = name;
 		this.properties = properties;
+	}
+	
+	public Tile(Tile tile){
+		this.properties = tile.properties;
+		this.name = tile.name;
 	}
 
 	public String getName(){

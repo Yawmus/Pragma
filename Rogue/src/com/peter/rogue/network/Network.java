@@ -2,6 +2,7 @@ package com.peter.rogue.network;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.peter.entities.Entity;
@@ -128,8 +129,10 @@ public class Network extends Listener {
 			for(AddNPCPacket npc : packet.npcs.values())
 				EntityManager.NPCQueue.add(npc);
 			for(int x=0; x<Play.map.WIDTH; x++)
-				for(int y=0; y<Play.map.HEIGHT; y++)
-					Play.map.init[x][y] = packet.tiles[x][y];
+				for(int y=0; y<Play.map.HEIGHT; y++){
+					Play.map.initTiles[x][y] = packet.tiles[x][y];
+					Play.map.initTints[x][y] = packet.tints[x][y];
+				}
 			Play.map.initialize = true;
 			
 			Play.map.database = new HashMap<Integer, Entity>();

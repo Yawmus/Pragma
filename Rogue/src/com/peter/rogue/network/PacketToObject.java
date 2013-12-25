@@ -1,5 +1,6 @@
 package com.peter.rogue.network;
 
+import com.badlogic.gdx.graphics.Color;
 import com.peter.inventory.Food;
 import com.peter.inventory.Item;
 import com.peter.inventory.Wearable;
@@ -12,19 +13,21 @@ public class PacketToObject{
 	public static Tile tileConverter(byte tile){
 		switch(tile){
 		case 0:
-			return Tile.BLANK;
+			return new Tile(Tile.BLANK);
 		case 1:
-			return Tile.GROUND;
+			return new Tile(Tile.GROUND);
 		case 2:
-			return Tile.WALL;
+			return new Tile(Tile.WALL);
 		case 3:
-			return Tile.DOOR;
+			return new Tile(Tile.DOOR);
 		case 4:
-			return Tile.WATER;
+			return new Tile(Tile.WATER);
 		case 5:
-			return Tile.DOWN;
+			return new Tile(Tile.DOWN);
 		case 6:
-			return Tile.UP;
+			return new Tile(Tile.UP);
+		case 7:
+			return new Tile(Tile.GRASS);
 		}
 		return null;
 	}
@@ -37,7 +40,24 @@ public class PacketToObject{
 			temp.ID = item.ID;
 			return temp;
 		case "Gem":
-			temp = new Item(Item.GEM);
+			switch(item.type){
+			case "Diamond":
+				temp = new Item(Item.GEM_DIAMOND);
+				temp.setColor(Color.WHITE);
+				break;
+			case "Ruby":
+				temp = new Item(Item.GEM_RUBY);
+				temp.setColor(new Color(.79f, .17f, .17f, 1));
+				break;
+			case "Topaz":
+				temp = new Item(Item.GEM_TOPAZ);
+				temp.setColor(new Color(.26f, .4f, .96f, 1));
+				break;
+			case "Spessarite":
+				temp = new Item(Item.GEM_SPESSARITE);
+				temp.setColor(new Color(.28f, .86f, .29f, 1));
+				break;
+			}
 			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;

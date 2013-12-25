@@ -1,5 +1,6 @@
 package com.peter.server;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -46,7 +47,7 @@ public class PragmaServer{
 	public static void connect() throws Exception {
 		System.out.println("Creating the server...");
 		
-		server = new Server();
+		server = new Server(49000, 12000);
 		server.getKryo().register(PlayerPacket.class);
 		server.getKryo().register(NPCPacket.class);
 		server.getKryo().register(ExperiencePacket.class);
@@ -66,6 +67,8 @@ public class PragmaServer{
 		server.getKryo().register(IDPacket.class);
 		server.getKryo().register(java.util.HashMap.class);
 		server.getKryo().register(java.util.ArrayList.class);
+		server.getKryo().register(String[][].class);
+		server.getKryo().register(String[].class);
 		server.getKryo().register(short[][].class);
 		server.getKryo().register(short[].class);
 		server.getKryo().register(byte[][].class);
@@ -99,13 +102,16 @@ public class PragmaServer{
 						packet2.marks[i][j] = (short)((int)Map.markSets.get(0).getMarker()[i][j]);
 				
 				packet2.tiles = new byte[Map.WIDTH][Map.HEIGHT];
+				packet2.tints = new String[Map.WIDTH][Map.HEIGHT];
 				for(int x=0; x<Map.WIDTH; x++)
-					for(int y=0; y<Map.HEIGHT; y++)
+					for(int y=0; y<Map.HEIGHT; y++){
 						packet2.tiles[x][y] = ObjectToPacket.tileConverter(Map.tileSets.get(0)[x][y]);
-				
+						packet2.tints[x][y] = Map.tintSets.get(0)[x][y];
+					}
+
 				server.sendToTCP(c.getID(), packet2);
 				
-				System.out.println("[SERVER] connection received.");
+				System.out.println("[SERVER] connection received on " + (new Date()) + ".");
 			}
 			
 			public void received(Connection c, Object o){
@@ -219,6 +225,9 @@ public class PragmaServer{
 						packet.x = player.getX();
 						packet.y = player.getY();
 						packet.floor = player.floor;
+						packet.color = new short[4];
+						for(int i=0; i<4; i++)
+							packet.color[i] = player.color[i];
 						packet.name = player.getName();
 						packet.picture = player.getPicture();
 						server.sendToTCP(c.getID(), packet);
@@ -230,6 +239,8 @@ public class PragmaServer{
 					newPlayer.setX(packet2.x);
 					newPlayer.setY(packet2.y);
 					newPlayer.floor = 0;
+					for(int i=0; i<4; i++)
+						newPlayer.color[i] = packet2.color[i];
 					newPlayer.setPicture(packet2.picture);
 					newPlayer.setName(packet2.name);
 					
@@ -246,6 +257,7 @@ public class PragmaServer{
 					MapPacket packet5 = new MapPacket();
 					
 					packet5.tiles = new byte[Map.WIDTH][Map.HEIGHT];
+					packet5.tints = new String[Map.WIDTH][Map.HEIGHT];
 					Tile[][] tileSet = map.generateFloor(packet.floor, packet.x/32, packet.y/32);
 					
 					packet5.items = Map.itemSets.get(packet.floor);
@@ -262,16 +274,15 @@ public class PragmaServer{
 					for(int i=0; i<Map.WIDTH; i++)
 						for(int j=0; j<Map.HEIGHT; j++)
 							packet5.marks[i][j] = (short)((int)Map.markSets.get(packet.floor).getMarker()[i][j]);
-					
 					for(int x=0; x<Map.WIDTH; x++)
-						for(int y=0; y<Map.HEIGHT; y++)
+						for(int y=0; y<Map.HEIGHT; y++){
 							packet5.tiles[x][y] = ObjectToPacket.tileConverter(tileSet[x][y]);
+							packet5.tints[x][y] = Map.tintSets.get(packet.floor)[x][y];
+						}
 					
 					server.sendToTCP(c.getID(), packet5);
 				}
-
 			}
-			
 			
 			public void disconnected(Connection c){
 				RemovePlayerPacket packet = new RemovePlayerPacket();
@@ -298,9 +309,6 @@ public class PragmaServer{
 					for(Player player : map.players.values())
 						if(player.floor == removeFloor)
 							server.sendToTCP(player.ID, packet);
-					System.out.println(Map.npcSets.size());
-					System.out.println(Map.npcSets.get(removeFloor).size());
-					System.out.println(Map.npcSets.get(removeFloor).get(removeID).getGroup());
 					if(Map.npcSets.get(removeFloor).get(removeID).getDrop() != null){ // Drops nothing
 						ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
 						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
