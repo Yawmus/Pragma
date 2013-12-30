@@ -6,6 +6,7 @@ public class Monster extends NPC{
 	
 	public Monster(int level, String race, String type, String name) {
 		super("w.png", level, race, type, name);
+		symbol = 'w';
 		if(level > 10)
 			setColor(Color.RED);
 		else if(level > 5)

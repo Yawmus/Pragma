@@ -1,5 +1,6 @@
 package com.peter.rogue.views;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -24,6 +25,17 @@ public class UI{
     private Texture texture2 = new Texture(Gdx.files.internal("img/guiRightTest.png"));
     public static HashMap<Vector3, Entity> screenMarks;
     private Vector2 screenCoord;
+    public static ArrayList<Entry> messageList = new ArrayList<Entry>();
+
+	public static class Entry{
+		public String message, name;
+		public float time;
+		public Entry(String message, String name){
+			this.message = message;
+			this.name = name;
+			this.time = 0;
+		}
+	}
     
 	public UI(Player player){
 		screenMarks = new HashMap<Vector3, Entity>();
@@ -261,19 +273,44 @@ public class UI{
 	}
 	
 	public void update(float delta){
-
-		
+		for(int i=0; i<messageList.size(); i++){
+			messageList.get(i).time += delta;
+			if(messageList.get(i).time >= 10)
+				messageList.remove(i);
+		}
 	}
 	
 	public void display(SpriteBatch spriteBatch, Player player){
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		Global.screenShapes.begin(ShapeType.Filled);
+		Global.screenShapes.setColor(new Color(.15f, .15f, .15f, .7f));
+		Global.screenShapes.rect(0, 600 - player.getVisible().size() * 17 - 5, 190, player.getVisible().size() * 17 + 10);
+		Global.screenShapes.end();
+		Gdx.gl.glDisable(GL10.GL_BLEND);
+		
 		spriteBatch.begin();
+		for(int i=0; i<player.getVisible().size(); i++){
+			Global.font.draw(spriteBatch, player.getVisible().get(i).symbol + "", 20 - Global.font.getBounds(player.getVisible().get(i).symbol + "").width/2, 600 - i*17);
+			Global.font.draw(spriteBatch, "-  " + player.getVisible().get(i).getName(), 38, 600 - i*17);
+		}
+		for(int i=0; i<messageList.size(); i++){
+			if(messageList.get(i).time < 5f)
+				Global.font.setColor(Color.WHITE);
+			else
+				Global.font.setColor(1f, 1f, 1f, 1 - (messageList.get(i).time-5)/5f);
+			Global.font.draw(spriteBatch, messageList.get(i).name + ": " + messageList.get(i).message, 20, 120 + (messageList.size()-i)*17);
+		}
+		
+		Global.font.setColor(Color.WHITE);
+		
 		spriteBatch.draw(texture1, 0, 0);
 		spriteBatch.draw(texture2, Global.SCREEN_WIDTH - 179, 0);
 		
 		spriteBatch.draw(player.getPicture(),  200, 15);
 		
 		Global.gothicFont.setScale(1f);
-		Global.gothicFont.draw(spriteBatch, player.getName(), 280, 90);
+		Global.gothicFont.draw(spriteBatch, player.getName().split(" ")[0], 280, 90);
 		Global.gothicFont.setScale(.7f);
 		if(player.getStats().getPoints() > 0){
 			Global.gothicFont.setColor(Color.GREEN);

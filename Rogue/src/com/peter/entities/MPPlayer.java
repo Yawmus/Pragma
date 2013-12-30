@@ -10,6 +10,7 @@ public class MPPlayer extends Animate{
 	
 	public MPPlayer(String filename) {
 		super(filename, "Player", "Human", null);
+		symbol = '@';
 	}
 	public void draw(SpriteBatch spriteBatch){
 		super.draw(spriteBatch);

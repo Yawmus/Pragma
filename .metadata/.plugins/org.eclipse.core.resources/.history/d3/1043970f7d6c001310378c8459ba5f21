@@ -1,0 +1,8 @@
+package com.peter.map;
+
+import com.peter.server.Global;
+
+public class Palette {
+	public static short[] WALL = new short[]{(short) Global.rand(10, 65), (short) Global.rand(10, 65), (short) Global.rand(10, 65), 100};
+	
+}

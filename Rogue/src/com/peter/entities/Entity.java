@@ -11,6 +11,7 @@ public class Entity extends Sprite{
 	public Integer ID;
 	protected int timeout = 0;
 	public boolean canDraw = false;
+	public char symbol;
 
 	public Entity(String filename, String type, String name){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));

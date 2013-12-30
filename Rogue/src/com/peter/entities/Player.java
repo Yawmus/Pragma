@@ -1,6 +1,8 @@
 package com.peter.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -29,6 +31,8 @@ import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
+import com.peter.rogue.views.UI;
+import com.peter.rogue.views.UI.Entry;
 
 public class Player extends Animate implements InputProcessor {
 	
@@ -49,13 +53,16 @@ public class Player extends Animate implements InputProcessor {
 	private String alert;
 	private float alertDelay = 0;
 	private Color color;
+	private ArrayList<Entity> visible;
 	protected Stats stats;
 	//public ClientWrapper clientWrapper2 = new ClientWrapper();
 	
 	public Player(String filename){
 		super(filename, "Player", "Human", null);
+		symbol = '@';
 		stats = new Stats();
 		messageFlag = false;
+		visible = new ArrayList<Entity>();
 		name = "Adelaide";
 		pictureURL = "img/adelaide.png";
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
@@ -73,8 +80,8 @@ public class Player extends Animate implements InputProcessor {
 		stats.setMaxHitpoints(20);
 		hunger = 1.01f;
 		delay = .2f;
-		
-		switch(Global.rand(8, 0)){
+		color = new Color(Color.WHITE);
+		/*switch(Global.rand(8, 0)){
 		case 0:
 			color = new Color(.7f, .7f, .7f, 1f); // gray
 			break;
@@ -100,7 +107,7 @@ public class Player extends Animate implements InputProcessor {
 			color = new Color(1f, .5f, 0f, 1f); // yella
 			break;
 			
-		}
+		}*/
 		setColor(color);
 		
 		for(int i=0; i<100; i++){
@@ -342,6 +349,7 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
     public void light(){
+    	visible.clear();
 		//Global.mapShapes.begin(ShapeType.Line);
 		//Global.mapShapes.setColor(Color.YELLOW);
 		
@@ -356,10 +364,21 @@ public class Player extends Animate implements InputProcessor {
 			//Global.mapShapes.line(rays.get(i).origin, rays.get(i).direction);
 		}
 		
+		Collections.sort(visible, new Comparator<Entity>(){
+		     public int compare(Entity entity1, Entity entity2){
+		    	 int index = 0;
+		    	 if(entity1.getName().equals(entity2.getName()))
+		    		 return 1;
+		    	 while(entity1.getName().charAt(index) - entity2.getName().charAt(index) == 0)
+		    		 index++;
+		         return entity1.getName().charAt(index) - entity2.getName().charAt(index);
+		     }
+		});
 		//Global.mapShapes.end();
     }
     
     public Vector3 intersect(Ray ray){
+    	Entity temp = null;
     	float x, y, splits = 8; // Perfect number for splits and viewDistance to not have wall nonsense
     	for(int i=1; i<=splits; i++){
     		x = ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits);
@@ -371,13 +390,19 @@ public class Player extends Animate implements InputProcessor {
 	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
 	    	}
 	    	// Render entities when in sight
-	    	else if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y).equals("")))
-	    		if(Play.map.get(Play.map.marks.get((int) x, (int) y)) != null)
+	    	else if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y).equals(""))){
+	    		temp = Play.map.get(Play.map.marks.get((int) x, (int) y));
+	    		if(temp != null && temp.canDraw == false){
 	    			Play.map.get(Play.map.marks.get((int) x, (int) y)).canDraw = true;
+	    			visible.add(Play.map.get(Play.map.marks.get((int) x, (int) y)));
+	    		}
+	    	}
     	}
     	return ray.direction;
     }
-	
+	public ArrayList<Entity> getVisible(){
+		return visible;
+	}
 	public String getMessageBuffer(){
 		return messageBuffer;
 	}
@@ -482,7 +507,9 @@ public class Player extends Animate implements InputProcessor {
 		case Keys.ENTER:
 			if(getMenu().equals("Chat")){
 				if(!messageBuffer.isEmpty()){
+					System.out.println(messageBuffer);
 					message = messageBuffer;
+					UI.messageList.add(new UI.Entry(message, name));
 					messageDelay = 0;
 					MessagePacket packet = new MessagePacket();
 					packet.message = message;

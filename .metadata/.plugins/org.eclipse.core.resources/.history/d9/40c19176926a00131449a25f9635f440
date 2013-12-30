@@ -1,0 +1,17 @@
+package com.peter.entities;
+
+import com.badlogic.gdx.graphics.Color;
+
+public class Monster extends NPC{
+	
+	public Monster(int level, String race, String type, String name) {
+		super("tilda.png", race, type, name);
+		if(level > 3)
+			setColor(Color.RED);
+	}
+	
+
+	public void setLevel(int level){
+		this.level = level;
+	}
+}

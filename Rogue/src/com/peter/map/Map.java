@@ -50,7 +50,7 @@ public class Map implements MapRenderer{
 		tiles = new Tile[WIDTH][HEIGHT];
 		initTiles = new byte[WIDTH][HEIGHT];
 		initTints = new String[WIDTH][HEIGHT];
-		//visible = new String[WIDTH][HEIGHT];
+
 		players = new ArrayList<HashMap<Integer, MPPlayer>>();
 		npcs = new HashMap<Integer, NPC>();
 		items = new HashMap<Integer, Item>();

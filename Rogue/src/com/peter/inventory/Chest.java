@@ -33,6 +33,7 @@ public class Chest extends Entity {
 	
 	public Chest(){
 		super("equals.png", "Chest", null);
+		symbol = '=';
 		setColor(Color.WHITE);
 		this.name = "Chest";
 		this.items = new ArrayList<Item>();

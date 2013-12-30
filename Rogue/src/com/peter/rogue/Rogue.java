@@ -1,7 +1,5 @@
 package com.peter.rogue;
 
-import java.util.Scanner;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

@@ -1,0 +1,5 @@
+package com.peter.inventory;
+
+public class Gear {
+
+}

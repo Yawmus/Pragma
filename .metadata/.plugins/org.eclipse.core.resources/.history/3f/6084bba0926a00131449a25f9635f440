@@ -1,0 +1,8 @@
+package com.peter.entities;
+
+public class Citizen extends NPC{
+
+	public Citizen(String race, String type, String name) {
+		super("c_.png", race, type, name);
+	}
+}

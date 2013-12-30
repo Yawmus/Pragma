@@ -37,9 +37,9 @@ public class EntityManager{
 	public static Queue<AddTradeItemPacket> tradeItemQueue;
     
     public EntityManager(Play play){
-    	player = new Player("santa.png");
+    	player = new Player("at.png");
     	System.out.print("Name?: ");
-    	player.setName(in.next());
+    	player.setName(in.nextLine());
     	
     	playerQueue = new LinkedList<AddPlayerPacket>();
     	NPCQueue = new LinkedList<AddNPCPacket>();
@@ -94,7 +94,7 @@ public class EntityManager{
 			chestQueue.remove();
 		}
 		while(!playerQueue.isEmpty()){
-			MPPlayer newPlayer = new MPPlayer("santa.png");
+			MPPlayer newPlayer = new MPPlayer("at.png");
 			newPlayer.ID = playerQueue.peek().ID;
 			newPlayer.setX(playerQueue.peek().x);
 			newPlayer.setY(playerQueue.peek().y);
@@ -179,6 +179,11 @@ public class EntityManager{
 		packet.x = (int) player.getX();
 		packet.y = (int) player.getY();
 		packet.floor = Play.map.getFloor();
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		packet.ID = player.ID;
 		packet.color = new short[4];
 		packet.color[0] = (short)(100 * player.getColor().r);
@@ -188,9 +193,8 @@ public class EntityManager{
 		
 		Rogue.clientWrapper.client.sendTCP(packet);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
