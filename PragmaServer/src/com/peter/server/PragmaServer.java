@@ -165,6 +165,7 @@ public class PragmaServer{
 							packet2.amount = Map.npcSets.get(packet.floor).get(packet.receiverID).getStats().getExperience();
 							packet2.name = Map.npcSets.get(packet.floor).get(packet.receiverID).getName();
 							packet2.race = Map.npcSets.get(packet.floor).get(packet.receiverID).getRace();
+							packet2.group = Map.npcSets.get(packet.floor).get(packet.receiverID).getGroup();
 							server.sendToTCP(packet.attackerID, packet2);
 							removeID = Map.npcSets.get(packet.floor).get(packet.receiverID).ID;
 							removeFloor = packet.floor;

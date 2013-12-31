@@ -38,8 +38,8 @@ public class EntityManager{
     
     public EntityManager(Play play){
     	player = new Player("at.png");
-    	System.out.print("Name?: ");
-    	player.setName(in.nextLine());
+    	//System.out.print("Name?: ");
+    	//player.setName(in.nextLine());
     	
     	playerQueue = new LinkedList<AddPlayerPacket>();
     	NPCQueue = new LinkedList<AddNPCPacket>();
@@ -49,7 +49,6 @@ public class EntityManager{
     }
     
 	public void draw(SpriteBatch spriteBatch){
-
 		while(!itemQueue.isEmpty()){
 			Item newItem = PacketToObject.itemConverter(itemQueue.peek());
 			Play.map.marks.put(newItem.ID, (int) newItem.getX(), (int) newItem.getY());

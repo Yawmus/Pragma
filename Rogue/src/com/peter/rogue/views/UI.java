@@ -281,13 +281,15 @@ public class UI{
 	}
 	
 	public void display(SpriteBatch spriteBatch, Player player){
-		Gdx.gl.glEnable(GL10.GL_BLEND);
-	    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		Global.screenShapes.begin(ShapeType.Filled);
-		Global.screenShapes.setColor(new Color(.15f, .15f, .15f, .7f));
-		Global.screenShapes.rect(0, 600 - player.getVisible().size() * 17 - 5, 190, player.getVisible().size() * 17 + 10);
-		Global.screenShapes.end();
-		Gdx.gl.glDisable(GL10.GL_BLEND);
+		if(!player.getVisible().isEmpty()){
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			Global.screenShapes.begin(ShapeType.Filled);
+			Global.screenShapes.setColor(new Color(.1f, .1f, .1f, .7f));
+			Global.screenShapes.rect(0, 600 - player.getVisible().size() * 17 - 5, 190, player.getVisible().size() * 17 + 10);
+			Global.screenShapes.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+		}
 		
 		spriteBatch.begin();
 		for(int i=0; i<player.getVisible().size(); i++){

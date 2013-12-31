@@ -162,7 +162,6 @@ public class Player extends Animate implements InputProcessor {
 			statusFlag = true;
 			statusDelay += delta;
 		}
-		
 
 		if(alertDelay > 2){
 			setAlert("", true);

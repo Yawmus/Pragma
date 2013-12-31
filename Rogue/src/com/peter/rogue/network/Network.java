@@ -164,7 +164,7 @@ public class Network extends Listener {
 		else if(o instanceof ExperiencePacket){
 			ExperiencePacket packet = (ExperiencePacket) o;
 			EntityManager.player.getStats().mutateExperience(packet.amount);
-			if(packet.name != null)
+			if(!packet.group.equals("Monster"))
 				EntityManager.player.setAlert("You killed " + packet.name + "!", false);
 		}
 		else if(o instanceof AttackPacket){

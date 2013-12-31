@@ -59,7 +59,25 @@ public class NPC extends Entity {
 		//time -= Global.rand(15, 0) * .8f;
 		canMove = true;
 		moves = new Stack<Node>();
-		drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
+		//drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
+		drop = new ItemPacket("Gem");
+		if(drop.name.equals("Gem"))
+			switch(Global.rand(6, 0)){
+			case 0:
+				drop.type = "Diamond";
+				break;
+			case 1:
+			case 2:
+				drop.type = "Topaz";
+				break;
+			case 3:
+			case 4:
+				drop.type = "Ruby";
+				break;
+			case 5:
+				drop.type = "Spessarite";
+				break;
+			}
 		delay = 2.6f + Global.rand(100, 0) * .005f;
 		list = new HostilityList();
 		response = new Responses(getGroup());
