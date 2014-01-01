@@ -32,7 +32,7 @@ public class Chest extends Entity {
 	private Character selector;
 	
 	public Chest(){
-		super("equals.png", "Chest", null);
+		super("equals.png", "Chest");
 		symbol = '=';
 		setColor(Color.WHITE);
 		this.name = "Chest";

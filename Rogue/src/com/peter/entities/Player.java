@@ -610,7 +610,6 @@ public class Player extends Animate implements InputProcessor {
 			if(character == '1'){
 				if(inventory.getHover() != null){
 					Item temp = inventory.remove(inventory.getHoverIndex());
-					System.out.println(temp.getFullName() + "     " + temp.getType());
 					ItemPacket packet = new ItemPacket(temp.getFullName(), temp.ID, Play.map.getFloor());
 					packet.x = (int) (getX()/32);
 					packet.y = (int) (getY()/32);

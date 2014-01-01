@@ -4,11 +4,11 @@ import com.peter.entities.Entity;
 
 public class Item extends Entity{
 	
-	public static Item GOLD = new Item("Gold", 0, 5, "$.png", '$');
-	public static Item GEM_DIAMOND = new Item("Gem$Diamond", 0, 25, "asterisk.png", '*');
-	public static Item GEM_RUBY = new Item("Gem$Ruby", 0, 10, "asterisk.png", '*');
-	public static Item GEM_TOPAZ = new Item("Gem$Topaz", 0, 10, "asterisk.png", '*');
-	public static Item GEM_SPESSARITE = new Item("Gem$Spessartite", 0, 20, "asterisk.png", '*');
+	public static Item GOLD = new Item("Treasure$Gold", 0, 5, "$.png", '$');
+	public static Item DIAMOND = new Item("Treasure$Gem$Diamond", 0, 25, "asterisk.png", '*');
+	public static Item RUBY = new Item("Treasure$Gem$Ruby", 0, 10, "asterisk.png", '*');
+	public static Item TOPAZ = new Item("Treasure$Gem$Topaz", 0, 10, "asterisk.png", '*');
+	public static Item SPESSARTITE = new Item("Treasure$Gem$Spessartite", 0, 20, "asterisk.png", '*');
 	
 	private int weight;
 	private int value;
@@ -16,7 +16,7 @@ public class Item extends Entity{
 	private boolean pickedUp;
 	
 	public Item(String name, int weight, int value, String filename, char symbol){
-		super(filename, "Item", name);
+		super(filename, name);
 		this.weight = weight;
 		this.value = value;
 		this.filename = filename;
@@ -24,9 +24,8 @@ public class Item extends Entity{
 	}
 	
 	public Item(Item item){
-		super(item.filename, item.type, item.name);
+		super(item.filename, item.name);
 		this.name = item.name;
-		this.type = item.type;
 		this.weight = item.weight;
 		this.value = item.value;
 		this.filename = item.filename;
@@ -54,5 +53,9 @@ public class Item extends Entity{
 	}
 	public boolean isPickedUp(){
 		return pickedUp;
+	}
+	
+	public String getFullName(){
+		return name;
 	}
 }

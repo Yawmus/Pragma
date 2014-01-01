@@ -21,12 +21,14 @@ public class Animate extends Entity{
 	protected Animate attacker;
 	protected Sound deathSound;
 	public static Animation animations = new Animation();
+	protected String type;
 	
 	public Animate(String filename, String race, String type, String name) {
-		super(filename, type, name);
+		super(filename, name);
 		message = new String("");
 		status = null;
 		this.race = race;
+		this.type = type;
 	}
 	public void update(float delta){
 		time += delta;
@@ -64,6 +66,10 @@ public class Animate extends Entity{
 	
 	public String getMessage() {
 		return message;
+	}
+	
+	public String getType() {
+		return type;
 	}
 	
 	public void resetMessage() {

@@ -7,15 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Entity extends Sprite{
 	
-	protected String type, name;
+	protected String name;
 	public Integer ID;
 	protected int timeout = 0;
 	public boolean canDraw = false;
 	public char symbol;
 
-	public Entity(String filename, String type, String name){
+	public Entity(String filename, String name){
 		super(new Sprite(new Texture(Gdx.files.internal("img/" + filename))));
-		this.type = type;
 		this.name = name;
 	}
 	
@@ -34,22 +33,19 @@ public class Entity extends Sprite{
 	}
 	
 	public String getName(){
-		if(name.contains("$"))
-			return name.split("\\$")[1];
+		if(name.contains("$")){
+			int count = 0;
+			for(int i=0; i<name.length(); i++){
+				if(name.charAt(i) == '$')
+					count++;
+			}
+			return name.split("\\$")[count];
+		}
 		else
 			return name;
-	}
-	
-	public String getFullName(){
-		return name;
-	}
-	
-	public String getType() {
-		return type;
 	}
 
 	public void setName(String name){
 		this.name = name;
 	}
 }
-

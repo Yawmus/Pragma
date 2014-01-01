@@ -92,7 +92,7 @@ public class Gear{
 	
 	public void wear(Wearable item, Player player){
 		for(int i=0; i<SLOTS; i++)
-			if(names[i] == item.getType()){
+			if(names[i] == item.getGroup()){
 				if(items[i] != null){
 					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
 					player.getInventory().move(items[i]);

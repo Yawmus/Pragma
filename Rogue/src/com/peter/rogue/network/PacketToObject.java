@@ -33,62 +33,84 @@ public class PacketToObject{
 	}
 	
 	public static Item itemConverter(ItemPacket item){
-		System.out.println(item.name.split("\\$")[0]);
+		System.out.println(item.name);
 		switch(item.name.split("\\$")[0]){
-		case "Gold":
-			temp = new Item(Item.GOLD);
-			temp.ID = item.ID;
-			return temp;
-		case "Gem":
-			System.out.println(item.name.split("\\$")[1]);
+		case "Treasure":
 			switch(item.name.split("\\$")[1]){
-			case "Diamond":
-				temp = new Item(Item.GEM_DIAMOND);
-				temp.setColor(Color.WHITE);
-				break;
-			case "Ruby":
-				temp = new Item(Item.GEM_RUBY);
-				temp.setColor(new Color(.79f, .17f, .17f, 1));
-				break;
-			case "Topaz":
-				temp = new Item(Item.GEM_TOPAZ);
-				temp.setColor(new Color(.26f, .4f, .96f, 1));
-				break;
-			case "Spessarite":
-				temp = new Item(Item.GEM_SPESSARITE);
-				temp.setColor(new Color(.28f, .86f, .29f, 1));
-				break;
+			case "Gold":
+				temp = new Item(Item.GOLD);
+				temp.ID = item.ID;
+				return temp;
+			case "Gem":
+				switch(item.name.split("\\$")[2]){
+				case "Diamond":
+					temp = new Item(Item.DIAMOND);
+					temp.setColor(Color.WHITE);
+					break;
+				case "Ruby":
+					temp = new Item(Item.RUBY);
+					temp.setColor(new Color(.79f, .17f, .17f, 1));
+					break;
+				case "Topaz":
+					temp = new Item(Item.TOPAZ);
+					temp.setColor(new Color(.26f, .4f, .96f, 1));
+					break;
+				case "Spessarite":
+					temp = new Item(Item.SPESSARTITE);
+					temp.setColor(new Color(.28f, .86f, .29f, 1));
+					break;
+				}
+				temp.ID = item.ID;
+				return temp;
 			}
-			temp.ID = item.ID;
-			return temp;
-		case "Breast Plate":
-			temp = new Wearable(Wearable.BREAST_PLATE);
-			temp.ID = item.ID;
-			return temp;
-		case "Hat":
-			temp = new Wearable(Wearable.HAT);
-			temp.ID = item.ID;
-			return temp;
-		case "Ring":
-			temp = new Wearable(Wearable.RING);
-			temp.ID = item.ID;
-			return temp;
-		case "Shoes":
-			temp = new Wearable(Wearable.SHOES);
-			temp.ID = item.ID;
-			return temp;
-		case "Helmet":
-			temp = new Wearable(Wearable.HELMET);
-			temp.ID = item.ID;
-			return temp;
-		case "Bread":
-			temp = new Food(Food.BREAD);
-			temp.ID = item.ID;
-			return temp;
-		case "Meat":
-			temp = new Food(Food.MEAT);
-			temp.ID = item.ID;
-			return temp;
+		case "Food":
+			switch(item.name.split("\\$")[1]){
+			case "Bread":
+				temp = new Food(Food.BREAD);
+				temp.ID = item.ID;
+				return temp;
+			case "Meat":
+				temp = new Food(Food.MEAT);
+				temp.ID = item.ID;
+				return temp;
+			}
+			
+		case "Wearable":
+			switch(item.name.split("\\$")[1]){
+			case "Head":
+				switch(item.name.split("\\$")[2]){
+				case "Helmet":
+					temp = new Wearable(Wearable.HELMET);
+					temp.ID = item.ID;
+					return temp;
+				case "Hat":
+					temp = new Wearable(Wearable.HAT);
+					temp.ID = item.ID;
+					return temp;
+				}
+			case "Body":
+				switch(item.name.split("\\$")[2]){
+				case "Breast Plate":
+					temp = new Wearable(Wearable.BREAST_PLATE);
+					temp.ID = item.ID;
+					return temp;
+				
+				}
+			case "Ring":
+				switch(item.name.split("\\$")[2]){
+				case "Wooden Ring":
+					temp = new Wearable(Wearable.WOODEN_RING);
+					temp.ID = item.ID;
+					return temp;
+				}
+			case "Feet":
+				switch(item.name.split("\\$")[2]){
+				case "Shoes":
+					temp = new Wearable(Wearable.SHOES);
+					temp.ID = item.ID;
+					return temp;
+				}
+			}
 		}
 		return null;
 	}

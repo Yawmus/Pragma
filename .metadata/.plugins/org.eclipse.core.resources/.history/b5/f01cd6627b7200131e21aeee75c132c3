@@ -1,0 +1,102 @@
+package com.peter.rogue.network;
+
+import com.badlogic.gdx.graphics.Color;
+import com.peter.inventory.Food;
+import com.peter.inventory.Item;
+import com.peter.inventory.Wearable;
+import com.peter.map.Tile;
+import com.peter.packets.ItemPacket;
+
+public class PacketToObject{
+	private static Item temp;
+	
+	public static Tile tileConverter(byte tile){
+		switch(tile){
+		case 0:
+			return new Tile(Tile.BLANK);
+		case 1:
+			return new Tile(Tile.GROUND);
+		case 2:
+			return new Tile(Tile.WALL);
+		case 3:
+			return new Tile(Tile.DOOR);
+		case 4:
+			return new Tile(Tile.WATER);
+		case 5:
+			return new Tile(Tile.DOWN);
+		case 6:
+			return new Tile(Tile.UP);
+		case 7:
+			return new Tile(Tile.GRASS);
+		}
+		return null;
+	}
+	
+	public static Item itemConverter(ItemPacket item){
+		switch(item.name.split(" ")[0]){
+		case "Gold":
+			temp = new Item(Item.GOLD);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Gem":
+			switch(item..split(" ")[1]){
+			case "Diamond":
+				temp = new Item(Item.GEM_DIAMOND);
+				temp.setColor(Color.WHITE);
+				break;
+			case "Ruby":
+				temp = new Item(Item.GEM_RUBY);
+				temp.setColor(new Color(.79f, .17f, .17f, 1));
+				break;
+			case "Topaz":
+				temp = new Item(Item.GEM_TOPAZ);
+				temp.setColor(new Color(.26f, .4f, .96f, 1));
+				break;
+			case "Spessarite":
+				temp = new Item(Item.GEM_SPESSARITE);
+				temp.setColor(new Color(.28f, .86f, .29f, 1));
+				break;
+			}
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Breast Plate":
+			temp = new Wearable(Wearable.BREAST_PLATE);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Hat":
+			temp = new Wearable(Wearable.HAT);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Ring":
+			temp = new Wearable(Wearable.RING);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Shoes":
+			temp = new Wearable(Wearable.SHOES);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Helmet":
+			temp = new Wearable(Wearable.HELMET);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Bread":
+			temp = new Food(Food.BREAD);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		case "Meat":
+			temp = new Food(Food.MEAT);
+			temp.setPosition(item.x, item.y);
+			temp.ID = item.ID;
+			return temp;
+		}
+		return null;
+	}
+}

@@ -1,0 +1,14 @@
+package com.peter.inventory;
+
+public class Item {
+	public static final String GOLD = new String("Treasure$Gold");
+	public static final String DIAMOND = new String("Treasure$Gem$Diamond");
+	public static final String RUBY = new String("Treasure$Gem$Ruby");
+	public static final String TOPAZ = new String("Treasure$Gem$Topaz");
+	public static final String SPESSARITE = new String("Treasure$Gem$Spessartite");
+	public static final String HELMET = new String("Wearable$Head$Helmet", 5, 17, "^.png", 3, '^');
+	public static final String HAT = new String("Wearable$Head$Hat");
+	public static final String BREAST_PLATE = new String("Wearable$Head$Breast Plate");
+	public static final String SHOES = new String("Wearable$Feet$Shoes");
+	public static final String WOODEN_RING = new String("Wearable$Ring$Wooden Shoes");
+}

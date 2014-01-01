@@ -1,0 +1,11 @@
+package com.peter.inventory;
+
+public class Item {
+	public static final String WOODEN_RING()
+	
+	public static final String GOLD = new Item("Treasure$Gold", 0, 5, "$.png", '$');
+	public static final String DIAMOND = new Item("Treasure$Gem$Diamond", 0, 25, "asterisk.png", '*');
+	public static final String RUBY = new Item("Treasure$Gem$Ruby", 0, 10, "asterisk.png", '*');
+	public static final String TOPAZ = new Item("Treasure$Gem$Topaz", 0, 10, "asterisk.png", '*');
+	public static final String SPESSARITE = new Item("Treasure$Gem$Spessartite", 0, 20, "asterisk.png", '*');
+}

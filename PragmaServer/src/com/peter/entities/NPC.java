@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
 
+import com.peter.inventory.Item;
 import com.peter.map.Map;
 import com.peter.packets.AttackPacket;
 import com.peter.packets.ItemPacket;
@@ -59,25 +60,7 @@ public class NPC extends Entity {
 		//time -= Global.rand(15, 0) * .8f;
 		canMove = true;
 		moves = new Stack<Node>();
-		//drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
-		drop = new ItemPacket("Gem", ++Global.count, floor);
-		if(drop.name.equals("Gem"))
-			switch(Global.rand(6, 0)){
-			case 0:
-				drop.name += "$Diamond";
-				break;
-			case 1:
-			case 2:
-				drop.name += "$Topaz";
-				break;
-			case 3:
-			case 4:
-				drop.name += "$Ruby";
-				break;
-			case 5:
-				drop.name += "$Spessarite";
-				break;
-			}
+		drop = new ItemPacket(Item.getDrop((int) Global.rand(50, -20)), ++Global.count, floor);
 		delay = 2.6f + Global.rand(100, 0) * .005f;
 		list = new HostilityList();
 		response = new Responses(getGroup());

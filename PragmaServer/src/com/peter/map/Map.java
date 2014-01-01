@@ -13,6 +13,7 @@ import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
+import com.peter.inventory.Item;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
 import com.peter.server.Global;
@@ -141,8 +142,8 @@ public class Map{
 		NPC temp3;
 		
 		// Populates floor 0 only
-		Map.itemSets.get(0)[30][8] = new ItemPacket("Ring", ++Global.count, 0);
-		Map.itemSets.get(0)[32][8] = new ItemPacket("Hat", ++Global.count, 0);
+		Map.itemSets.get(0)[30][8] = new ItemPacket(Item.WOODEN_RING, ++Global.count, 0);
+		Map.itemSets.get(0)[32][8] = new ItemPacket(Item.HAT, ++Global.count, 0);
 		
 		Map.chestSets.get(0).put(++Global.count, new ChestPacket("Chest", 32, 7, Global.count));
 		temp2 = Map.chestSets.get(0).get(Global.count);
@@ -458,7 +459,7 @@ class Chamber extends Room{
 	}
 	
 	public void populate(int chance){
-		ItemPacket temp;
+		ItemPacket temp = null;
 		NPC temp2;
 		if(chance < 1){
 			temp2 = new Citizen(floor, Citizen.Serf);
@@ -468,21 +469,20 @@ class Chamber extends Room{
 			Map.NPCQueue.add(temp2);
 		}
 		else if(chance < 3){
-			temp = new ItemPacket("Gem", ++Global.count, floor);
 			switch(Global.rand(6, 0)){
 			case 0:
-				temp.name += "$Diamond";
+				temp = new ItemPacket(Item.DIAMOND, ++Global.count, floor);
 				break;
 			case 1:
 			case 2:
-				temp.name += "$Topaz";
+				temp = new ItemPacket(Item.TOPAZ, ++Global.count, floor);
 				break;
 			case 3:
 			case 4:
-				temp.name += "$Ruby";
+				temp = new ItemPacket(Item.RUBY, ++Global.count, floor);
 				break;
 			case 5:
-				temp.name += "$Spessarite";
+				temp = new ItemPacket(Item.SPESSARTITE, ++Global.count, floor);
 				break;
 			}
 			Map.itemSets.get(floor)[(x + Global.rand(width-1, -(width/2-1)))][(y + Global.rand(height-1, -(height/2-1)))] = temp;

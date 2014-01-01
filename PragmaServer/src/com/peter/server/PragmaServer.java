@@ -153,7 +153,9 @@ public class PragmaServer{
 					packet.ID = ++Global.count;
 					Map.itemSets.get(packet.floor)[packet.x][packet.y] = packet;
 					System.out.println("Add: " + packet.ID);
-					server.sendToAllTCP(packet);
+					for(Player player : map.players.values())
+						if(player.floor == packet.floor)
+							server.sendToTCP(player.ID, packet);
 				}
 				
 				else if(o instanceof RemoveItemPacket){
@@ -161,7 +163,9 @@ public class PragmaServer{
 					System.out.println("Sub: " + Map.itemSets.get(packet.floor)[packet.x][packet.y].ID + ", " + packet.ID);
 					if(Map.itemSets.get(packet.floor)[packet.x][packet.y].ID.equals(packet.ID)){
 						Map.itemSets.get(packet.floor)[packet.x][packet.y] = null;
-						server.sendToAllExceptTCP(c.getID(), packet);
+						for(Player player : map.players.values())
+							if(player.floor == packet.floor && player.ID != c.getID())
+								server.sendToTCP(player.ID, packet);
 					}
 					else
 						System.out.println("[SERVER] failed to remove item!");
