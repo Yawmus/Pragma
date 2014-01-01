@@ -3,6 +3,7 @@ package com.peter.entities;
 import java.util.ArrayList;
 
 import com.peter.packets.ItemPacket;
+import com.peter.server.Global;
 
 public class Shopkeep extends NPC{
 
@@ -18,16 +19,16 @@ public class Shopkeep extends NPC{
         this.items = new ArrayList<ItemPacket>();
         switch(type){
         case "Bartender":
-        	items.add(new ItemPacket("Bread"));
-        	items.add(new ItemPacket("Meat"));
+        	items.add(new ItemPacket("Bread", ++Global.count, floor));
+        	items.add(new ItemPacket("Meat", ++Global.count, floor));
         	break;
         case "Blacksmith":
         	break;
         case "Fletcher":
         	break;
         case "Armorer":
-        	items.add(new ItemPacket("Breast Plate"));
-        	items.add(new ItemPacket("Helmet"));
+        	items.add(new ItemPacket("Breast Plate", ++Global.count, floor));
+        	items.add(new ItemPacket("Helmet", ++Global.count, floor));
         	break;
         }
         stats.setExperience(5);

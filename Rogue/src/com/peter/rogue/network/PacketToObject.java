@@ -33,14 +33,13 @@ public class PacketToObject{
 	}
 	
 	public static Item itemConverter(ItemPacket item){
-		switch(item.name){
+		switch(item.name.split("$")[0]){
 		case "Gold":
 			temp = new Item(Item.GOLD);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Gem":
-			switch(item.type){
+			switch(item.name.split("$")[1]){
 			case "Diamond":
 				temp = new Item(Item.GEM_DIAMOND);
 				temp.setColor(Color.WHITE);
@@ -58,42 +57,34 @@ public class PacketToObject{
 				temp.setColor(new Color(.28f, .86f, .29f, 1));
 				break;
 			}
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Breast Plate":
 			temp = new Wearable(Wearable.BREAST_PLATE);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Hat":
 			temp = new Wearable(Wearable.HAT);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Ring":
 			temp = new Wearable(Wearable.RING);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Shoes":
 			temp = new Wearable(Wearable.SHOES);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Helmet":
 			temp = new Wearable(Wearable.HELMET);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Bread":
 			temp = new Food(Food.BREAD);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		case "Meat":
 			temp = new Food(Food.MEAT);
-			temp.setPosition(item.x, item.y);
 			temp.ID = item.ID;
 			return temp;
 		}

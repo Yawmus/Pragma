@@ -60,22 +60,22 @@ public class NPC extends Entity {
 		canMove = true;
 		moves = new Stack<Node>();
 		//drop = Global.rand(4, 0) == 0 ? new ItemPacket("Gem") : Global.rand(3, 0) == 0 ? new ItemPacket("Gold") : null;
-		drop = new ItemPacket("Gem");
+		drop = new ItemPacket("Gem", ++Global.count, floor);
 		if(drop.name.equals("Gem"))
 			switch(Global.rand(6, 0)){
 			case 0:
-				drop.type = "Diamond";
+				drop.name += "$Diamond";
 				break;
 			case 1:
 			case 2:
-				drop.type = "Topaz";
+				drop.name += "$Topaz";
 				break;
 			case 3:
 			case 4:
-				drop.type = "Ruby";
+				drop.name += "$Ruby";
 				break;
 			case 5:
-				drop.type = "Spessarite";
+				drop.name += "$Spessarite";
 				break;
 			}
 		delay = 2.6f + Global.rand(100, 0) * .005f;
@@ -149,7 +149,7 @@ public class NPC extends Entity {
 		else if(PragmaServer.map.getTile(floor, getX(), getY()).getName() == "Door" && group.equals("Shopkeep"))
 			collision = true;
 		if(Map.markSets.get(floor).get(getX(), getY()) != -1 && Map.markSets.get(floor).get(getX(), getY()) != ID){
-			if(Map.itemSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY())) || Map.chestSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){
+			if(Map.chestSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){
 				collision = true;
 			}
 			else if(Map.npcSets.get(floor).containsKey(Map.markSets.get(floor).get(getX(), getY()))){

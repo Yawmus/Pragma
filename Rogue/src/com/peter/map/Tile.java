@@ -1,14 +1,18 @@
 package com.peter.map;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.peter.inventory.Item;
 import com.peter.rogue.Global;
 
 public class Tile{
 	/*blocked, stairway, door, direction, canSee, animated, hasDescription
 	*/
 	private Texture texture;
+	private Item item;
 	private String name;
 	private boolean[] properties;
 	private float tick = Global.rand(30, 0);
@@ -26,7 +30,7 @@ public class Tile{
 	public Tile(String filename, String name, boolean[] properties){
 		texture = new Texture(Gdx.files.internal("maps/" + filename));
 		tint = new Color();
-		
+		item = null;
 		this.name = name;
 		this.properties = properties;
 	}
@@ -92,5 +96,21 @@ public class Tile{
 	}
 	public boolean hasDescription() {
 		return properties[6];
+	}
+
+	public void put(Item item) {
+		this.item = item;
+	}
+	public Item remove(Integer ID){
+		if(ID.equals(item.ID)){
+			Item temp = item;
+			item = null;
+			return temp;
+		}
+		System.out.println("[CLIENT] Failed to remove the item!");
+		return null;
+	}
+	public Item get() {
+		return item;
 	}
 }

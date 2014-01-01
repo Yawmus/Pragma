@@ -30,10 +30,9 @@ public class Map{
 	public static ArrayList<Tile[][]> tileSets;
 	public static ArrayList<String[][]> tintSets;
 	public static ArrayList<HashMap<Integer, ChestPacket>> chestSets;
-	public static ArrayList<HashMap<Integer, ItemPacket>> itemSets;
+	public static ArrayList<ItemPacket[][]> itemSets;
 	public static ArrayList<HashMap<Integer, NPC>> npcSets;
 	
-	public static Queue<ItemPacket> ItemQueue;
 	public static Queue<ChestPacket> ChestQueue;
 	public static Queue<NPC> NPCQueue;
 	
@@ -44,11 +43,10 @@ public class Map{
 		tileSets = new ArrayList<Tile[][]>();
 		tintSets = new ArrayList<String[][]>();
 		chestSets = new ArrayList<HashMap<Integer, ChestPacket>>();
-		itemSets = new ArrayList<HashMap<Integer, ItemPacket>>();
+		itemSets = new ArrayList<ItemPacket[][]>();
 		npcSets = new ArrayList<HashMap<Integer, NPC>>();
 		markSets = new ArrayList<Marks>();
 		
-		ItemQueue = new LinkedList<ItemPacket>();
 		ChestQueue = new LinkedList<ChestPacket>();
 		NPCQueue = new LinkedList<NPC>();
 
@@ -56,7 +54,7 @@ public class Map{
 		tileSets.add(new Tile[WIDTH][HEIGHT]);
 		tintSets.add(new String[WIDTH][HEIGHT]);
 
-		itemSets.add(new HashMap<Integer, ItemPacket>());
+		itemSets.add(new ItemPacket[WIDTH][HEIGHT]);
 		chestSets.add(new HashMap<Integer, ChestPacket>());
 		npcSets.add(new HashMap<Integer, NPC>());
 		markSets.add(new Marks());
@@ -69,6 +67,30 @@ public class Map{
 			return Tile.BLANK;
 		return tileSets.get(floor)[(int)(x/32)][(int)(y/32)];
 	}
+	
+	public static void generateTerrain(Tile[][] tileSet, Tile tile, int x, int y){
+		if(x <= 0 || x + 1 >= WIDTH || y <= 0 || y + 1 >= HEIGHT)
+			return;
+		if(tileSet[x][y] == tile || tileSet[x][y] == Tile.WALL)
+			return;
+		tileSet[x][y] = tile;
+		
+		for(int i=0; i<4; i++)
+			switch(Global.rand(7, 0)){
+			case 0:
+				generateTerrain(tileSet, tile, x+1, y);
+				break;
+			case 1:
+				generateTerrain(tileSet, tile, x-1, y);
+				break;
+			case 2:
+				generateTerrain(tileSet, tile, x, y+1);
+				break;
+			case 3:
+				generateTerrain(tileSet, tile, x, y-1);
+				break;
+			}
+	}
 
 	private void baseFloor(){
 		int seaX = WIDTH-8, seaY = 1;
@@ -79,12 +101,12 @@ public class Map{
 				if(y == 0 || y == HEIGHT-1 || x == 0 || x == WIDTH-1)
 					tileSets.get(0)[x][y] = Tile.WALL;
 				else{
-					if(Global.rand(6, 0) >= 4)
-						tileSets.get(0)[x][y] = Tile.GRASS;
-					else
-						tileSets.get(0)[x][y] = Tile.GROUND;
+					tileSets.get(0)[x][y] = Tile.GROUND;
 				}
 			}
+		
+		for(int i=0; i<3; i++)
+			generateTerrain(tileSets.get(0), Tile.GRASS, Global.rand(WIDTH-2, 1), Global.rand(HEIGHT-2, 1));
 		
 		for(int y=seaY; y<HEIGHT-1; y++)
 			for(int x=Global.rand(3, seaX-7); x<WIDTH; x++){
@@ -115,19 +137,13 @@ public class Map{
 		
 		tileSets.get(0)[24][8] = Tile.DOWN;
 		
-		ItemPacket temp;
 		ChestPacket temp2;
 		NPC temp3;
 		
 		// Populates floor 0 only
-		Map.itemSets.get(0).put(++Global.count, new ItemPacket("Ring", 30, 8, Global.count));
-		temp = Map.itemSets.get(0).get(Global.count);
-		Map.markSets.get(0).put(temp.ID, temp.x * 32, temp.y * 32);
-
-		Map.itemSets.get(0).put(++Global.count, new ItemPacket("Hat", 32, 8, Global.count));
-		temp = Map.itemSets.get(0).get(Global.count);
-		Map.markSets.get(0).put(temp.ID, temp.x * 32, temp.y * 32);
-
+		Map.itemSets.get(0)[30][8] = new ItemPacket("Ring", ++Global.count, 0);
+		Map.itemSets.get(0)[32][8] = new ItemPacket("Hat", ++Global.count, 0);
+		
 		Map.chestSets.get(0).put(++Global.count, new ChestPacket("Chest", 32, 7, Global.count));
 		temp2 = Map.chestSets.get(0).get(Global.count);
 		Map.markSets.get(0).put(temp2.ID, temp2.x * 32, temp2.y * 32);
@@ -157,13 +173,27 @@ public class Map{
 		tintSets.add(new String[WIDTH][HEIGHT]);
 		Map.npcSets.add(new HashMap<Integer, NPC>());
 		Map.chestSets.add(new HashMap<Integer, ChestPacket>());
-		Map.itemSets.add(new HashMap<Integer, ItemPacket>());
+		Map.itemSets.add(new ItemPacket[WIDTH][HEIGHT]);
 		Map.markSets.add(new Marks());
 		
 		for(int i=0; i<WIDTH; i++)
 			for(int j=0; j<HEIGHT; j++)
 				tileSet[i][j] = Tile.BLANK;
-		Chamber chamber = new Chamber(x, y, 10, 6, floor);
+		
+		int baseWidth = 10, baseHeight = 6;
+		if(x + baseWidth/2 >= WIDTH || x - baseWidth/2 < 0 || y + baseHeight/2 >= HEIGHT || y - baseHeight/2 < 0){
+			while(x + baseWidth/2 >= WIDTH)
+				baseWidth--;
+			while(x - baseWidth/2 < 0)
+				baseWidth++;
+			while(y + baseHeight/2 >= HEIGHT)
+				baseHeight--;
+			while(y - baseHeight/2 < 0)
+				baseHeight++;
+		}
+			
+		Chamber chamber = new Chamber(x, y, baseWidth, baseHeight, floor);
+		
 		generateRoom(tileSet, tintSets.get(floor), floor, chamber);
 		tileSet[x][y] = Tile.UP;
 		
@@ -209,8 +239,6 @@ public class Map{
 	private void addEntities(int floor){
 		while(!NPCQueue.isEmpty())
 			Map.npcSets.get(floor).put(NPCQueue.peek().ID, NPCQueue.remove());
-		while(!ItemQueue.isEmpty())
-			Map.itemSets.get(floor).put(ItemQueue.peek().ID, ItemQueue.remove());
 		while(!ChestQueue.isEmpty())
 			Map.chestSets.get(floor).put(ChestQueue.peek().ID, ChestQueue.remove());
 	}
@@ -423,6 +451,8 @@ class Chamber extends Room{
 	
 	public void write(Tile[][] tileSet, String[][] tintSet){
 		super.write(tileSet);
+		if(Global.rand(2, 0) == 0)
+			Map.generateTerrain(tileSet, Tile.GRASS, Global.rand(width-1, x-width/2+1), Global.rand(height-1, y-height/2+1));
 		for(int i=0; i<3; i++)
 			populate(Global.rand(100, 0));
 	}
@@ -438,39 +468,29 @@ class Chamber extends Room{
 			Map.NPCQueue.add(temp2);
 		}
 		else if(chance < 3){
-			temp = new ItemPacket("Gem");
+			temp = new ItemPacket("Gem", ++Global.count, floor);
 			switch(Global.rand(6, 0)){
 			case 0:
-				temp.type = "Diamond";
+				temp.name += "$Diamond";
 				break;
 			case 1:
 			case 2:
-				temp.type = "Topaz";
+				temp.name += "$Topaz";
 				break;
 			case 3:
 			case 4:
-				temp.type = "Ruby";
+				temp.name += "$Ruby";
 				break;
 			case 5:
-				temp.type = "Spessarite";
+				temp.name += "$Spessarite";
 				break;
 			}
-			temp.ID = ++Global.count;
-			temp.floor = floor;
-			temp.x = (x + Global.rand(width-1, -(width/2-1)));
-			temp.y = (y + Global.rand(height-1, -(height/2-1)));
-			Map.markSets.get(floor).put(temp.ID,temp.x * 32, temp.y * 32);
-			Map.ItemQueue.add(temp);
+			Map.itemSets.get(floor)[(x + Global.rand(width-1, -(width/2-1)))][(y + Global.rand(height-1, -(height/2-1)))] = temp;
 		}
 		else if(chance < 8){
 			for(int i=0; i<Global.rand(4, 1); i++){
-				temp = new ItemPacket("Gold");
-				temp.ID = ++Global.count;
-				temp.floor = floor;
-				temp.x = (x + Global.rand(width-1, -(width/2-1)));
-				temp.y = (y + Global.rand(height-1, -(height/2-1)));
-				Map.markSets.get(floor).put(temp.ID,temp.x * 32, temp.y * 32);
-				Map.ItemQueue.add(temp);
+				temp = new ItemPacket("Gold", ++Global.count, floor);
+				Map.itemSets.get(floor)[(x + Global.rand(width-1, -(width/2-1)))][(y + Global.rand(height-1, -(height/2-1)))] = temp;
 			}
 		}
 		else if(chance < 20){

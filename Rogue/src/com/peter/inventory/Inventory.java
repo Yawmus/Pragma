@@ -122,14 +122,15 @@ public class Inventory {
 			font.draw(spriteBatch, "Weight: " + hover.getWeight(), ORIGIN_X + 235, ORIGIN_Y + 80);
 			
 			font.draw(spriteBatch, "1 - drop", ORIGIN_X + 175, ORIGIN_Y + 50);
+			font.draw(spriteBatch, "2 - throw", ORIGIN_X + 238, ORIGIN_Y + 50);
 			if(hover instanceof Food)
-				font.draw(spriteBatch, "2 - eat", ORIGIN_X + 238, ORIGIN_Y + 50);
+				font.draw(spriteBatch, "3 - eat", ORIGIN_X + 175, ORIGIN_Y + 30);
 			else if(hover instanceof Wearable || hover instanceof Equipable)
-				font.draw(spriteBatch, "2 - wear", ORIGIN_X + 238, ORIGIN_Y + 50);
+				font.draw(spriteBatch, "3 - wear", ORIGIN_X + 175, ORIGIN_Y + 30);
 			if(trade instanceof Chest)
-				font.draw(spriteBatch, "3 - move", ORIGIN_X + 175, ORIGIN_Y + 30);
+				font.draw(spriteBatch, "4 - move", ORIGIN_X + 238, ORIGIN_Y + 30);
 			else if(trade instanceof Shopkeep)
-				font.draw(spriteBatch, "3 - sell", ORIGIN_X + 175, ORIGIN_Y + 30);
+				font.draw(spriteBatch, "4 - sell", ORIGIN_X + 238, ORIGIN_Y + 30);
 			
 			spriteBatch.end();
 			
@@ -277,7 +278,7 @@ public class Inventory {
 					if(trade instanceof Shopkeep){
 						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 						tradeItem.ID = trade.getID();
-						tradeItem.item = new ItemPacket(items.get(i).getName());
+						tradeItem.item = new ItemPacket(items.get(i).getName(), items.get(i).ID, Play.map.getFloor());
 						Rogue.clientWrapper.client.sendUDP(tradeItem);
 						wallet += getItems().get(i).getValue();
 						((Shopkeep) trade).add(remove(i));
@@ -286,7 +287,7 @@ public class Inventory {
 					else if(trade instanceof Chest){
 						AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 						tradeItem.ID = trade.getID();
-						tradeItem.item = new ItemPacket(items.get(i).getName());
+						tradeItem.item = new ItemPacket(items.get(i).getName(), items.get(i).ID, Play.map.getFloor());
 						Rogue.clientWrapper.client.sendUDP(tradeItem);
 						((Chest) trade).add(remove(i));
 					}

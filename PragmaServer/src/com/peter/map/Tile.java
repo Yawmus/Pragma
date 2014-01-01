@@ -6,14 +6,14 @@ public class Tile{
 	private String name;
 	private boolean[] properties;
 
-	public static final Tile BLANK = new Tile("", new boolean[]{true, false, false, false, false});
-	public static final Tile GROUND = new Tile("", new boolean[]{false, false, false, false, true});
-	public static final Tile WALL = new Tile("", new boolean[]{true, false, false, false, false});
+	public static final Tile BLANK = new Tile("Blank", new boolean[]{true, false, false, false, false});
+	public static final Tile GROUND = new Tile("Ground", new boolean[]{false, false, false, false, true});
+	public static final Tile WALL = new Tile("Wall", new boolean[]{true, false, false, false, false});
 	public static final Tile DOOR = new Tile("Door", new boolean[]{false, false, true, false, false});
-	public static final Tile WATER = new Tile("", new boolean[]{true, false, false, false, true});
+	public static final Tile WATER = new Tile("Water", new boolean[]{true, false, false, false, true});
 	public static final Tile DOWN = new Tile("Downstairs", new boolean[]{false, true, false, false, true});
 	public static final Tile UP = new Tile("Upstairs", new boolean[]{false, true, false, true, true});
-	public static final Tile GRASS = new Tile("", new boolean[]{false, false, false, false, true});
+	public static final Tile GRASS = new Tile("Grass", new boolean[]{false, false, false, false, true});
 	
 	public Tile(String name, boolean[] properties){
 		this.name = name;

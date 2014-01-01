@@ -1,7 +1,5 @@
 package com.peter.entities;
 
-import com.badlogic.gdx.graphics.Color;
-
 public class Player extends Entity{
 
 	private String picture;

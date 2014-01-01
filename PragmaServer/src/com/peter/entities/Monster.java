@@ -36,16 +36,35 @@ public class Monster extends NPC{
 	}
 	
 	public ItemPacket generateDrop(int chance){
-		if(chance < 3)
-			return new ItemPacket("Gem");
+		ItemPacket temp;
+		if(chance < 3){
+			temp = new ItemPacket("Gem", Global.count++, floor);
+			switch(Global.rand(6, 0)){
+			case 0:
+				temp.name += "$Diamond";
+				break;
+			case 1:
+			case 2:
+				temp.name += "$Topaz";
+				break;
+			case 3:
+			case 4:
+				temp.name += "$Ruby";
+				break;
+			case 5:
+				temp.name += "$Spessarite";
+				break;
+			}
+			return temp;
+		}
 		else if(chance < 6)
-			return new ItemPacket("Helmet");
+			return new ItemPacket("Helmet", Global.count++, floor);
 		else if(chance < 50)
-			return new ItemPacket("Gold");
+			return new ItemPacket("Gold", Global.count++, floor);
 		else if(chance < 60)
-			return new ItemPacket("Bread");
+			return new ItemPacket("Bread", Global.count++, floor);
 		else if(chance < 70)
-			return new ItemPacket("Meat");
+			return new ItemPacket("Meat", Global.count++, floor);
 		return null;
 	}
 	

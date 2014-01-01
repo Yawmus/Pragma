@@ -37,8 +37,8 @@ public class PragmaServer{
 	private static int udpPort = 23989, tcpPort = 23989;   //
 	public final int HEIGHT = 40, WIDTH = 80;
 	public static Map map = new Map();
-	public static Integer removeID = 0;
-	public static Integer removeFloor = 0;
+	public static Integer removeID = -1;
+	public static Integer removeFloor = -1;
 	
 	public static void main(String[] args) throws Exception {
 		connect();
@@ -67,6 +67,8 @@ public class PragmaServer{
 		server.getKryo().register(IDPacket.class);
 		server.getKryo().register(java.util.HashMap.class);
 		server.getKryo().register(java.util.ArrayList.class);
+		server.getKryo().register(ItemPacket[][].class);
+		server.getKryo().register(ItemPacket[].class);
 		server.getKryo().register(String[][].class);
 		server.getKryo().register(String[].class);
 		server.getKryo().register(short[][].class);
@@ -86,7 +88,6 @@ public class PragmaServer{
 
 				// Sync map information
 				MapPacket packet2 = new MapPacket();
-				packet2.items = Map.itemSets.get(0);
 				packet2.chests = Map.chestSets.get(0);
 				
 				packet2.npcs = new HashMap<Integer, AddNPCPacket>();
@@ -103,10 +104,16 @@ public class PragmaServer{
 				
 				packet2.tiles = new byte[Map.WIDTH][Map.HEIGHT];
 				packet2.tints = new String[Map.WIDTH][Map.HEIGHT];
+				packet2.items = new ItemPacket[Map.WIDTH][Map.HEIGHT];
 				for(int x=0; x<Map.WIDTH; x++)
 					for(int y=0; y<Map.HEIGHT; y++){
 						packet2.tiles[x][y] = ObjectToPacket.tileConverter(Map.tileSets.get(0)[x][y]);
 						packet2.tints[x][y] = Map.tintSets.get(0)[x][y];
+						if(Map.itemSets.get(0)[x][y] != null){
+							packet2.items[x][y] = Map.itemSets.get(0)[x][y];
+							packet2.items[x][y].x = x;
+							packet2.items[x][y].y = y;
+						}
 					}
 
 				server.sendToTCP(c.getID(), packet2);
@@ -141,13 +148,20 @@ public class PragmaServer{
 					Map.markSets.get(packet.floor).put(-1, packet.oldX, packet.oldY);
 					server.sendToAllExceptTCP(packet.ID, packet);
 				}
+				else if(o instanceof ItemPacket){
+					ItemPacket packet = (ItemPacket) o;
+					packet.ID = ++Global.count;
+					Map.itemSets.get(packet.floor)[packet.x][packet.y] = packet;
+					System.out.println("Add: " + packet.ID);
+					server.sendToAllTCP(packet);
+				}
 				
 				else if(o instanceof RemoveItemPacket){
 					RemoveItemPacket packet = (RemoveItemPacket) o;
-					if(Map.itemSets.get(packet.floor).containsKey(packet.ID)){
-						Map.itemSets.get(packet.floor).remove(packet.ID);
-						Map.markSets.get(packet.floor).put(-1, packet.x, packet.y);
-						server.sendToAllExceptUDP(c.getID(), packet);
+					System.out.println("Sub: " + Map.itemSets.get(packet.floor)[packet.x][packet.y].ID + ", " + packet.ID);
+					if(Map.itemSets.get(packet.floor)[packet.x][packet.y].ID.equals(packet.ID)){
+						Map.itemSets.get(packet.floor)[packet.x][packet.y] = null;
+						server.sendToAllExceptTCP(c.getID(), packet);
 					}
 					else
 						System.out.println("[SERVER] failed to remove item!");
@@ -167,8 +181,8 @@ public class PragmaServer{
 							packet2.race = Map.npcSets.get(packet.floor).get(packet.receiverID).getRace();
 							packet2.group = Map.npcSets.get(packet.floor).get(packet.receiverID).getGroup();
 							server.sendToTCP(packet.attackerID, packet2);
-							removeID = Map.npcSets.get(packet.floor).get(packet.receiverID).ID;
 							removeFloor = packet.floor;
+							removeID = Map.npcSets.get(packet.floor).get(packet.receiverID).ID;
 						}
 						else{
 							Map.npcSets.get(packet.floor).get(packet.receiverID).attacker = map.players.get(packet.attackerID);
@@ -279,8 +293,8 @@ public class PragmaServer{
 						for(int y=0; y<Map.HEIGHT; y++){
 							packet5.tiles[x][y] = ObjectToPacket.tileConverter(tileSet[x][y]);
 							packet5.tints[x][y] = Map.tintSets.get(packet.floor)[x][y];
+							packet5.items[x][y] = Map.itemSets.get(packet.floor)[x][y];
 						}
-					
 					server.sendToTCP(c.getID(), packet5);
 				}
 			}
@@ -303,7 +317,7 @@ public class PragmaServer{
 				currentFrame = System.currentTimeMillis() - lastFrame;
 				lastFrame = System.currentTimeMillis();
 	
-				if(removeID != 0){
+				if(removeID != -1){
 					RemoveNPCPacket packet = new RemoveNPCPacket();
 					packet.ID = removeID;
 					packet.floor = removeFloor;
@@ -312,18 +326,16 @@ public class PragmaServer{
 							server.sendToTCP(player.ID, packet);
 					if(Map.npcSets.get(removeFloor).get(removeID).getDrop() != null){ // Drops nothing
 						ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
+						Map.itemSets.get(removeFloor)[Map.npcSets.get(removeFloor).get(removeID).getX()/32][Map.npcSets.get(removeFloor).get(removeID).getY()/32] = packet2;
+						Map.markSets.get(removeFloor).put(-1, Map.npcSets.get(removeFloor).get(removeID).getX(), Map.npcSets.get(removeFloor).get(removeID).getY());
 						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
 						packet2.y = Map.npcSets.get(removeFloor).get(removeID).getY()/32;
-						packet2.ID = ++Global.count;
-						packet2.floor = removeFloor;
-						Map.itemSets.get(removeFloor).put(packet2.ID, packet2);
-						Map.markSets.get(removeFloor).put(packet2.ID, packet2.x, packet2.y);
 						for(Player player : map.players.values())
 							if(player.floor == removeFloor)
 								server.sendToTCP(player.ID, packet2);
 					}
 					Map.npcSets.get(removeFloor).remove(removeID);
-					removeID = 0;
+					removeID = removeFloor = -1;
 				}
 				try{
 					for(int i=0; i<Map.npcSets.size(); i++)

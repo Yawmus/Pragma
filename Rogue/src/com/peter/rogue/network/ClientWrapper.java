@@ -52,6 +52,8 @@ public class ClientWrapper {
 		client.getKryo().register(IDPacket.class);
 		client.getKryo().register(java.util.HashMap.class);
 		client.getKryo().register(java.util.ArrayList.class);
+		client.getKryo().register(ItemPacket[][].class);
+		client.getKryo().register(ItemPacket[].class);
 		client.getKryo().register(String[][].class);
 		client.getKryo().register(String[].class);
 		client.getKryo().register(short[][].class);

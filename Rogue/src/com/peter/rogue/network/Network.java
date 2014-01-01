@@ -2,7 +2,6 @@ package com.peter.rogue.network;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.peter.entities.Entity;
@@ -11,7 +10,6 @@ import com.peter.entities.MPPlayer;
 import com.peter.entities.NPC;
 import com.peter.entities.Shopkeep;
 import com.peter.inventory.Chest;
-import com.peter.inventory.Item;
 import com.peter.map.Marks;
 import com.peter.packets.AddNPCPacket;
 import com.peter.packets.AddPlayerPacket;
@@ -52,9 +50,7 @@ public class Network extends Listener {
 		}
 		else if(o instanceof RemoveItemPacket){
 			RemoveItemPacket packet = (RemoveItemPacket) o;
-			Play.map.marks.put(-1, packet.x, packet.y);
-			Play.map.database.remove(packet.ID);
-			Play.map.items.remove(packet.ID);
+			Play.map.getTile(packet.x*32, packet.y*32).remove(packet.ID);
 		}
 		else if(o instanceof AddPlayerPacket){
 			AddPlayerPacket packet = (AddPlayerPacket) o;
@@ -119,25 +115,26 @@ public class Network extends Listener {
 		}
 		else if(o instanceof MapPacket){
 			Play.map.chests = new HashMap<Integer, Chest>();
-			Play.map.items = new HashMap<Integer, Item>();
 			Play.map.npcs = new HashMap<Integer, NPC>();
 			Play.map.marks = new Marks();
 			
 			MapPacket packet = (MapPacket) o;
 			Play.map.marks.setMarker(packet.marks);
 			Play.map.marks.put(c.getID(), (int) EntityManager.player.getX(), (int) EntityManager.player.getY());
-			for(ItemPacket item : packet.items.values())
-				EntityManager.itemQueue.add(item);
-			for(ChestPacket chest : packet.chests.values())
-				EntityManager.chestQueue.add(chest);
-			for(AddNPCPacket npc : packet.npcs.values())
-				EntityManager.NPCQueue.add(npc);
+			
 			for(int x=0; x<Play.map.WIDTH; x++)
 				for(int y=0; y<Play.map.HEIGHT; y++){
 					Play.map.initTiles[x][y] = packet.tiles[x][y];
 					Play.map.initTints[x][y] = packet.tints[x][y];
+					if(packet.items[x][y] != null)
+						EntityManager.itemQueue.add(packet.items[x][y]);
 				}
 			Play.map.initialize = true;
+			
+			for(ChestPacket chest : packet.chests.values())
+				EntityManager.chestQueue.add(chest);
+			for(AddNPCPacket npc : packet.npcs.values())
+				EntityManager.NPCQueue.add(npc);
 			
 			Play.map.database = new HashMap<Integer, Entity>();
 			Play.map.database.put(c.getID(), EntityManager.player);

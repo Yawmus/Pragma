@@ -10,7 +10,7 @@ import com.peter.rogue.screens.Play;
 
 public class Rogue extends Game{
 	
-	public static final String TITLE = "Pragma", VERSION = "v0.8.3.2-alpha";
+	public static final String TITLE = "Pragma", VERSION = "v0.8.3.8-alpha";
 
 	Play play;
 	public static ClientWrapper clientWrapper;

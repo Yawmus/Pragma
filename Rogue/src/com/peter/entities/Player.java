@@ -32,7 +32,6 @@ import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 import com.peter.rogue.views.UI;
-import com.peter.rogue.views.UI.Entry;
 
 public class Player extends Animate implements InputProcessor {
 	
@@ -75,7 +74,7 @@ public class Player extends Animate implements InputProcessor {
 		stats.setMaxExperience(20);
 		stats.setExperience(0);
 		stats.setLevel(1);
-		stats.setStrength(0);
+		stats.setStrength(10);
 		stats.setHitpoints(20);
 		stats.setMaxHitpoints(20);
 		hunger = 1.01f;
@@ -226,7 +225,6 @@ public class Player extends Animate implements InputProcessor {
 					setMenuActive(false);
 					checkCollision();
 			}
-		
 		}
 	}
 	
@@ -236,6 +234,23 @@ public class Player extends Animate implements InputProcessor {
 		setMenu("");
 		if(Play.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
+		else if(Play.map.getTile(getX(), getY()).get() != null){
+			Item temp = Play.map.getTile(getX(), getY()).get();
+			if(!inventory.checkIsFull(temp)){
+				RemoveItemPacket item = new RemoveItemPacket();
+				item.ID = temp.ID;
+				item.floor = Play.map.getFloor();
+				item.x = (int) (temp.getX()/32);
+				item.y = (int) (temp.getY()/32);
+				Rogue.clientWrapper.client.sendTCP(item);
+				inventory.add(temp);
+				Play.map.getTile(getX(), getY()).remove(temp.ID);
+			}
+			else{
+				setAlert("Backpack is full!", true);
+				collision = true;
+			}
+		}
 		else if(Play.map.getTile(getX(), getY()).hasStairs() && !Play.map.getTile(oldX, oldY).hasStairs()){
 
 			packet.oldX = (int) oldX;
@@ -264,6 +279,7 @@ public class Player extends Animate implements InputProcessor {
 			packet2.ID = ID;
 			Rogue.clientWrapper.client.sendTCP(packet2);
 		}
+		
 		if(!(Play.map.marks.get((int)getX(), (int)getY()) == -1 || Play.map.marks.get((int)getX(), (int)getY()) == ID)){
 			if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof NPC){
 				if(isHostile())
@@ -283,24 +299,7 @@ public class Player extends Animate implements InputProcessor {
 					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 				collision = true;
 			}
-			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Item){
-				Item temp = Play.map.items.get(Play.map.marks.get((int)getX(), (int)getY()));
-				if(!inventory.checkIsFull(temp)){
-					Play.map.items.remove(temp.ID);
-					Play.map.marks.put(-1, (int) temp.getX(), (int) temp.getY());
-					RemoveItemPacket item = new RemoveItemPacket();
-					item.ID = temp.ID;
-					item.floor = Play.map.getFloor();
-					item.x = (int) temp.getX();
-					item.y = (int) temp.getY();
-					Rogue.clientWrapper.client.sendUDP(item);
-					inventory.add(temp);
-				}
-				else{
-					setAlert("Backpack is full!", true);
-					collision = true;
-				}
-			}
+			
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
 				menuActive = !menuActive;
 				setMenu("Chest");
@@ -388,6 +387,7 @@ public class Player extends Animate implements InputProcessor {
 	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits), 
 	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
 	    	}
+    		
 	    	// Render entities when in sight
 	    	else if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y).equals(""))){
 	    		temp = Play.map.get(Play.map.marks.get((int) x, (int) y));
@@ -396,6 +396,13 @@ public class Player extends Animate implements InputProcessor {
 	    			visible.add(Play.map.get(Play.map.marks.get((int) x, (int) y)));
 	    		}
 	    	}
+	    	else if(tile.get() != null){
+	    		if(tile.get().canDraw == false){
+	    			visible.add(tile.get());
+	    			tile.get().canDraw = true;
+	    			
+	    		}
+    		}
     	}
     	return ray.direction;
     }
@@ -506,7 +513,6 @@ public class Player extends Animate implements InputProcessor {
 		case Keys.ENTER:
 			if(getMenu().equals("Chat")){
 				if(!messageBuffer.isEmpty()){
-					System.out.println(messageBuffer);
 					message = messageBuffer;
 					UI.messageList.add(new UI.Entry(message, name));
 					messageDelay = 0;
@@ -601,8 +607,13 @@ public class Player extends Animate implements InputProcessor {
 				temp.setHover(temp.items.get(character - 'A'), temp.getCollision().get(character - 'A'), character - 'A');
 			}
 			if(character == '1'){
-				if(inventory.getHover() != null)
-					inventory.remove(inventory.getHoverIndex());
+				if(inventory.getHover() != null){
+					Item temp = inventory.remove(inventory.getHoverIndex());
+					ItemPacket packet = new ItemPacket(temp.getName(), temp.ID, Play.map.getFloor());
+					packet.x = (int) (getX()/32);
+					packet.y = (int) (getY()/32);
+					Rogue.clientWrapper.client.sendTCP(packet);
+				}
 				else if(getMenu().equals("Chest") && ((Chest) inventory.getTrade()).getHover() != null){
 					Chest temp = (Chest) inventory.getTrade();
 					if(inventory.checkIsFull(temp.getItems().get(temp.getHoverIndex())))
@@ -631,25 +642,28 @@ public class Player extends Animate implements InputProcessor {
 					}
 				}
 			}
-			else if(character == '2' && inventory.getHover() instanceof Food){
+			else if(character == '2' && inventory.getHover() != null){
+				setAlert("Not implemented yet!", false);
+			}
+			else if(character == '3' && inventory.getHover() instanceof Food){
 				mutateHunger(.1f);
 				inventory.remove(inventory.getHoverIndex());
 			}
-			else if(character == '2' && inventory.getHover() instanceof Wearable){
+			else if(character == '3' && inventory.getHover() instanceof Wearable){
 				inventory.gear.wear((Wearable) inventory.move(inventory.getHoverIndex()), this);
 			}
-			else if(character == '3' && getMenu().equals("Barter") && inventory.getHover() != null){
+			else if(character == '4' && getMenu().equals("Barter") && inventory.getHover() != null){
 				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 				tradeItem.ID = inventory.getTrade().getID();
-				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName());
+				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName(), inventory.getItems().get(inventory.getHoverIndex()).ID, Play.map.getFloor());
 				Rogue.clientWrapper.client.sendUDP(tradeItem);
 				inventory.mutateWallet(inventory.getItems().get(inventory.getHoverIndex()).getValue());
 				((Shopkeep) inventory.getTrade()).add(inventory.remove(inventory.getHoverIndex()));
 			}
-			else if(character == '3' && getMenu().equals("Chest") && inventory.getHover() != null){
+			else if(character == '4' && getMenu().equals("Chest") && inventory.getHover() != null){
 				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 				tradeItem.ID = inventory.getTrade().getID();
-				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName());
+				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName(), inventory.getItems().get(inventory.getHoverIndex()).ID, Play.map.getFloor());
 				Rogue.clientWrapper.client.sendUDP(tradeItem);
 				((Chest) inventory.getTrade()).add(inventory.remove(inventory.getHoverIndex()));
 			}

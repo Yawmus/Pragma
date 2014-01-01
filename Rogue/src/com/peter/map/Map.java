@@ -17,7 +17,6 @@ import com.peter.entities.MPPlayer;
 import com.peter.entities.Monster;
 import com.peter.entities.NPC;
 import com.peter.inventory.Chest;
-import com.peter.inventory.Item;
 import com.peter.rogue.Global;
 import com.peter.rogue.network.PacketToObject;
 import com.peter.rogue.screens.Play;
@@ -37,7 +36,6 @@ public class Map implements MapRenderer{
 
 	public ArrayList<HashMap<Integer, MPPlayer>> players;
 	public HashMap<Integer, NPC> npcs;
-	public HashMap<Integer, Item> items;
 	public HashMap<Integer, Chest> chests;
 	public HashMap<Integer, Entity> database;
 	
@@ -53,7 +51,6 @@ public class Map implements MapRenderer{
 
 		players = new ArrayList<HashMap<Integer, MPPlayer>>();
 		npcs = new HashMap<Integer, NPC>();
-		items = new HashMap<Integer, Item>();
 		chests = new HashMap<Integer, Chest>();
 		database = new HashMap<Integer, Entity>();
 		
@@ -93,6 +90,9 @@ public class Map implements MapRenderer{
 					tiles[x][y].update(Gdx.graphics.getDeltaTime());
 					spriteBatch.setColor(tiles[x][y].getTint());
 					spriteBatch.draw(tiles[x][y].getTexture(), 32 * x, 32 * y, 32, 32);
+					if(tiles[x][y].get() != null){
+						tiles[x][y].get().draw(spriteBatch);
+					}
 					visibleSets.get(floor)[x][y] = "hasVisited";
 				}
 				else if(visibleSets.get(floor)[x][y].equals("hasVisited")){
@@ -103,10 +103,6 @@ public class Map implements MapRenderer{
 					spriteBatch.draw(Tile.BLANK.getTexture(), 32 * x, 32 * y, 32, 32);
 			}
 
-		
-		for(Item item : items.values())
-			if(item.canDraw)
-				item.draw(spriteBatch);
 		for(NPC npc : npcs.values())
 			if(npc.canDraw)
 				npc.draw(spriteBatch);
