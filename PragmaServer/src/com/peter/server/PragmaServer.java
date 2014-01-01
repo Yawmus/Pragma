@@ -330,6 +330,7 @@ public class PragmaServer{
 						Map.markSets.get(removeFloor).put(-1, Map.npcSets.get(removeFloor).get(removeID).getX(), Map.npcSets.get(removeFloor).get(removeID).getY());
 						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
 						packet2.y = Map.npcSets.get(removeFloor).get(removeID).getY()/32;
+						packet2.ID = Map.npcSets.get(removeFloor).get(removeID).getDrop().ID;
 						for(Player player : map.players.values())
 							if(player.floor == removeFloor)
 								server.sendToTCP(player.ID, packet2);

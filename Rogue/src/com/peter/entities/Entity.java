@@ -34,6 +34,13 @@ public class Entity extends Sprite{
 	}
 	
 	public String getName(){
+		if(name.contains("$"))
+			return name.split("\\$")[1];
+		else
+			return name;
+	}
+	
+	public String getFullName(){
 		return name;
 	}
 	

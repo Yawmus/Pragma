@@ -383,13 +383,10 @@ public class Player extends Animate implements InputProcessor {
     		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits);
     		Tile tile = Play.map.getTile(x, y);
     		Play.map.setVisible(x, y, "visited");
-	    	if(!tile.canSee()){
-	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits), 
-	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
-	    	}
+	    	
     		
 	    	// Render entities when in sight
-	    	else if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y).equals(""))){
+	    	if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y) == -1)){
 	    		temp = Play.map.get(Play.map.marks.get((int) x, (int) y));
 	    		if(temp != null && temp.canDraw == false){
 	    			Play.map.get(Play.map.marks.get((int) x, (int) y)).canDraw = true;
@@ -403,6 +400,10 @@ public class Player extends Animate implements InputProcessor {
 	    			
 	    		}
     		}
+	    	else if(!tile.canSee()){
+	    		return new Vector3(ray.origin.x + (((ray.direction.x - ray.origin.x)*i)/splits), 
+	    				           ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits), 0);
+	    	}
     	}
     	return ray.direction;
     }
@@ -609,7 +610,8 @@ public class Player extends Animate implements InputProcessor {
 			if(character == '1'){
 				if(inventory.getHover() != null){
 					Item temp = inventory.remove(inventory.getHoverIndex());
-					ItemPacket packet = new ItemPacket(temp.getName(), temp.ID, Play.map.getFloor());
+					System.out.println(temp.getFullName() + "     " + temp.getType());
+					ItemPacket packet = new ItemPacket(temp.getFullName(), temp.ID, Play.map.getFloor());
 					packet.x = (int) (getX()/32);
 					packet.y = (int) (getY()/32);
 					Rogue.clientWrapper.client.sendTCP(packet);

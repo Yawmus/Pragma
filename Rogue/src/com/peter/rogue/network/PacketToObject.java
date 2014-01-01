@@ -33,13 +33,15 @@ public class PacketToObject{
 	}
 	
 	public static Item itemConverter(ItemPacket item){
-		switch(item.name.split("$")[0]){
+		System.out.println(item.name.split("\\$")[0]);
+		switch(item.name.split("\\$")[0]){
 		case "Gold":
 			temp = new Item(Item.GOLD);
 			temp.ID = item.ID;
 			return temp;
 		case "Gem":
-			switch(item.name.split("$")[1]){
+			System.out.println(item.name.split("\\$")[1]);
+			switch(item.name.split("\\$")[1]){
 			case "Diamond":
 				temp = new Item(Item.GEM_DIAMOND);
 				temp.setColor(Color.WHITE);
