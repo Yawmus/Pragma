@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.inventory.Chest"/>
-<fullyQualifiedTypeName name="com.peter.packets.ChestPacket"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.maps.Map"/>
-<fullyQualifiedTypeName name="com.peter.packets.RemoveTradeItemPacket"/>
-<fullyQualifiedTypeName name="com.peter.packets.ItemPacket"/>
-<fullyQualifiedTypeName name="com.peter.packets.AddTradeItemPacket"/>
-<fullyQualifiedTypeName name="com.peter.rogue.Rogue"/>
 <fullyQualifiedTypeName name="com.peter.rogue.Global"/>
 <fullyQualifiedTypeName name="com.peter.map.Map.Tile"/>
 <fullyQualifiedTypeName name="com.peter.packets.ObjectToPacket"/>
@@ -30,7 +23,6 @@
 <fullyQualifiedTypeName name="java.io.FileReader"/>
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.net.URL"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="com.peter.packets.PlayerInitPacket"/>
 <fullyQualifiedTypeName name="java.util.Scanner"/>
 <fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
@@ -40,7 +32,6 @@
 <fullyQualifiedTypeName name="com.peter.entities.Player"/>
 <fullyQualifiedTypeName name="com.peter.map.Marks"/>
 <fullyQualifiedTypeName name="com.peter.packets.IDPacket"/>
-<fullyQualifiedTypeName name="com.peter.map.Map"/>
 <fullyQualifiedTypeName name="com.peter.server.PragmaServer"/>
 <fullyQualifiedTypeName name="com.peter.packets.AddNPCPacket"/>
 <fullyQualifiedTypeName name="java.util.Stack"/>
@@ -48,16 +39,25 @@
 <fullyQualifiedTypeName name="java.lang.Math"/>
 <fullyQualifiedTypeName name="com.peter.entities.EntityManager"/>
 <fullyQualifiedTypeName name="com.peter.packets.MPPlayer"/>
-<fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="com.peter.entities.Shopkeep"/>
 <fullyQualifiedTypeName name="com.peter.entities.Animate"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
-<fullyQualifiedTypeName name="com.badlogic.gdx.Input.Keys"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Color"/>
+<fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="com.peter.rogue.views.Entry"/>
+<fullyQualifiedTypeName name="com.peter.rogue.views.UI.Entry"/>
+<fullyQualifiedTypeName name="com.peter.rogue.views.UI"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.peter.map.Map"/>
+<fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
+<fullyQualifiedTypeName name="com.peter.packets.ItemPacket"/>
 <fullyQualifiedTypeName name="com.peter.server.Global"/>
+<fullyQualifiedTypeName name="com.peter.inventory.Item"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.Input.Keys"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.InputProcessor"/>
 </qualifiedTypeNameHistroy>

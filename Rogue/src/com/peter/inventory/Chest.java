@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,7 +21,7 @@ import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
 
-public class Chest extends Entity {
+public class Chest extends Entity implements InputProcessor {
 	
 	public ArrayList<Item> items;
 	private ArrayList<Rectangle> collisions;
@@ -182,5 +184,81 @@ public class Chest extends Entity {
 	
 	public void setTrade(Entity trade) {
 		this.trade = trade;
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if(keycode >= Keys.A && keycode <= Keys.Z && (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT))
+			return true;
+		
+		switch(keycode){
+		case Keys.NUM_1:
+			if(hover != null){
+				if(((Player) trade).getInventory().checkIsFull(hover))
+					((Player) trade).setAlert("Backpack is full!", true);
+				else{
+					RemoveTradeItemPacket tradeItem = new RemoveTradeItemPacket();
+					tradeItem.ID = ID;
+					tradeItem.index = hoverIndex;
+					Rogue.clientWrapper.client.sendUDP(tradeItem);
+					((Player) trade).getInventory().add(remove(hoverIndex));
+				}
+				return true;
+			}
+			break;
+		case Keys.NUMPAD_1:
+		case Keys.NUMPAD_2:
+		case Keys.NUMPAD_3:
+		case Keys.NUMPAD_4:
+		case Keys.NUMPAD_5:
+		case Keys.NUMPAD_6:
+		case Keys.NUMPAD_7:
+		case Keys.NUMPAD_8:
+		case Keys.NUMPAD_9:
+		case Keys.ESCAPE:
+			Global.multiplexer.removeProcessor(this);
+			return false;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		if(character >= 'A' && character - 'A' < items.size()){
+			((Player) trade).getInventory().setHover(null);
+			setHover(items.get(character - 'A'), collisions.get(character - 'A'), character - 'A');
+		}
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }

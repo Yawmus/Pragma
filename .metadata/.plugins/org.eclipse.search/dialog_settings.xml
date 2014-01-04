@@ -13,8 +13,8 @@
 	<section name="DialogBounds_SearchDialog">
 		<item value="636" key="DIALOG_WIDTH"/>
 		<item value="278" key="DIALOG_Y_ORIGIN"/>
-		<item value="690" key="DIALOG_HEIGHT"/>
 		<item value="-765" key="DIALOG_X_ORIGIN"/>
+		<item value="690" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.163636|0|WINDOWS|1|-14|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="Search">
@@ -33,11 +33,11 @@
 			<item value="org.eclipse.pde.internal.ui.search.SearchPage"/>
 		</list>
 	</section>
-	<section name="org.eclipse.search.text.FileSearchResultPage">
-		<item value="1000" key="org.eclipse.search.resultpage.limit"/>
-	</section>
 	<section name="SearchDialog">
 		<item value="org.eclipse.search.internal.ui.text.TextSearchPage" key="PREVIOUS_PAGE"/>
+	</section>
+	<section name="org.eclipse.search.text.FileSearchResultPage">
+		<item value="1000" key="org.eclipse.search.resultpage.limit"/>
 	</section>
 	<section name="TextSearchPage">
 		<item value="false" key="CASE_SENSITIVE"/>
@@ -47,7 +47,19 @@
 		<item value="12" key="HISTORY_SIZE"/>
 		<section name="HISTORY11">
 			<item value="true" key="isRegExSearch"/>
-			<item value="Here" key="textPattern"/>
+			<item value="\n[\s]*" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="true" key="ignoreCase"/>
+			<item value="false" key="isWholeWord"/>
+			<list key="fileNamePatterns">
+				<item value="*.java"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY2">
+			<item value="true" key="isRegExSearch"/>
+			<item value="breast" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -61,33 +73,9 @@
 			<item value="*.class" key="1"/>
 			<item value="*.java" key="0"/>
 		</section>
-		<section name="HISTORY2">
-			<item value="true" key="isRegExSearch"/>
-			<item value="32" key="textPattern"/>
-			<item value="0" key="scope"/>
-			<item value="true" key="ignoreCase"/>
-			<item value="false" key="isWholeWord"/>
-			<list key="fileNamePatterns">
-				<item value="*.java"/>
-			</list>
-			<list key="workingSets">
-			</list>
-		</section>
 		<section name="HISTORY3">
 			<item value="true" key="isRegExSearch"/>
-			<item value="System.out" key="textPattern"/>
-			<item value="0" key="scope"/>
-			<item value="true" key="ignoreCase"/>
-			<item value="false" key="isWholeWord"/>
-			<list key="fileNamePatterns">
-				<item value="*.java"/>
-			</list>
-			<list key="workingSets">
-			</list>
-		</section>
-		<section name="HISTORY10">
-			<item value="true" key="isRegExSearch"/>
-			<item value="requested" key="textPattern"/>
+			<item value="hey" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -99,7 +87,19 @@
 		</section>
 		<section name="HISTORY0">
 			<item value="true" key="isRegExSearch"/>
-			<item value="Thread" key="textPattern"/>
+			<item value="system" key="textPattern"/>
+			<item value="0" key="scope"/>
+			<item value="true" key="ignoreCase"/>
+			<item value="false" key="isWholeWord"/>
+			<list key="fileNamePatterns">
+				<item value="*.java"/>
+			</list>
+			<list key="workingSets">
+			</list>
+		</section>
+		<section name="HISTORY10">
+			<item value="true" key="isRegExSearch"/>
+			<item value="32" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -111,7 +111,7 @@
 		</section>
 		<section name="HISTORY1">
 			<item value="true" key="isRegExSearch"/>
-			<item value="16" key="textPattern"/>
+			<item value="failed to remove" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -123,7 +123,7 @@
 		</section>
 		<section name="HISTORY9">
 			<item value="true" key="isRegExSearch"/>
-			<item value="buffer" key="textPattern"/>
+			<item value="16" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -135,7 +135,7 @@
 		</section>
 		<section name="HISTORY8">
 			<item value="true" key="isRegExSearch"/>
-			<item value="attackpacket" key="textPattern"/>
+			<item value="Thread" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -147,7 +147,7 @@
 		</section>
 		<section name="HISTORY5">
 			<item value="true" key="isRegExSearch"/>
-			<item value="AddPlayerPacket" key="textPattern"/>
+			<item value="removeID" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -159,7 +159,7 @@
 		</section>
 		<section name="HISTORY4">
 			<item value="true" key="isRegExSearch"/>
-			<item value="\n[\s]*" key="textPattern"/>
+			<item value="hhey" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -171,7 +171,7 @@
 		</section>
 		<section name="HISTORY7">
 			<item value="true" key="isRegExSearch"/>
-			<item value="system.out.println" key="textPattern"/>
+			<item value="System.out" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>
@@ -183,7 +183,7 @@
 		</section>
 		<section name="HISTORY6">
 			<item value="true" key="isRegExSearch"/>
-			<item value="floor" key="textPattern"/>
+			<item value="setalert" key="textPattern"/>
 			<item value="0" key="scope"/>
 			<item value="true" key="ignoreCase"/>
 			<item value="false" key="isWholeWord"/>

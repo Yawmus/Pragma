@@ -90,6 +90,12 @@ public class Animate extends Entity{
 		if(!messageFlag){
 			this.message = message;
 		}
+		else if(this instanceof Player)
+			this.message = message;
+	}
+	
+	public void setMessageDelay(float amount){
+		this.messageDelay = amount;
 	}
 	
 	public void requestMessage(NPC npc){

@@ -3,7 +3,6 @@ package com.peter.rogue;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
 import com.peter.rogue.network.ClientWrapper;
 import com.peter.rogue.screens.Death;
 import com.peter.rogue.screens.Play;
@@ -42,7 +41,6 @@ public class Rogue extends Game{
 			setScreen(new Death(this));
 		    if(Gdx.input.isKeyPressed(Keys.ENTER)){
 		    	Global.gameOver = false;
-		    	Global.multiplexer = new InputMultiplexer();
 		    	setScreen(new Play(this));
 		    }
 		}

@@ -17,6 +17,7 @@ import com.peter.packets.AddPlayerPacket;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ChestPacket;
 import com.peter.packets.ItemPacket;
+import com.peter.packets.RemovePlayerPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.network.PacketToObject;
@@ -159,6 +160,13 @@ public class EntityManager{
 		Global.screen.end();
 		
 		if(player.stats.getHitpoints() <= 0){
+			RemovePlayerPacket packet = new RemovePlayerPacket();
+			packet.ID = player.ID;
+			packet.x = (int) player.getX();
+			packet.y = (int) player.getY();
+			packet.floor = Play.map.getFloor();
+			Rogue.clientWrapper.client.sendTCP(packet);
+			
 			Global.gameOver = true;
 			Rogue.clientWrapper.client.stop();
 			Rogue.clientWrapper.client.close();
@@ -171,9 +179,9 @@ public class EntityManager{
 		Play.map.marks.put(player.ID, (int) player.getX(), (int) player.getY());
 		Play.map.database.put(player.ID, player);
 		
-		ui = new UI(player);
-    	Global.multiplexer.addProcessor(player);
+		Global.multiplexer.addProcessor(player);
 		Gdx.input.setInputProcessor(Global.multiplexer);
+		ui = new UI(player);
 		
 		AddPlayerPacket packet = new AddPlayerPacket();
 		packet.name = player.getName();

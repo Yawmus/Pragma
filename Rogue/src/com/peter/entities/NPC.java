@@ -8,7 +8,9 @@ public class NPC extends Animate {
 
 	protected int move;
 	protected boolean canMove;
+	public boolean messageFlag;
 	public int level;
+	protected float messageDelay = 0;
 	
 	public NPC(String filename, int level, String race, String type, String name) {
 		super(filename, race, type, name);

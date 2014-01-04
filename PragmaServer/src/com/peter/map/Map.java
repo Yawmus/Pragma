@@ -485,18 +485,18 @@ class Chamber extends Room{
 				temp = new ItemPacket(Item.SPESSARTITE, ++Global.count, floor);
 				break;
 			}
-			Map.itemSets.get(floor)[(x + Global.rand(width-1, -(width/2-1)))][(y + Global.rand(height-1, -(height/2-1)))] = temp;
+			Map.itemSets.get(floor)[(x + Global.rand(width-2, -(width/2-1)))][(y + Global.rand(height-2, -(height/2-1)))] = temp;
 		}
 		else if(chance < 8){
 			for(int i=0; i<Global.rand(4, 1); i++){
-				temp = new ItemPacket("Gold", ++Global.count, floor);
-				Map.itemSets.get(floor)[(x + Global.rand(width-1, -(width/2-1)))][(y + Global.rand(height-1, -(height/2-1)))] = temp;
+				temp = new ItemPacket(Item.GOLD, ++Global.count, floor);
+				Map.itemSets.get(floor)[(x + Global.rand(width-2, -(width/2-1)))][(y + Global.rand(height-2, -(height/2-1)))] = temp;
 			}
 		}
 		else if(chance < 20){
 			temp2 = new Monster(floor, Monster.Worm);
 			temp2.ID = ++Global.count;
-			temp2.setPosition((x + Global.rand(width-1, -(width/2-1))), (y + Global.rand(height-1, -(height/2-1))));
+			temp2.setPosition((x + Global.rand(width-2, -(width/2-1))), (y + Global.rand(height-2, -(height/2-1))));
 			Map.markSets.get(floor).put(temp2.ID, temp2.getX(), temp2.getY());
 			Map.NPCQueue.add(temp2);
 		}

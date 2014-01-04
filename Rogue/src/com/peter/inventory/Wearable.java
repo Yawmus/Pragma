@@ -3,7 +3,7 @@ package com.peter.inventory;
 public class Wearable extends Item{
 	public static Wearable HELMET = new Wearable("Wearable$Head$Helmet", 5, 17, "^.png", 3, '^');
 	public static Wearable HAT = new Wearable("Wearable$Head$Hat", 2, 6, "^.png", 1, '^');
-	public static Wearable BREAST_PLATE = new Wearable("Wearable$Head$Breast Plate", 5, 17, "[.png", 3, '[');
+	public static Wearable BREAST_PLATE = new Wearable("Wearable$Body$Breast Plate", 5, 17, "[.png", 3, '[');
 	public static Wearable SHOES = new Wearable("Wearable$Feet$Shoes", 2, 6, "congruent.png", 1, '\u2245');
 	public static Wearable WOODEN_RING = new Wearable("Wearable$Ring$Wooden Ring", 1, 20, "dash.png", 1, '-');
 	
@@ -21,7 +21,7 @@ public class Wearable extends Item{
 	public int getDefense(){
 		return defense;
 	}
-	public String getGroup(){
+	public String getType(){
 		return name.split("\\$")[1];
 	}
 }

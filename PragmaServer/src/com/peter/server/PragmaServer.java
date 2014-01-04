@@ -152,7 +152,6 @@ public class PragmaServer{
 					ItemPacket packet = (ItemPacket) o;
 					packet.ID = ++Global.count;
 					Map.itemSets.get(packet.floor)[packet.x][packet.y] = packet;
-					System.out.println("Add: " + packet.ID);
 					for(Player player : map.players.values())
 						if(player.floor == packet.floor)
 							server.sendToTCP(player.ID, packet);
@@ -160,7 +159,6 @@ public class PragmaServer{
 				
 				else if(o instanceof RemoveItemPacket){
 					RemoveItemPacket packet = (RemoveItemPacket) o;
-					System.out.println("Sub: " + Map.itemSets.get(packet.floor)[packet.x][packet.y].ID + ", " + packet.ID);
 					if(Map.itemSets.get(packet.floor)[packet.x][packet.y].ID.equals(packet.ID)){
 						Map.itemSets.get(packet.floor)[packet.x][packet.y] = null;
 						for(Player player : map.players.values())
@@ -195,15 +193,16 @@ public class PragmaServer{
 					}
 					else if(map.players.containsKey(packet.receiverID)){
 						map.players.get(packet.receiverID).getStats().mutateHitpoints(packet.amount);
+						for(Player player : map.players.values())
+							if(player.floor == packet.floor)
+								server.sendToTCP(player.ID, packet);
 						if(map.players.get(packet.receiverID).getStats().getHitpoints() <= 0){
 							ExperiencePacket packet2 = new ExperiencePacket();
 							packet2.amount = 20;
 							packet2.name = map.players.get(packet.receiverID).getName();
+							packet2.group = "Player";
 							server.sendToTCP(packet.attackerID, packet2);
 						}
-						for(Player player : map.players.values())
-							if(player.floor == packet.floor)
-								server.sendToTCP(player.ID, packet);
 					}
 					else
 						System.out.println("[SERVER] failed to attack something!");
@@ -279,7 +278,6 @@ public class PragmaServer{
 					packet5.tints = new String[Map.WIDTH][Map.HEIGHT];
 					Tile[][] tileSet = map.generateFloor(packet.floor, packet.x/32, packet.y/32);
 					
-					packet5.items = Map.itemSets.get(packet.floor);
 					packet5.chests = Map.chestSets.get(packet.floor);
 					packet5.npcs = new HashMap<Integer, AddNPCPacket>();
 					
@@ -293,23 +291,30 @@ public class PragmaServer{
 					for(int i=0; i<Map.WIDTH; i++)
 						for(int j=0; j<Map.HEIGHT; j++)
 							packet5.marks[i][j] = (short)((int)Map.markSets.get(packet.floor).getMarker()[i][j]);
+					
+					packet5.items = new ItemPacket[Map.WIDTH][Map.HEIGHT];
 					for(int x=0; x<Map.WIDTH; x++)
 						for(int y=0; y<Map.HEIGHT; y++){
 							packet5.tiles[x][y] = ObjectToPacket.tileConverter(tileSet[x][y]);
 							packet5.tints[x][y] = Map.tintSets.get(packet.floor)[x][y];
-							packet5.items[x][y] = Map.itemSets.get(packet.floor)[x][y];
+							if(Map.itemSets.get(packet.floor)[x][y] != null){
+								packet5.items[x][y] = Map.itemSets.get(packet.floor)[x][y];
+								packet5.items[x][y].x = x;
+								packet5.items[x][y].y = y;
+							}
 						}
 					server.sendToTCP(c.getID(), packet5);
+				}
+				
+				else if(o instanceof RemovePlayerPacket){
+					RemovePlayerPacket packet = (RemovePlayerPacket) o;
+					map.players.remove(packet.ID);
+					Map.markSets.get(packet.floor).put(-1, packet.x, packet.y);
+					server.sendToAllExceptTCP(c.getID(), packet);
 				}
 			}
 			
 			public void disconnected(Connection c){
-				RemovePlayerPacket packet = new RemovePlayerPacket();
-				map.players.remove(c.getID());
-				for(int i=0; i<Map.markSets.size(); i++)
-					Map.markSets.get(i).find(c.getID(), -1);
-				packet.ID = c.getID();
-				server.sendToAllExceptTCP(c.getID(), packet);
 				System.out.println("[SERVER] Connection dropped.");
 			}
 			});
@@ -328,13 +333,14 @@ public class PragmaServer{
 					for(Player player : map.players.values())
 						if(player.floor == removeFloor)
 							server.sendToTCP(player.ID, packet);
-					if(Map.npcSets.get(removeFloor).get(removeID).getDrop() != null){ // Drops nothing
+					if(Map.npcSets.get(removeFloor).get(removeID).getDrop().name != null){ // Drops nothing
 						ItemPacket packet2 = Map.npcSets.get(removeFloor).get(removeID).getDrop();
 						Map.itemSets.get(removeFloor)[Map.npcSets.get(removeFloor).get(removeID).getX()/32][Map.npcSets.get(removeFloor).get(removeID).getY()/32] = packet2;
 						Map.markSets.get(removeFloor).put(-1, Map.npcSets.get(removeFloor).get(removeID).getX(), Map.npcSets.get(removeFloor).get(removeID).getY());
 						packet2.x = Map.npcSets.get(removeFloor).get(removeID).getX()/32;
 						packet2.y = Map.npcSets.get(removeFloor).get(removeID).getY()/32;
 						packet2.ID = Map.npcSets.get(removeFloor).get(removeID).getDrop().ID;
+						packet2.name = Map.npcSets.get(removeFloor).get(removeID).getDrop().name;
 						for(Player player : map.players.values())
 							if(player.floor == removeFloor)
 								server.sendToTCP(player.ID, packet2);

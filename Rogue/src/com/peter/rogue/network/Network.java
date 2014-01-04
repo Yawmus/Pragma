@@ -45,8 +45,10 @@ public class Network extends Listener {
 				Play.map.players.get(packet.floor).get(packet.receiverID).setMessage(packet.message);
 				UI.messageList.add(new Entry(packet.message, Play.map.players.get(packet.floor).get(packet.receiverID).getName()));
 			}
-			else if(Play.map.npcs.containsKey(packet.receiverID))
+			else if(Play.map.npcs.containsKey(packet.receiverID)){
 				Play.map.npcs.get(packet.receiverID).setMessage(packet.message);
+				Play.map.npcs.get(packet.receiverID).messageFlag = true;
+			}
 		}
 		else if(o instanceof RemoveItemPacket){
 			RemoveItemPacket packet = (RemoveItemPacket) o;
@@ -58,16 +60,14 @@ public class Network extends Listener {
 		}
 		else if(o instanceof RemovePlayerPacket){
 			RemovePlayerPacket packet = (RemovePlayerPacket) o;
-			Play.map.marks.find(packet.ID, -1);
+			Play.map.marks.put(-1, packet.x, packet.y);
 			Play.map.database.remove(packet.ID);
-			for(int i=0; i<Play.map.players.size(); i++)
-				if(Play.map.players.get(i).containsKey(packet.ID)){
-					Play.map.players.get(i).remove(packet.ID);
-					break;
-				}
+			Play.map.players.get(packet.floor).remove(packet.ID);
 		}
 		else if(o instanceof PlayerPacket){
 			PlayerPacket packet = (PlayerPacket) o;
+			while(packet.floor > Play.map.players.size()-1)
+				Play.map.players.add(new HashMap<Integer, MPPlayer>());
 			Play.map.players.get(packet.floor).get(packet.ID).setX(packet.x);
 			Play.map.players.get(packet.floor).get(packet.ID).setY(packet.y);
 			Play.map.players.get(packet.floor).get(packet.ID).setOldX(packet.oldX);
@@ -77,7 +77,6 @@ public class Network extends Listener {
 				Play.map.marks.put(-1, packet.oldX, packet.oldY);
 			}
 		}
-		
 		else if(o instanceof NPCPacket){
 			NPCPacket packet = (NPCPacket) o;
 			if(Play.map.npcs.get(packet.ID) != null){
@@ -161,8 +160,9 @@ public class Network extends Listener {
 		else if(o instanceof ExperiencePacket){
 			ExperiencePacket packet = (ExperiencePacket) o;
 			EntityManager.player.getStats().mutateExperience(packet.amount);
-			if(!packet.group.equals("Monster"))
+			if(!packet.group.equals("Monster")){
 				EntityManager.player.setAlert("You killed " + packet.name + "!", false);
+			}
 		}
 		else if(o instanceof AttackPacket){
 			AttackPacket packet = (AttackPacket) o;
@@ -181,5 +181,6 @@ public class Network extends Listener {
 		}
 	}
 	public void disconnected (Connection connection) {
+		System.out.println("[CLIENT] Connection dropped.");
 	}
 }

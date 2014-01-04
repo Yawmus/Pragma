@@ -54,7 +54,6 @@ public class Item extends Entity{
 	public boolean isPickedUp(){
 		return pickedUp;
 	}
-	
 	public String getFullName(){
 		return name;
 	}

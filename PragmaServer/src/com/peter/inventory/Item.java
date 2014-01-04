@@ -14,7 +14,7 @@ public class Item {
 	
 	public static final String HELMET = new String("Wearable$Head$Helmet");
 	public static final String HAT = new String("Wearable$Head$Hat");
-	public static final String BREAST_PLATE = new String("Wearable$Head$Breast Plate");
+	public static final String BREAST_PLATE = new String("Wearable$Body$Breast Plate");
 	public static final String SHOES = new String("Wearable$Feet$Shoes");
 	public static final String WOODEN_RING = new String("Wearable$Ring$Wooden Ring");
 	

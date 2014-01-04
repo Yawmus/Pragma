@@ -15,23 +15,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.peter.inventory.Chest;
-import com.peter.inventory.Food;
 import com.peter.inventory.Inventory;
 import com.peter.inventory.Item;
-import com.peter.inventory.Wearable;
 import com.peter.map.Tile;
-import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.AttackPacket;
-import com.peter.packets.ItemPacket;
-import com.peter.packets.MessagePacket;
 import com.peter.packets.PlayerPacket;
 import com.peter.packets.RemoveItemPacket;
-import com.peter.packets.RemoveTradeItemPacket;
+import com.peter.packets.RemovePlayerPacket;
 import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
+import com.peter.rogue.network.Chat;
 import com.peter.rogue.screens.Play;
-import com.peter.rogue.views.UI;
 
 public class Player extends Animate implements InputProcessor {
 	
@@ -47,14 +42,13 @@ public class Player extends Animate implements InputProcessor {
 	private String pictureURL;
 	private float hunger;
 	public PlayerPacket packet;
-	private String messageBuffer;
 	public boolean showPlayers = false;
 	private String alert;
 	private float alertDelay = 0;
 	private Color color;
 	private ArrayList<Entity> visible;
 	protected Stats stats;
-	//public ClientWrapper clientWrapper2 = new ClientWrapper();
+	private Chat chat;
 	
 	public Player(String filename){
 		super(filename, "Player", "Human", null);
@@ -67,9 +61,10 @@ public class Player extends Animate implements InputProcessor {
 		picture = new Texture(Gdx.files.internal("img/adelaide.png"));
 		deathSound = Gdx.audio.newSound(Gdx.files.internal("sound/death.wav"));
 		packet = new PlayerPacket();
-		info = alert = messageBuffer = new String();
+		info = alert = new String();
 		viewDistance = 7;
 		hostile = false;
+		chat = new Chat(this);
 		stats.setDexterity(0);
 		stats.setMaxExperience(20);
 		stats.setExperience(0);
@@ -138,29 +133,7 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void update(float delta){
-		time += delta;
-		
-		if(messageDelay > 2.0){
-			resetMessage();
-			messageDelay = 0;
-			messageFlag = false;
-		}
-		
-		if(getMessage() != ""){
-			messageFlag = true;
-			messageDelay += delta;
-		}
-
-		if(statusDelay > 1.6f){
-			resetStatus();
-			statusDelay = 0;
-			statusFlag = false;
-		}
-		
-		if(getStatus() != null){
-			statusFlag = true;
-			statusDelay += delta;
-		}
+		super.update(delta);
 
 		if(alertDelay > 2){
 			setAlert("", true);
@@ -248,7 +221,6 @@ public class Player extends Animate implements InputProcessor {
 			}
 			else{
 				setAlert("Backpack is full!", true);
-				collision = true;
 			}
 		}
 		else if(Play.map.getTile(getX(), getY()).hasStairs() && !Play.map.getTile(oldX, oldY).hasStairs()){
@@ -288,6 +260,9 @@ public class Player extends Animate implements InputProcessor {
 					if(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())) instanceof Shopkeep){
 						menuActive = !menuActive;
 						setMenu("Barter");
+						Global.multiplexer.getProcessors().removeValue(inventory, true);
+						Global.multiplexer.addProcessor(0, inventory);
+						Global.multiplexer.addProcessor(0, (Shopkeep) Play.map.get(Play.map.marks.get((int)getX(), (int)getY())));
 						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 					}
 					requestMessage(Play.map.npcs.get(Play.map.marks.get((int) getX(), (int) getY())));
@@ -303,6 +278,9 @@ public class Player extends Animate implements InputProcessor {
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
 				menuActive = !menuActive;
 				setMenu("Chest");
+				Global.multiplexer.getProcessors().removeValue(inventory, true);
+				Global.multiplexer.addProcessor(0, inventory);
+				Global.multiplexer.addProcessor(0, (Chest) Play.map.get(Play.map.marks.get((int)getX(), (int)getY())));
 				setMenuObject((Chest) Play.map.chests.get(Play.map.marks.get((int)getX(), (int)getY())));
 				collision = true;
 			}
@@ -343,7 +321,7 @@ public class Player extends Animate implements InputProcessor {
 		packet.receiverID = entity.ID;
 		packet.floor = Play.map.getFloor();
 		packet.amount = amount;
-		Rogue.clientWrapper.client.sendUDP(packet);
+		Rogue.clientWrapper.client.sendTCP(packet);
 	}
 	
     public void light(){
@@ -410,9 +388,6 @@ public class Player extends Animate implements InputProcessor {
 	public ArrayList<Entity> getVisible(){
 		return visible;
 	}
-	public String getMessageBuffer(){
-		return messageBuffer;
-	}
 	
 	public void setInformation(String info){
 		this.info = info;
@@ -423,7 +398,11 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void setMenu(String request){
-			menu = request;
+		if(request == "")
+			menuActive = false;
+		else
+			menuActive = true;
+		menu = request;
 		menuObject = null;
 	}
 	
@@ -489,6 +468,9 @@ public class Player extends Animate implements InputProcessor {
 	public boolean isError(){
 		return error;
 	}
+	public Chat getChat(){
+		return chat;
+	}
 
 	public String getPictureURL() {
 		return pictureURL;
@@ -497,82 +479,47 @@ public class Player extends Animate implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode){
-		case Keys.F10:
-			if(getMenu().equals("MainMenu")){
-				setMenu("");
-				menuActive = false;
-			}
-			else{
-				menuActive = true;
-				setMenu("MainMenu");
-			}
-			break;
 		case Keys.P:
 			if(!getMenu().equals("Chat") && !getMenu().equals("Inventory") && !getMenu().equals("Barter") && !getMenu().equals("Chest"))
 				showPlayers = true;
 			break;
 		case Keys.ENTER:
-			if(getMenu().equals("Chat")){
-				if(!messageBuffer.isEmpty()){
-					message = messageBuffer;
-					UI.messageList.add(new UI.Entry(message, name));
-					messageDelay = 0;
-					MessagePacket packet = new MessagePacket();
-					packet.message = message;
-					packet.receiverID = ID;
-					packet.floor = Play.map.getFloor();
-					Rogue.clientWrapper.client.sendUDP(packet);
-					setMenu("");
-					menuActive = false;
-					messageBuffer = new String();
-					return true;
-				}
-				menuActive = false;
-				setMenu("");
-			}
-			else{
-				setMenu("Chat");
-				menuActive = true;
-			}
+			setMenu("Chat");
+			Global.multiplexer.addProcessor(0, chat);
 			break;
 		case Keys.I:
-			if(!getMenu().equals("Chat") && !getMenu().equals("Inventory") && !getMenu().equals("Barter") && !getMenu().equals("Chest"))
-				if(getMenu().equals("Chest")){
-					menuActive = true;
-					setMenu("Inventory");
-				}
-				else if(getMenu().equals("Inventory")){
-					setMenu("");
-					menuActive = false;
-				}
-				else{
-					menuActive = true;
-					setMenu("Inventory");
-				}
+			setMenu("Inventory");
+			Global.multiplexer.addProcessor(0, inventory);
 			break;
 		case Keys.D:
-			if(!getMenu().equals("Chat") && !getMenu().equals("Inventory") && !getMenu().equals("Barter") && !getMenu().equals("Chest"))
-				hostile = !hostile;
-			break;
-		case Keys.ESCAPE:
-			setMenu("");
-			inventory.setHover(null);
+			hostile = !hostile;
 			break;
 		case Keys.SHIFT_LEFT:
 		case Keys.SHIFT_RIGHT:
-			if(!getMenu().equals("Chat") && !getMenu().equals("Inventory") && !getMenu().equals("Barter") && !getMenu().equals("Chest"))
-				delay = .5f;
-			break;
-		case Keys.TAB:
-			Global.camera.zoom += .5;
+			delay = .5f;
 			break;
 		case Keys.Q:
 			if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)){
-				Global.gameOver = true;
+				RemovePlayerPacket packet = new RemovePlayerPacket();
+				packet.ID = ID;
+				packet.x = (int) getX();
+				packet.y = (int) getY();
+				packet.floor = Play.map.getFloor();
+				Rogue.clientWrapper.client.sendTCP(packet);
+				
 				Rogue.clientWrapper.client.stop();
 				Rogue.clientWrapper.client.close();
-				System.exit(1);
+				Gdx.app.exit();
 			}
+			break;
+		case Keys.SLASH:
+			if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)){
+				setMenu("Help");
+			}
+			break;
+		case Keys.ESCAPE:
+			inventory.setHover(null);
+			setMenu("");
 			break;
 		}
 		return true;
@@ -580,104 +527,13 @@ public class Player extends Animate implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		if(getMenu().equals("Chat") && character != 13){
-			if(character != 8){
-				if(Global.gothicFont.getBounds(messageBuffer).width < 750)
-					messageBuffer += character;
-			}
-			else
-				if(!messageBuffer.isEmpty())
-					messageBuffer = messageBuffer.substring(0, messageBuffer.length() - 1);
-		}
-		else if(getMenu().equals("Inventory") || getMenu().equals("Barter") || getMenu().equals("Chest")){
-			if(character >= 97 && character - 97 < inventory.getItems().size()){
-				if(getMenu().equals("Barter"))
-					((Shopkeep) inventory.getTrade()).setHover(null);
-				if(getMenu().equals("Chest"))
-					((Chest) inventory.getTrade()).setHover(null);
-				inventory.setHover(inventory.getItems().get(character - 97), inventory.getCollision().get(character - 97), character - 97);
-			}
-			else if(character >= 'A' && getMenu().equals("Chest") && character - 'A' < ((Chest) inventory.getTrade()).items.size()){
-				inventory.setHover(null);
-				Chest temp = (Chest) inventory.getTrade();
-				temp.setHover(temp.items.get(character - 'A'), temp.getCollision().get(character - 'A'), character - 'A');
-			}
-			else if(character >= 'A' && getMenu().equals("Barter") && character - 'A' < ((Shopkeep) inventory.getTrade()).items.size()){
-				inventory.setHover(null);
-				Shopkeep temp = (Shopkeep) inventory.getTrade();
-				temp.setHover(temp.items.get(character - 'A'), temp.getCollision().get(character - 'A'), character - 'A');
-			}
-			if(character == '1'){
-				if(inventory.getHover() != null){
-					Item temp = inventory.remove(inventory.getHoverIndex());
-					ItemPacket packet = new ItemPacket(temp.getFullName(), temp.ID, Play.map.getFloor());
-					packet.x = (int) (getX()/32);
-					packet.y = (int) (getY()/32);
-					Rogue.clientWrapper.client.sendTCP(packet);
-				}
-				else if(getMenu().equals("Chest") && ((Chest) inventory.getTrade()).getHover() != null){
-					Chest temp = (Chest) inventory.getTrade();
-					if(inventory.checkIsFull(temp.getItems().get(temp.getHoverIndex())))
-						setAlert("Backpack is full!", true);
-					else{
-						RemoveTradeItemPacket tradeItem = new RemoveTradeItemPacket();
-						tradeItem.ID = ID;
-						tradeItem.index = temp.getHoverIndex();
-						Rogue.clientWrapper.client.sendUDP(tradeItem);
-						inventory.add(temp.remove(temp.getHoverIndex()));
-					}
-				}
-				else if(getMenu().equals("Barter") && ((Shopkeep) inventory.getTrade()).getHover() != null){
-					Shopkeep temp = (Shopkeep) inventory.getTrade();
-					if(inventory.checkIsFull(temp.items.get(temp.getHoverIndex())))
-						setAlert("Backpack is full!", true);
-					else if(inventory.getWallet() - temp.items.get(temp.getHoverIndex()).getValue() < 0)
-                 		setAlert("Insufficient funds!", true);
-					else{
-						RemoveTradeItemPacket tradeItem = new RemoveTradeItemPacket();
-						tradeItem.ID = ID;
-						tradeItem.index = temp.getHoverIndex();
-						Rogue.clientWrapper.client.sendUDP(tradeItem);
-						inventory.mutateWallet(-temp.items.get(temp.getHoverIndex()).getValue());
-						inventory.add(temp.remove(temp.getHoverIndex()));
-					}
-				}
-			}
-			else if(character == '2' && inventory.getHover() != null){
-				setAlert("Not implemented yet!", false);
-			}
-			else if(character == '3' && inventory.getHover() instanceof Food){
-				mutateHunger(.1f);
-				inventory.remove(inventory.getHoverIndex());
-			}
-			else if(character == '3' && inventory.getHover() instanceof Wearable){
-				inventory.gear.wear((Wearable) inventory.move(inventory.getHoverIndex()), this);
-			}
-			else if(character == '4' && getMenu().equals("Barter") && inventory.getHover() != null){
-				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
-				tradeItem.ID = inventory.getTrade().getID();
-				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName(), inventory.getItems().get(inventory.getHoverIndex()).ID, Play.map.getFloor());
-				Rogue.clientWrapper.client.sendUDP(tradeItem);
-				inventory.mutateWallet(inventory.getItems().get(inventory.getHoverIndex()).getValue());
-				((Shopkeep) inventory.getTrade()).add(inventory.remove(inventory.getHoverIndex()));
-			}
-			else if(character == '4' && getMenu().equals("Chest") && inventory.getHover() != null){
-				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
-				tradeItem.ID = inventory.getTrade().getID();
-				tradeItem.item = new ItemPacket(inventory.getItems().get(inventory.getHoverIndex()).getName(), inventory.getItems().get(inventory.getHoverIndex()).ID, Play.map.getFloor());
-				Rogue.clientWrapper.client.sendUDP(tradeItem);
-				((Chest) inventory.getTrade()).add(inventory.remove(inventory.getHoverIndex()));
-			}
-		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
 		switch(keycode){
-		case Keys.TAB:
-			Global.camera.zoom -= .5;
-			break;
 		case Keys.P:
 			showPlayers = false;
 			break;

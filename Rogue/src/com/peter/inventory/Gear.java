@@ -20,8 +20,11 @@ public class Gear{
 	private final int SLOTS = 7;
 	private int originX, originY;
 	private Rectangle[] collisions;
+	private Player player;
 	
-	public Gear(int originX, int originY){
+	public Gear(int originX, int originY, Player player){
+		this.player = player;
+		
 		collisions = new Rectangle[SLOTS];
 		unused = new Texture[SLOTS];
 		items = new Wearable[SLOTS];
@@ -59,7 +62,7 @@ public class Gear{
 		names[5] = "Hand";
 		names[6] = "Ring";
 	}
-	public Item check(Vector2 screenCoord, Vector3 coord, Player player) {
+	public Item check(Vector2 screenCoord, Vector3 coord) {
 		for(int i=0; i<SLOTS; i++)
 			if(collisions[i].contains(screenCoord) && this.items[i] != null){
 				Global.mapShapes.begin(ShapeType.Filled);
@@ -90,9 +93,9 @@ public class Gear{
 		spriteBatch.draw(items[6] != null ? items[6].getTexture() : unused[6], originX + 40, originY + 165);
 	}
 	
-	public void wear(Wearable item, Player player){
+	public void wear(Wearable item){
 		for(int i=0; i<SLOTS; i++)
-			if(names[i] == item.getGroup()){
+			if(names[i].equals(item.getType())){
 				if(items[i] != null){
 					player.getStats().mutateDefense(-((Wearable) (items[i])).getDefense());
 					player.getInventory().move(items[i]);

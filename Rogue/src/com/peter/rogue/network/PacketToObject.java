@@ -33,7 +33,6 @@ public class PacketToObject{
 	}
 	
 	public static Item itemConverter(ItemPacket item){
-		System.out.println(item.name);
 		switch(item.name.split("\\$")[0]){
 		case "Treasure":
 			switch(item.name.split("\\$")[1]){
@@ -55,7 +54,7 @@ public class PacketToObject{
 					temp = new Item(Item.TOPAZ);
 					temp.setColor(new Color(.26f, .4f, .96f, 1));
 					break;
-				case "Spessarite":
+				case "Spessartite":
 					temp = new Item(Item.SPESSARTITE);
 					temp.setColor(new Color(.28f, .86f, .29f, 1));
 					break;
