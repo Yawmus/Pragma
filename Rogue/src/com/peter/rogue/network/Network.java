@@ -30,7 +30,6 @@ import com.peter.packets.RemoveTradeItemPacket;
 import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.screens.Play;
 import com.peter.rogue.views.UI;
-import com.peter.rogue.views.UI.Entry;
 
 public class Network extends Listener {
 	public void connected(Connection c) {
@@ -43,7 +42,7 @@ public class Network extends Listener {
 				Play.map.players.add(new HashMap<Integer, MPPlayer>());
 			if(Play.map.players.get(packet.floor).containsKey(packet.receiverID)){
 				Play.map.players.get(packet.floor).get(packet.receiverID).setMessage(packet.message);
-				UI.messageList.add(new Entry(packet.message, Play.map.players.get(packet.floor).get(packet.receiverID).getName()));
+				UI.chat.messageList.add(new Chat.Entry(packet.message, Play.map.players.get(packet.floor).get(packet.receiverID).getName()));
 			}
 			else if(Play.map.npcs.containsKey(packet.receiverID)){
 				Play.map.npcs.get(packet.receiverID).setMessage(packet.message);

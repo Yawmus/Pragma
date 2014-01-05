@@ -189,6 +189,9 @@ public class Shopkeep extends NPC implements InputProcessor{
 			if(keycode >= Keys.A && keycode <= Keys.Z && (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT))
 				return true;
 			
+			if(keycode == Keys.NUM_1)
+				System.out.println("WASSUP");
+			
 			switch(keycode){
 			case Keys.NUM_1:
 				if(hover != null){
@@ -218,8 +221,12 @@ public class Shopkeep extends NPC implements InputProcessor{
 			case Keys.NUMPAD_8:
 			case Keys.NUMPAD_9:
 			case Keys.ESCAPE:
+				((Player) trade).setMenu("");
+				((Player) trade).getInventory().setTrade(null);
+				Global.multiplexer.removeProcessor(((Player) trade).getInventory());
+				trade = null;
 				Global.multiplexer.removeProcessor(this);
-				return false;
+				return true;
 			}
 			
 			return false;

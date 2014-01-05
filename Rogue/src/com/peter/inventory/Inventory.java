@@ -19,7 +19,6 @@ import com.peter.entities.Player;
 import com.peter.entities.Shopkeep;
 import com.peter.packets.AddTradeItemPacket;
 import com.peter.packets.ItemPacket;
-import com.peter.packets.RemoveTradeItemPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
 import com.peter.rogue.screens.Play;
@@ -55,8 +54,6 @@ public class Inventory implements InputProcessor{
 			pointCollisions[i].setSize(8);
 		}
 		wallet = 0;
-		add(new Wearable(Wearable.BREAST_PLATE));
-		add(new Wearable(Wearable.BREAST_PLATE));
 		add(new Wearable(Wearable.SHOES));
 		add(new Food(Food.BREAD));
 		add(new Food(Food.BREAD));
@@ -392,7 +389,7 @@ public class Inventory implements InputProcessor{
 				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 				tradeItem.ID = trade.getID();
 				tradeItem.item = new ItemPacket(hover.getFullName(), hover.ID, Play.map.getFloor());
-				Rogue.clientWrapper.client.sendUDP(tradeItem);
+				Rogue.clientWrapper.client.sendTCP(tradeItem);
 				mutateWallet(hover.getValue());
 				((Shopkeep) trade).add(remove(hoverIndex));
 				return true;
@@ -401,7 +398,7 @@ public class Inventory implements InputProcessor{
 				AddTradeItemPacket tradeItem = new AddTradeItemPacket();
 				tradeItem.ID = trade.getID();
 				tradeItem.item = new ItemPacket(hover.getFullName(), hover.ID, Play.map.getFloor());
-				Rogue.clientWrapper.client.sendUDP(tradeItem);
+				Rogue.clientWrapper.client.sendTCP(tradeItem);
 				((Chest) trade).add(remove(hoverIndex));
 				return true;
 			}
@@ -417,6 +414,7 @@ public class Inventory implements InputProcessor{
 		case Keys.NUMPAD_9:
 		case Keys.ESCAPE:
 			player.setMenu("");
+			trade = null;
 			Global.multiplexer.removeProcessor(this);
 			return true;
 		}
@@ -430,18 +428,14 @@ public class Inventory implements InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
+		System.out.println(character + 0);
 		if(character >= 97 && character - 97 < items.size()){
 			if(trade instanceof Shopkeep)
 				((Shopkeep) trade).setHover(null);
 			if(trade instanceof Chest)
 				((Chest) trade).setHover(null);
 			setHover(items.get(character - 97), collisions.get(character - 97), character - 97);
-		}
-		else if((character == 27 || (character >= 49 && character <= 57)) && (trade instanceof Shopkeep || trade instanceof Chest)){
-			player.setMenu("");
-			Global.multiplexer.removeProcessor(this);
-		}
-			
+		}			
 		return true;
 	}
 

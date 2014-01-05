@@ -216,8 +216,12 @@ public class Chest extends Entity implements InputProcessor {
 		case Keys.NUMPAD_8:
 		case Keys.NUMPAD_9:
 		case Keys.ESCAPE:
+			((Player) trade).setMenu("");
+			((Player) trade).getInventory().setTrade(null);
+			Global.multiplexer.removeProcessor(((Player) trade).getInventory());
+			trade = null;
 			Global.multiplexer.removeProcessor(this);
-			return false;
+			return true;
 		}
 		
 		return false;

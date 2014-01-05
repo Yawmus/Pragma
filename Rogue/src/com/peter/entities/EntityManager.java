@@ -120,7 +120,7 @@ public class EntityManager{
 				tradeItemQueue.remove();
 			}
 		}
-
+		
 		Play.map.getSpriteBatch().begin();
 		Play.map.draw();
 		player.draw(spriteBatch);
@@ -142,7 +142,7 @@ public class EntityManager{
 		mapCoord = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		Global.camera.unproject(mapCoord);
 		
-		if(!player.isMenuActive()){
+		if(player.getMenu().equals("")){
 			player.setInformation(Play.map.cursor(Play.map.marks.get((int) mapCoord.x, (int) mapCoord.y), (int) mapCoord.x, (int) mapCoord.y));
 			Global.mapShapes.begin(ShapeType.Filled);
 			Global.mapShapes.setColor(0, 0, 0, 1f);

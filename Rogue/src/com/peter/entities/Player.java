@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -25,18 +24,16 @@ import com.peter.packets.RemovePlayerPacket;
 import com.peter.packets.RequestFloorPacket;
 import com.peter.rogue.Global;
 import com.peter.rogue.Rogue;
-import com.peter.rogue.network.Chat;
 import com.peter.rogue.screens.Play;
+import com.peter.rogue.views.UI;
 
 public class Player extends Animate implements InputProcessor {
 	
 	private Texture picture;
 	private String info;
 	private String menu = "";
-	private boolean menuActive = false;
 	private Inventory inventory = new Inventory(this);
 	private ArrayList<Ray> rays = new ArrayList<Ray>();
-	private Entity menuObject;
 	private int viewDistance;
 	private boolean hostile, error;
 	private String pictureURL;
@@ -48,7 +45,6 @@ public class Player extends Animate implements InputProcessor {
 	private Color color;
 	private ArrayList<Entity> visible;
 	protected Stats stats;
-	private Chat chat;
 	
 	public Player(String filename){
 		super(filename, "Player", "Human", null);
@@ -64,7 +60,6 @@ public class Player extends Animate implements InputProcessor {
 		info = alert = new String();
 		viewDistance = 7;
 		hostile = false;
-		chat = new Chat(this);
 		stats.setDexterity(0);
 		stats.setMaxExperience(20);
 		stats.setExperience(0);
@@ -145,57 +140,49 @@ public class Player extends Animate implements InputProcessor {
 		}
 		hunger -= delta/6000;
 		
-		if(time >= delay && !getMenu().equals("Chat")){
-			if(Gdx.input.isKeyPressed(Keys.NUMPAD_9) || (getMenu().equals("") && Gdx.input.isKeyPressed(Keys.U))){
+		if(time >= delay && getMenu().equals("")){
+			if(Gdx.input.isKeyPressed(Keys.NUMPAD_9) || Gdx.input.isKeyPressed(Keys.U)){
 					setY(getY() + 32);
 					setX(getX() + 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_8) || (getMenu().equals("") && (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.K)))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_8) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.K)){
 					setY(getY() + 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_7) || (getMenu().equals("") && Gdx.input.isKeyPressed(Keys.Y))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_7) || Gdx.input.isKeyPressed(Keys.Y)){
 					setY(getY() + 32);
 					setX(getX() - 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_6) || (getMenu().equals("") && (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.L)))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_6) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.L)){
 					setX(getX() + 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_4) || (getMenu().equals("") && (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.H)))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_4) || Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.H)){
 					setX(getX() - 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_3) || (getMenu().equals("") && Gdx.input.isKeyPressed(Keys.N))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_3) || Gdx.input.isKeyPressed(Keys.N)){
 					setX(getX() + 32);
 					setY(getY() - 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_2) || (getMenu().equals("") && (Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.J)))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_2) || Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.J)){
 					setY(getY() - 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
-			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_1) || (getMenu().equals("") && Gdx.input.isKeyPressed(Keys.B))){
+			else if(Gdx.input.isKeyPressed(Keys.NUMPAD_1) || Gdx.input.isKeyPressed(Keys.B)){
 					setX(getX() - 32);
 					setY(getY() - 32);
 					time = 0;
-					setMenuActive(false);
 					checkCollision();
 			}
 		}
@@ -203,8 +190,6 @@ public class Player extends Animate implements InputProcessor {
 	
 	public void checkCollision(){
 		collision = false;
-		menuActive = false;
-		setMenu("");
 		if(Play.map.getTile(getX(), getY()).isBlocked())
 			collision = true;
 		else if(Play.map.getTile(getX(), getY()).get() != null){
@@ -258,12 +243,14 @@ public class Player extends Animate implements InputProcessor {
 					attack((Animate) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
 				else{
 					if(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())) instanceof Shopkeep){
-						menuActive = !menuActive;
 						setMenu("Barter");
 						Global.multiplexer.getProcessors().removeValue(inventory, true);
+
+						inventory.setTrade(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+						((Shopkeep) inventory.getTrade()).setTrade(this);
+						
 						Global.multiplexer.addProcessor(0, inventory);
-						Global.multiplexer.addProcessor(0, (Shopkeep) Play.map.get(Play.map.marks.get((int)getX(), (int)getY())));
-						setMenuObject((Shopkeep) Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+						Global.multiplexer.addProcessor(0, (Shopkeep) inventory.getTrade());
 					}
 					requestMessage(Play.map.npcs.get(Play.map.marks.get((int) getX(), (int) getY())));
 				}
@@ -276,14 +263,18 @@ public class Player extends Animate implements InputProcessor {
 			}
 			
 			else if(Play.map.get(Play.map.marks.get((int)getX(), (int)getY())) instanceof Chest){
-				menuActive = !menuActive;
 				setMenu("Chest");
 				Global.multiplexer.getProcessors().removeValue(inventory, true);
+
+				inventory.setTrade(Play.map.get(Play.map.marks.get((int) getX(), (int) getY())));
+				((Chest) inventory.getTrade()).setTrade(this);
+
+				Global.multiplexer.getProcessors().removeValue(inventory, true);
 				Global.multiplexer.addProcessor(0, inventory);
-				Global.multiplexer.addProcessor(0, (Chest) Play.map.get(Play.map.marks.get((int)getX(), (int)getY())));
-				setMenuObject((Chest) Play.map.chests.get(Play.map.marks.get((int)getX(), (int)getY())));
+				Global.multiplexer.addProcessor(0, (Chest) inventory.getTrade());
 				collision = true;
 			}
+			
 			else
 				collision = true;
 		}
@@ -361,7 +352,6 @@ public class Player extends Animate implements InputProcessor {
     		y = ray.origin.y + (((ray.direction.y - ray.origin.y)*i)/splits);
     		Tile tile = Play.map.getTile(x, y);
     		Play.map.setVisible(x, y, "visited");
-	    	
     		
 	    	// Render entities when in sight
 	    	if(!(Play.map.marks.get((int) x, (int) y).equals(ID) || Play.map.marks.get((int) x, (int) y) == -1)){
@@ -375,7 +365,6 @@ public class Player extends Animate implements InputProcessor {
 	    		if(tile.get().canDraw == false){
 	    			visible.add(tile.get());
 	    			tile.get().canDraw = true;
-	    			
 	    		}
     		}
 	    	else if(!tile.canSee()){
@@ -398,32 +387,11 @@ public class Player extends Animate implements InputProcessor {
 	}
 	
 	public void setMenu(String request){
-		if(request == "")
-			menuActive = false;
-		else
-			menuActive = true;
 		menu = request;
-		menuObject = null;
-	}
-	
-	public void setMenuActive(boolean menuActive){
-		this.menuActive = menuActive;
 	}
 	
 	public String getMenu(){
 		return menu;
-	}
-	
-	public boolean isMenuActive(){
-		return menuActive;
-	}
-	
-	public void setMenuObject(Entity object){
-		menuObject = object;
-	}
-	
-	public Entity getMenuObject(){
-		return menuObject;
 	}
 	
 	public int getViewDistance() {
@@ -438,7 +406,6 @@ public class Player extends Animate implements InputProcessor {
 		this.hostile = hostile;
 	}
     
-
 	public float getHunger() {
 		return hunger;
 	}
@@ -468,9 +435,6 @@ public class Player extends Animate implements InputProcessor {
 	public boolean isError(){
 		return error;
 	}
-	public Chat getChat(){
-		return chat;
-	}
 
 	public String getPictureURL() {
 		return pictureURL;
@@ -480,12 +444,11 @@ public class Player extends Animate implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch(keycode){
 		case Keys.P:
-			if(!getMenu().equals("Chat") && !getMenu().equals("Inventory") && !getMenu().equals("Barter") && !getMenu().equals("Chest"))
-				showPlayers = true;
+			showPlayers = true;
 			break;
 		case Keys.ENTER:
 			setMenu("Chat");
-			Global.multiplexer.addProcessor(0, chat);
+			Global.multiplexer.addProcessor(0, UI.chat);
 			break;
 		case Keys.I:
 			setMenu("Inventory");
@@ -527,7 +490,6 @@ public class Player extends Animate implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		
 		return false;
 	}
 
@@ -547,9 +509,6 @@ public class Player extends Animate implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (button == Buttons.LEFT) {
-			return true;
-		}
 		return false;
 	}
 

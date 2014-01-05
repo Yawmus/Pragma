@@ -2,7 +2,6 @@ package com.peter.entities;
 
 import com.peter.map.Map;
 import com.peter.packets.AddNPCPacket;
-import com.peter.packets.ItemPacket;
 import com.peter.server.Global;
 import com.peter.server.PragmaServer;
 

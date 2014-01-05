@@ -1,6 +1,5 @@
 package com.peter.rogue.views;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -25,19 +24,8 @@ public class UI{
     private Texture texture1 = new Texture(Gdx.files.internal("img/guiLeftTest.png"));
     private Texture texture2 = new Texture(Gdx.files.internal("img/guiRightTest.png"));
     public static HashMap<Vector3, Entity> screenMarks;
-    public Chat chat;
+    public static Chat chat;
     private Vector2 screenCoord;
-    public static ArrayList<Entry> messageList = new ArrayList<Entry>();
-
-	public static class Entry{
-		public String message, name;
-		public float time;
-		public Entry(String message, String name){
-			this.message = message;
-			this.name = name;
-			this.time = 0;
-		}
-	}
     
 	public UI(Player player){
 		screenMarks = new HashMap<Vector3, Entity>();
@@ -147,44 +135,22 @@ public class UI{
 		
 		display(Global.screen, player);
 		
-		if(player.isMenuActive()){
+		if(!player.getMenu().equals("")){
 			screenCoord = new Vector2(Gdx.input.getX(), (Gdx.input.getY() * -1 + Global.SCREEN_HEIGHT));
 			if(player.getMenu().equals("Inventory")){
 				player.getInventory().display(Global.screen, Global.font, screenCoord);
 			}
 			
 			else if(player.getMenu().equals("Chest")){
-				player.getInventory().setTrade(((Chest)(player.getMenuObject())));
-				((Chest)(player.getMenuObject())).setTrade(player);
 				player.getInventory().display(Global.screen, Global.font, screenCoord);
-				((Chest)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
+				((Chest) player.getInventory().getTrade()).display(Global.screen, Global.font, screenCoord);
 			}
 			
 			else if(player.getMenu().equals("Barter")){
-				player.getInventory().setTrade(((Shopkeep)(player.getMenuObject())));
-				((Shopkeep)(player.getMenuObject())).setTrade(player);
 				player.getInventory().display(Global.screen, Global.font, screenCoord);
-				((Shopkeep)(player.getMenuObject())).display(Global.screen, Global.font, screenCoord);
+				((Shopkeep) player.getInventory().getTrade()).display(Global.screen, Global.font, screenCoord);
 			}
-			else if(player.getMenu().equals("Chat")){
-				Gdx.gl.glEnable(GL10.GL_BLEND);
-			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-				Global.screenShapes.begin(ShapeType.Filled);
-				Global.screenShapes.setColor(.1f, .1f, .1f, .9f);
-				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, 50);
-				Global.screenShapes.end();
-				Global.screenShapes.begin(ShapeType.Line);
-				Global.screenShapes.setColor(0.25f, 0.25f, 0.25f, 1);
-				Global.screenShapes.rect(200, 150, Global.SCREEN_WIDTH-400, 50);
-				Global.screenShapes.end();
-				Gdx.gl.glDisable(GL10.GL_BLEND);
-				
-				Global.screen.begin();
-				Global.gothicFont.setScale(1.1f);
-				Global.gothicFont.draw(Global.screen, player.getChat().getMessageBuffer(), (Global.SCREEN_WIDTH/2) -420, 207);
-				Global.gothicFont.setScale(1f);
-				Global.screen.end();
-			}
+			
 			else if(player.getMenu().equals("Throw")){
 				Gdx.gl.glEnable(GL10.GL_BLEND);
 			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -223,8 +189,7 @@ public class UI{
 				Global.screen.end();
 			}
 		}
-		else
-			player.getInventory().setTrade(null);
+		
 		if(player.showPlayers){
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -291,11 +256,7 @@ public class UI{
 	}
 	
 	public void update(float delta){
-		for(int i=0; i<messageList.size(); i++){
-			messageList.get(i).time += delta;
-			if(messageList.get(i).time >= 10)
-				messageList.remove(i);
-		}
+		chat.update(delta);
 	}
 	
 	public void display(SpriteBatch spriteBatch, Player player){
@@ -308,25 +269,17 @@ public class UI{
 			Global.screenShapes.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 		}
+
+		chat.display(Global.screen, Global.gothicFont, Global.font);
 		
 		spriteBatch.begin();
 		for(int i=0; i<player.getVisible().size(); i++){
 			Global.font.draw(spriteBatch, player.getVisible().get(i).symbol + "", 20 - Global.font.getBounds(player.getVisible().get(i).symbol + "").width/2, 600 - i*17);
 			Global.font.draw(spriteBatch, "-  " + player.getVisible().get(i).getName(), 38, 600 - i*17);
 		}
-		for(int i=0; i<messageList.size(); i++){
-			if(messageList.get(i).time < 5f)
-				Global.font.setColor(Color.WHITE);
-			else
-				Global.font.setColor(1f, 1f, 1f, 1 - (messageList.get(i).time-5)/5f);
-			Global.font.draw(spriteBatch, messageList.get(i).name + ": " + messageList.get(i).message, 20, 120 + (messageList.size()-i)*17);
-		}
-		
-		Global.font.setColor(Color.WHITE);
 		
 		spriteBatch.draw(texture1, 0, 0);
 		spriteBatch.draw(texture2, Global.SCREEN_WIDTH - 179, 0);
-		
 		spriteBatch.draw(player.getPicture(),  200, 15);
 		
 		Global.gothicFont.setScale(1f);
@@ -347,7 +300,6 @@ public class UI{
 		else
 			Global.gothicFont.draw(spriteBatch, "Friendly", 755, 80);
 		Global.gothicFont.draw(spriteBatch, "Floor: " + Play.map.getFloor(), 670, 50);
-		
 		spriteBatch.end();
 	}
 	
