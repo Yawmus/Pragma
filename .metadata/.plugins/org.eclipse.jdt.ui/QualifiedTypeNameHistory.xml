@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.peter.rogue.Global"/>
 <fullyQualifiedTypeName name="com.peter.map.Map.Tile"/>
 <fullyQualifiedTypeName name="com.peter.packets.ObjectToPacket"/>
 <fullyQualifiedTypeName name="com.peter.entities.PacketToObject"/>
@@ -55,9 +54,10 @@
 <fullyQualifiedTypeName name="com.peter.map.Map"/>
 <fullyQualifiedTypeName name="com.peter.rogue.screens.Play"/>
 <fullyQualifiedTypeName name="com.peter.packets.ItemPacket"/>
-<fullyQualifiedTypeName name="com.peter.server.Global"/>
 <fullyQualifiedTypeName name="com.peter.inventory.Item"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.Input.Keys"/>
 <fullyQualifiedTypeName name="com.badlogic.gdx.InputProcessor"/>
+<fullyQualifiedTypeName name="com.peter.server.Global"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"/>
 </qualifiedTypeNameHistroy>

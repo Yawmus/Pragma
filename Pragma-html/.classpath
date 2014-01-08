@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<classpath>
+    <classpathentry kind="src" path="src"/>
+    <classpathentry combineaccessrules="false" exported="true" kind="src" path="/Pragma"/>
+    <classpathentry exported="true" kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+    <classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="output" path="war/WEB-INF/classes"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt.jar" sourcepath="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx.jar"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/tween-engine-api-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/tween-engine-api.jar"/>
+    <classpathentry kind="lib" path="/Pragma/libs/gdx-sources.jar"/>
+    <classpathentry kind="lib" path="/Pragma/libs/gdx.jar" sourcepath="/Pragma/libs/gdx-sources.jar"/>
+</classpath>

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename package &apos;animation&apos; to &apos;anim&apos;&#x0D;&#x0A;- Original project: &apos;Rogue-desktop&apos;&#x0D;&#x0A;- Original element: &apos;Rogue-desktop/assets/animation&apos;&#x0D;&#x0A;- Renamed element: &apos;Rogue-desktop/assets/anim&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;animation&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/assets&lt;animation" name="anim" qualified="false" references="true" stamp="1387419785015" textual="false" version="1.0"/>
-</session>

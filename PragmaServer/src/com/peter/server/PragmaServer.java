@@ -28,6 +28,7 @@ import com.peter.packets.RemoveNPCPacket;
 import com.peter.packets.RemovePlayerPacket;
 import com.peter.packets.RemoveTradeItemPacket;
 import com.peter.packets.RequestFloorPacket;
+import com.peter.packets.ThrowPacket;
 
 public class PragmaServer{
 
@@ -59,7 +60,6 @@ public class PragmaServer{
 		server.getKryo().register(RemovePlayerPacket.class);
 		server.getKryo().register(MapPacket.class);
 		server.getKryo().register(RequestFloorPacket.class);
-		server.getKryo().register(ItemPacket.class);
 		server.getKryo().register(ChestPacket.class);
 		server.getKryo().register(RemoveItemPacket.class);
 		server.getKryo().register(RemoveTradeItemPacket.class);
@@ -69,6 +69,8 @@ public class PragmaServer{
 		server.getKryo().register(java.util.ArrayList.class);
 		server.getKryo().register(ItemPacket[][].class);
 		server.getKryo().register(ItemPacket[].class);
+		server.getKryo().register(ItemPacket.class);
+		server.getKryo().register(ThrowPacket.class);
 		server.getKryo().register(String[][].class);
 		server.getKryo().register(String[].class);
 		server.getKryo().register(short[][].class);
@@ -148,6 +150,7 @@ public class PragmaServer{
 					Map.markSets.get(packet.floor).put(-1, packet.oldX, packet.oldY);
 					server.sendToAllExceptTCP(packet.ID, packet);
 				}
+				
 				else if(o instanceof ItemPacket){
 					ItemPacket packet = (ItemPacket) o;
 					packet.ID = ++Global.count;
@@ -155,6 +158,17 @@ public class PragmaServer{
 					for(Player player : map.players.values())
 						if(player.floor == packet.floor)
 							server.sendToTCP(player.ID, packet);
+				}
+				
+				else if(o instanceof ThrowPacket){
+					ThrowPacket packet = (ThrowPacket) o;
+					packet.item.ID = ++Global.count;
+					packet.item.x += packet.dx;
+					packet.item.y += packet.dy;
+					Map.itemSets.get(packet.item.floor)[packet.item.x][packet.item.y] = packet.item;
+					for(Player player : map.players.values())
+						if(player.floor == packet.item.floor)
+							server.sendToTCP(player.ID, packet.item);
 				}
 				
 				else if(o instanceof RemoveItemPacket){

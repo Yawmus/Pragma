@@ -1,10 +1,6 @@
 package com.peter.entities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Stack;
 
 import com.peter.inventory.Item;
@@ -25,38 +21,16 @@ public class NPC extends Entity {
 	public Entity attacker;
 	public HostilityList list;
 	protected Responses response;
-
-	protected static LinkedList<String> firstNames;
-	protected static LinkedList<String> lastNames;
-	private static Scanner in;
-	
+	private static NameGenerator nameGenerator = new NameGenerator();
 	protected String group;
-	
-	static{
-		firstNames = new LinkedList<String>();
-		lastNames = new LinkedList<String>();
-		
-		try {
-			in = new Scanner(new File("C:/Users/Yawmus/Desktop/pragmaFiles/firstName.txt"));
-			while(in.hasNextLine())
-				firstNames.add(new String(in.nextLine()));
-			in.close();
-			in = new Scanner(new File("C:/Users/Yawmus/Desktop/pragmaFiles/lastName.txt"));
-			
-			while(in.hasNextLine())
-				lastNames.add(new String(in.nextLine()));
-			in.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public NPC(int floor, String group, String race, String type){
 		super(race, type);
 		this.floor = floor;
 		this.group = group;
-		if(group != "Monster")
-			name = firstNames.get(Global.rand(firstNames.size(), 0)) + " " + lastNames.get(Global.rand(lastNames.size(), 0));
+		if(group != "Monster"){
+			name = nameGenerator.generateName();
+		}
 		//time -= Global.rand(15, 0) * .8f;
 		canMove = true;
 		moves = new Stack<Node>();
